@@ -1,22 +1,1151 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <link rel="stylesheet" href="styles.css" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>PakePlus App</title>
-        <script type="module" src="/main.js" defer></script>
-    </head>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>有数</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/clear-dialog.css">
+    <link rel="stylesheet" href="css/weather.css">
+    <script src="js/dayPilot/daypilot-all.min.js"></script>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/countdown.css">
+    <link rel="stylesheet" href="css/todolist.css">
+    <link rel="stylesheet" href="css/petittools.css">
+    <link rel="stylesheet" href="css/tag-filter.css">
+    <link rel="stylesheet" href="css/date-filter.css">
+    <link rel="stylesheet" href="css/filter-collapse.css">
+    <link rel="stylesheet" href="css/calendar.css">
+    <link rel="stylesheet" href="css/todolist-preview.css">
+    <link rel="stylesheet" href="css/project-search.css">
+    <link rel="stylesheet" href="css/event-detail-window.css">
+    <link rel="stylesheet" href="css/water-reminder.css">
+    <link rel="stylesheet" href="css/rest-reminder.css">
+    <link rel="stylesheet" href="css/hot-today.css">
+    <link rel="stylesheet" href="css/horoscope.css">
+</head>
+<body class="light-theme">
+    <div class="app-container">
+        <!-- 头部区域 -->
+        <header>
+            <div class="logo">有数</div>
+            <div class="user-controls">
+                <div class="points-info">
+                    <span class="points-icon">🌟</span>
+                    <span id="header-points">0</span>
+                </div>
+                <div class="user-profile">
+                    <img id="user-avatar" class="user-avatar" src="images/default-avatar.png" alt="用户头像">
+                    <span id="user-name" class="user-nickname">未登录</span>
+                </div>
+                <button class="settings-btn" id="settings-btn">设置</button>
+            </div>
+        </header>
 
-    <body>
-        <main class="container">
-            <h1>Welcome to PakePlus</h1>
+        <!-- 主内容区域 -->
+        <main>
+            <div id="login-modal" class="modal">
+                <div class="modal-content">
+                    <div class="welcome-header">
+                        <h2>欢迎使用有数</h2>
+                    </div>
+                    <div class="welcome-message">
+                        <p class="sub-text">请输入您的昵称以开始使用</p>
+                    </div>
+                    <div class="login-form">
+                        <div class="avatar-upload">
+                            <div class="avatar-preview">
+                                <img id="avatar-preview" src="images/default-avatar.png" alt="头像预览">
+                            </div>
+                            <div class="avatar-upload-btn">
+                                <label for="avatar-input" class="upload-label">
+                                    <i class="fas fa-camera"></i>
+                                    <span>选择头像</span>
+                                </label>
+                                <input type="file" id="avatar-input" accept="image/*" style="display: none;">
+                            </div>
+                            <div class="avatar-tip">支持 JPG、PNG 格式，最大 20MB</div>
+                        </div>
+                        <div class="input-group">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="nickname-input" placeholder="输入您的昵称" 
+                                   pattern="^[\u4e00-\u9fa5a-zA-Z0-9_]{2,20}$"
+                                   title="昵称长度必须在2-20个字符之间，仅支持中文、英文、数字和下划线">
+                        </div>
+                        <div class="privacy-agreement">
+                            <label class="checkbox-container">
+                                <input type="checkbox" id="privacy-agree">
+                                <span class="checkmark"></span>
+                                <span class="agreement-text">我已阅读并同意<a href="privacy.html" target="_blank">隐私政策</a></span>
+                            </label>
+                        </div>
+                        <button id="login-btn" class="primary-btn">
+                            <i class="fas fa-rocket"></i>
+                            开始使用
+                        </button>
+                    </div>
+                </div>
+            </div>
 
-            <form class="row" id="greet-form">
-                <input id="greet-input" placeholder="Enter a name..." />
-                <button type="submit">Greet</button>
-            </form>
-            <p id="greet-msg"></p>
+            <!-- 最近要做视图 -->
+            <section id="recent-tasks" class="view-section active">
+                <div class="view-header">
+                    <h2>最近要做</h2>
+                    <div class="view-controls">
+                        <button id="select-all-btn" class="select-btn" style="display: none;">
+                            <i class="fas fa-check-double"></i>全选
+                        </button>
+                        <button id="deselect-all-btn" class="select-btn" style="display: none;">
+                            <i class="fas fa-times"></i>取消全选
+                        </button>
+                        <button id="cancel-select-btn" class="select-btn" style="display: none;">
+                            <i class="fas fa-ban"></i>取消选择
+                        </button>
+                        <button id="batch-delete-btn" class="danger-btn" style="display: none;">
+                            <i class="fas fa-trash"></i>批量删除
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="list-view" class="view-content active">
+                    <div class="list-search-container">
+                        <div class="search-box">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" id="list-search-input" placeholder="搜索事件名称、描述、地点或标签..." class="search-input">
+                            <button id="clear-search-btn" class="clear-search-btn" style="display: none;">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <!-- 标签筛选区 -->
+                        <div id="tag-filter-container" class="tag-filter-container">
+                            <div class="tag-filter-header">
+                                <div class="tag-filter-title">
+                                    <i class="fas fa-tags"></i>
+                                    标签筛选
+                                    <span class="tag-count" id="tag-count">0</span>
+                                </div>
+                                <div class="tag-filter-actions">
+                                    <button id="clear-filter-btn" class="clear-filter-btn" style="display: none;">
+                                        <i class="fas fa-times"></i>
+                                        清除筛选
+                                    </button>
+                                    <button id="tag-filter-toggle" class="filter-toggle-btn" title="折叠/展开">
+                                        <i class="fas fa-chevron-down"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="tag-filter-content" id="tag-filter-content">
+                                <div class="tag-filter-buttons" id="tag-filter-buttons">
+                                    <!-- 标签按钮将由JS动态生成 -->
+                                </div>
+                                <div class="filter-status" id="filter-status" style="display: none;">
+                                    <i class="fas fa-filter"></i>
+                                    <span id="filter-status-text">未应用筛选</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 项目筛选区 -->
+                        <div id="project-filter-container" class="project-filter-container">
+                            <div class="project-filter-header">
+                                <div class="project-filter-title">
+                                    <i class="fas fa-project-diagram"></i>
+                                    项目筛选
+                                </div>
+                                <div class="project-filter-actions">
+                                    <button id="clear-project-filter-btn" class="clear-project-filter-btn" style="display: none;">
+                                        <i class="fas fa-times"></i>
+                                        清除项目筛选
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="project-filter-content" id="project-filter-content">
+                                <div class="project-filter-select">
+                                    <select id="project-filter-select" class="project-select">
+                                        <option value="">所有项目</option>
+                                        <!-- 项目选项将由JS动态生成 -->
+                                    </select>
+                                </div>
+                                <div class="filter-status" id="project-filter-status" style="display: none;">
+                                    <i class="fas fa-filter"></i>
+                                    <span id="project-filter-status-text">未应用项目筛选</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 日期筛选区 -->
+                        <div id="date-filter-container" class="date-filter-container">
+                            <div class="date-filter-header">
+                                <div class="date-filter-title">
+                                    <i class="fas fa-calendar-alt"></i>
+                                    日期筛选
+                                </div>
+                                <div class="date-filter-actions">
+                                    <button id="clear-date-filter-btn" class="clear-date-filter-btn" style="display: none;">
+                                        <i class="fas fa-times"></i>
+                                        清除日期筛选
+                                    </button>
+                                    <button id="date-filter-toggle" class="filter-toggle-btn" title="折叠/展开">
+                                        <i class="fas fa-chevron-down"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="date-filter-content" id="date-filter-content">
+                                <div class="date-range-selector">
+                                    <div class="date-input-group">
+                                        <label for="start-date">开始日期</label>
+                                        <input type="date" id="start-date" class="date-input">
+                                    </div>
+                                    <div class="date-input-group">
+                                        <label for="end-date">结束日期</label>
+                                        <input type="date" id="end-date" class="date-input">
+                                    </div>
+                                </div>
+                                <div class="quick-date-buttons" id="quick-date-buttons">
+                                    <button class="quick-date-btn" data-type="today">今天</button>
+                                    <button class="quick-date-btn" data-type="tomorrow">明天</button>
+                                    <button class="quick-date-btn" data-type="this-week">本周</button>
+                                    <button class="quick-date-btn" data-type="next-week">下周</button>
+                                    <button class="quick-date-btn" data-type="this-month">本月</button>
+                                    <button class="quick-date-btn" data-type="next-month">下月</button>
+                                </div>
+                                <div class="date-filter-status" id="date-filter-status" style="display: none;">
+                                    <i class="fas fa-calendar-check"></i>
+                                    <span id="date-filter-status-text">未应用日期筛选</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 添加出行贴士与天气信息 -->
+                    <div class="weather-tips-container">
+                        <div class="weather-info">
+                            <div class="weather-location">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span id="weather-location">加载中...</span>
+                                <button id="refresh-weather" class="refresh-btn" title="刷新天气">
+                                    <i class="fas fa-sync-alt"></i>
+                                </button>
+                            </div>
+                            <div class="weather-details">
+                                <div class="weather-temp">
+                                    <i class="fas fa-temperature-high"></i>
+                                    <span id="weather-temp">--℃</span>
+                                </div>
+                                <div class="weather-condition">
+                                    <i class="fas fa-cloud"></i>
+                                    <span id="weather-condition">--</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="travel-tips">
+                            <i class="fas fa-umbrella"></i>
+                            <span id="travel-tips">今日出行贴士正在加载中...</span>
+                        </div>
+                    </div>
+                    
+                    <div class="date-header">
+                        <h3 id="today-date">今天 (加载中...)</h3>
+                    </div>
+                    <div id="task-list" class="task-list">
+                        <!-- 任务列表将通过JS动态生成 -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- 大项目视图 -->
+            <section id="projects" class="view-section">
+                <div class="view-header">
+                    <h2>大项目</h2>
+                </div>
+                <div class="projects-container" id="projects-container">
+                    <!-- 项目列表将通过JS动态生成 -->
+                </div>
+            </section>
+
+            <!-- 新建视图 -->
+            <section id="create" class="view-section">
+                <div class="view-header">
+                    <h2>新建</h2>
+                    <div class="create-tabs">
+                        <button id="traditional-create-tab" class="active">传统创建</button>
+                        <button id="ai-create-tab">AI创建</button>
+                        <button id="import-tab">外部导入</button>
+                    </div>
+                </div>
+                
+                <div id="traditional-create" class="create-content active">
+                    <form id="task-form">
+                        <div class="form-group">
+                            <label for="event-name">事件名称 (必填)</label>
+                            <input type="text" id="event-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="event-project">事件属于项目 (选填)</label>
+                            <input type="text" id="event-project">
+                        </div>
+                        <div class="form-group">
+                            <label>事件时间</label>
+                            <div class="datetime-range">
+                                <div class="datetime-input">
+                                    <label for="event-start-time">开始时间</label>
+                                    <input type="datetime-local" id="event-start-time" required>
+                                </div>
+                                <div class="datetime-input">
+                                    <label for="event-end-time">结束时间</label>
+                                    <input type="datetime-local" id="event-end-time" required>
+                                </div>
+                                <div class="repeat-options">
+                                    <label for="event-repeat">重复</label>
+                                    <select id="event-repeat">
+                                        <option value="none">不重复</option>
+                                        <option value="daily">每天</option>
+                                        <option value="weekly">每周</option>
+                                        <option value="monthly">每月</option>
+                                        <option value="yearly">每年</option>
+                                    </select>
+                                    <div id="repeat-end-date" class="repeat-end-date" style="display: none;">
+                                        <label for="event-repeat-end">结束日期</label>
+                                        <input type="date" id="event-repeat-end">
+                                    </div>
+                                    <div id="repeat-count" class="repeat-count" style="display: none;">
+                                        <div class="repeat-count-header">
+                                            <label>自定义重复次数</label>
+                                            <div class="toggle-switch">
+                                                <input type="checkbox" id="enable-repeat-count">
+                                                <label for="enable-repeat-count"></label>
+                                            </div>
+                                        </div>
+                                        <div id="repeat-count-input" class="repeat-count-input" style="display: none;">
+                                            <input type="number" id="event-repeat-count" min="1" max="100" value="1">
+                                            <span>次</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="event-tags">标签 (用逗号分隔)</label>
+                            <input type="text" id="event-tags" placeholder="例如: 重要, 会议, 紧急">
+                        </div>
+                        <div class="form-group">
+                            <label>是否提醒</label>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="event-reminder">
+                                <label for="event-reminder"></label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="event-location">事件地点</label>
+                            <input type="text" id="event-location">
+                            <button type="button" id="map-picker-btn">地图选择</button>
+                        </div>
+                        <div class="form-group">
+                            <label for="event-participants">参与人员 (用顿号分隔)</label>
+                            <input type="text" id="event-participants" placeholder="例如：张三、李四、王五">
+                        </div>
+                        <div class="form-group">
+                            <label for="event-color">事件标记颜色</label>
+                            <input type="color" id="event-color" value="#4285f4">
+                        </div>
+                        <div class="form-group">
+                            <label for="event-notes">备注</label>
+                            <textarea id="event-notes"></textarea>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" id="save-event-btn">保存</button>
+                            <button type="button" id="cancel-event-btn">取消</button>
+                        </div>
+                    </form>
+                </div>
+                
+                <div id="import" class="create-content">
+                    <div class="import-container">
+                        <div class="import-section">
+                            <h3>导入日程文件</h3>
+                            <p>支持 CSV 或 ICS 格式</p>
+                            <input type="file" id="import-file" accept=".csv,.ics">
+                            <button id="import-btn">导入文件</button>
+                        </div>
+                        
+                        <div class="import-section">
+                            <h3>文本导入</h3>
+                            <p>支持按照以下格式输入：</p>
+                            <div class="format-hint">
+                                <pre>事件名称 | 开始时间 | 结束时间 | 地点 | 参与人员 | 标签 | 所属项目 | 
+例如：
+产品评审会 | 2024-03-20 14:00 | 2024-03-20 16:00 | 会议室A | 张三、李四 | 重要,会议 | 产品迭代 | daily,2024-04-20,10
+月报会议 | 2024-03-25 15:00 | 2024-03-25 16:00 | 会议室B | 全体 | 会议,月度 | 日常工作 | monthly,2024-12-25,12
+年会 | 2024-12-31 09:00 | 2024-12-31 18:00 | 总部 | 全体员工 | 重要,年会 | 公司活动 | yearly,2025-12-31
+
+重复设置格式说明：
+- 第一个参数：重复类型（daily/weekly/monthly/yearly）
+- 第二个参数：结束日期（可选，格式：YYYY-MM-DD）
+第三个参数：重复次数（可选，1-100的整数）</pre>
+                            </div>
+                            <textarea id="import-text" placeholder="请按照上述格式输入事件信息，每行一个事件" rows="6"></textarea>
+                            <button id="import-text-btn">导入文本</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div id="ai-create" class="create-content">
+                <div class="ai-prompt-container">
+                    <button id="open-ai-assistant" class="ai-modal-btn" onclick="window.location.href='ai-assistant.html'">
+                        <i class="fas fa-robot"></i>
+                        打开AI助手
+                    </button>
+                </div>
+            </div>
+ 
+            <!-- 专注模式视图 -->
+            <section id="focus-mode" class="view-section">
+                <div class="view-header">
+                    <h2>专注模式</h2>
+                </div>
+                <div class="focus-container">
+                    <div class="analog-clock">
+                        <div class="clock-face">
+                            <div class="clock-hour"></div>
+                            <div class="clock-minute"></div>
+                            <div class="clock-second"></div>
+                            <div class="clock-center"></div>
+                        </div>
+                    </div>
+                    <div class="focus-redirect" style="text-align: center; padding: 20px; background: rgba(255, 255, 255, 0.1); border-radius: 15px; backdrop-filter: blur(10px);">
+                        <button id="open-focus-window" class="btn primary" style="padding: 12px 24px; font-size: 16px; background: linear-gradient(45deg, #667eea, #764ba2); color: white; border: none; border-radius: 8px; cursor: pointer; transition: all 0.3s ease;">
+                            打开番茄时钟
+                        </button>
+                        
+                        <!-- 专注统计信息 -->
+                        <div class="focus-stats" style="margin-top: 30px; padding: 20px; background: rgba(255, 255, 255, 0.1); border-radius: 10px;">
+                            <h4 style="margin-bottom: 15px; color: #fefefe; text-align: center;">今日专注统计</h4>
+                            <div style="display: flex; justify-content: space-around; align-items: center;">
+                                <div class="stat-item">
+                                    <span style="color: hsl(0, 0%, 98%);">完成番茄：</span>
+                                    <span id="focus-completed-pomodoros" style="font-weight: bold;">0</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span style="color: #f7f7f7;">专注时长：</span>
+                                    <span id="focus-total-time" style="font-weight: bold;">0分钟</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span style="color: #f8f8f8;">当前事件：</span>
+                                    <span id="focus-current-event" style="font-weight: bold;">无</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 清单视图 -->
+            <section id="todolist" class="view-section">
+                <div class="view-header">
+                    <h2>清单</h2>
+                    <div class="view-controls">
+                        <button id="add-list-btn" class="add-btn"><i class="fas fa-plus"></i>新建清单</button>
+                        <button id="delete-list-btn" class="delete-btn"><i class="fas fa-trash"></i>删除</button>
+                        <button id="toggle-batch-mode-btn" class="select-btn"><i class="fas fa-check-square"></i>批量选择</button>
+                        <button id="batch-delete-btn" class="danger-btn" style="display: none;"><i class="fas fa-trash"></i>批量删除</button>
+                        <div class="dropdown">
+                            <button class="dropdown-btn"><i class="fas fa-ellipsis-v"></i></button>
+                            <div class="dropdown-content">
+                                    <i class="fas fa-file-import"></i>
+                                </label>
+                                <input type="file" id="import-lists-input" accept=".json" style="display: none;">
+                                <button id="import-lists-text-btn"><i class="fas fa-file-alt"></i>文本导入</button>
+                                <button id="edit-lists-text-btn"><i class="fas fa-edit"></i>文本编辑</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="lists-container">
+                    <div class="lists-sidebar">
+                        <div class="lists-search">
+                            <div class="search-box">
+                                <i class="fas fa-search search-icon"></i>
+                                <input type="text" id="list-search" placeholder="搜索清单...">
+                                <button id="clear-list-search-btn" class="clear-search-btn" style="display: none;">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="lists-nav" id="lists-nav">
+                            <!-- 清单列表将通过JS动态生成 -->
+                        </div>
+                    </div>
+                    <div class="list-content">
+                        <div class="list-header">
+                            <h3 id="current-list-title">请选择或创建清单</h3>
+                            <div class="list-actions">
+                                <button id="add-list-item-btn" class="list-action-btn" disabled><i class="fas fa-plus"></i>添加事项</button>
+                                <button id="edit-list-btn" class="list-action-btn" disabled><i class="fas fa-edit"></i>编辑</button>
+                            </div>
+                        </div>
+                        <div class="list-items-container" id="list-items-container">
+                            <!-- 清单项目将通过JS动态生成 -->
+                            <div class="empty-list-message">
+                                <div class="empty-icon">📋</div>
+                                <p>请选择或创建一个清单</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 倒数日视图 -->
+            <section id="countdown" class="view-section">
+                <div class="view-header">
+                    <h2>倒数日</h2>
+                    <div class="view-controls">
+                        <button id="add-countdown-btn" class="add-btn"><i class="fas fa-plus"></i>添加纪念日</button>
+                        <button id="toggle-countdown-batch-mode-btn" class="select-btn"><i class="fas fa-check-square"></i>批量选择</button>
+                        <button id="countdown-batch-delete-btn" class="danger-btn" style="display: none;"><i class="fas fa-trash"></i>批量删除</button>
+                        <div class="dropdown">
+                            <button class="dropdown-btn"><i class="fas fa-ellipsis-v"></i></button>
+                            <div class="dropdown-content">
+                                <button id="import-countdowns-text-btn"><i class="fas fa-file-alt"></i>文本导入</button>
+                                <button id="edit-countdowns-text-btn"><i class="fas fa-edit"></i>文本编辑</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 固定搜索框 -->
+                <div class="countdown-search-fixed">
+                    <div class="countdown-search">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="countdown-search-input" placeholder="搜索纪念日...">
+                    </div>
+                </div>
+                
+                <div class="countdown-container">
+                    <div class="countdown-list" id="countdown-list">
+                        <!-- 倒数日列表将通过JS动态生成 -->
+                    </div>
+                    <div class="empty-countdown-message" id="empty-countdown-message">
+                        <div class="empty-icon">📅</div>
+                        <p>目前还没有添加任何纪念日</p>
+                        <p class="sub-text">点击右上角的"添加纪念日"按钮开始添加</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 轻松一刻视图 -->
+            <section id="relax" class="view-section">
+                <div class="view-header">
+                    <h2>轻松一刻</h2>
+                </div>
+                <div class="relax-container">
+                    <div class="medals-wall">
+                        <h3>成就与勋章</h3>
+                        <div class="medals-container" id="medals-container">
+                            <!-- 初始勋章 -->
+                            <div class="medal-item" data-medal-id="newcomer">
+                                <div class="medal-icon">🎯</div>
+                                <div class="medal-info">
+                                    <h4>初来乍到</h4>
+                                    <p>欢迎使用有数！</p>
+                                </div>
+                            </div>
+                            <!-- 积分相关勋章 -->
+                            <div class="medal-item locked" data-medal-id="points-100">
+                                <div class="medal-icon">🌟</div>
+                                <div class="medal-info">
+                                    <h4>积分达人</h4>
+                                    <p>累计获得100积分</p>
+                                </div>
+                            </div>
+                            <div class="medal-item locked" data-medal-id="points-500">
+                                <div class="medal-icon">💫</div>
+                                <div class="medal-info">
+                                    <h4>积分大师</h4>
+                                    <p>累计获得500积分</p>
+                                </div>
+                            </div>
+                            <div class="medal-item locked" data-medal-id="points-1000">
+                                <div class="medal-icon">✨</div>
+                                <div class="medal-info">
+                                    <h4>积分王者</h4>
+                                    <p>累计获得1000积分</p>
+                                </div>
+                            </div>
+                            <!-- 使用时长相关勋章 -->
+                            <div class="medal-item locked" data-medal-id="time-1h">
+                                <div class="medal-icon">⏱️</div>
+                                <div class="medal-info">
+                                    <h4>时间探索者</h4>
+                                    <p>累计使用1小时</p>
+                                </div>
+                            </div>
+                            <div class="medal-item locked" data-medal-id="time-5h">
+                                <div class="medal-icon">⌛</div>
+                                <div class="medal-info">
+                                    <h4>时间管理者</h4>
+                                    <p>累计使用5小时</p>
+                                </div>
+                            </div>
+                            <div class="medal-item locked" data-medal-id="time-24h">
+                                <div class="medal-icon">⏳</div>
+                                <div class="medal-info">
+                                    <h4>时间大师</h4>
+                                    <p>累计使用24小时</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="points-display">
+                        <h3>积分</h3>
+                        <div class="points-value" id="user-points">0</div>
+                    </div>
+
+                    <!-- 喝水提醒面板 -->
+                    <div class="water-reminder-panel" id="water-reminder-panel"></div>
+
+                    <div class="lucky-wheel">
+                        <h3>小工具</h3>
+                        <div class="tools-container">
+                            <button id="tools-btn" onclick="checkPointsAndRedirect()">小工具页面 (每次使用消耗20积分)</button>
+                            <button id="tools-countdown-btn" style="display: none;" onclick="checkPointsAndRedirect()">
+                                小工具页面 (免费使用中，剩余: <span id="tools-countdown">24:00:00</span>)
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 今日热搜与历史上的今天模块 -->
+                    <section class="hot-today-section">
+                        <div class="hot-today-flex">
+                            <div class="hot-today-block">
+                                <h3>今日热搜 <button class="refresh-btn" id="refresh-hot-btn">刷新</button></h3>
+                                <ul class="hot-list" id="hot-list"><li>加载中...</li></ul>
+                            </div>
+                            <div class="hot-today-block">
+                                <h3 style="margin-top:0;">历史上的今天 <button class="refresh-btn" id="refresh-history-btn">刷新</button></h3>
+                                <ul class="history-list" id="history-list"><li>加载中...</li></ul>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </section>
+            
+            <!-- 设置弹窗 -->
+            <div class="settings-modal" id="settings-modal">
+                <div class="settings-content">
+                    <div class="settings-header">
+                        <h2>软件设置</h2>
+                        <button class="close-btn" id="settings-close"><i class="fas fa-times"></i></button>
+                    </div>
+                    
+                    <div class="settings-tabs">
+                        <button class="settings-tab active" data-tab="user-settings">用户管理</button>
+                        <button class="settings-tab" data-tab="theme-settings">主题</button>
+                        <button class="settings-tab" data-tab="data-settings">数据管理</button>
+                        <button class="settings-tab" data-tab="wenjuanxing">反馈</button>
+                        <button class="settings-tab" data-tab="about">关于</button>
+                    </div>
+
+                    <div class="settings-body">
+                        <div id="user-settings" class="settings-section active" style="--option-index: 0">
+                            <div class="settings-option">
+                                <label for="settings-nickname">昵称</label>
+                                <input type="text" id="settings-nickname" class="settings-input" placeholder="请输入昵称" maxlength="20">
+                                <p class="input-hint">必须在2-20个字符，目前仅支持中文、英文、数字和下划线</p>
+                            </div>
+                            <div class="settings-option">
+                                <label for="settings-avatar">头像</label>
+                                <input type="file" id="settings-avatar" accept="image/*" class="settings-input">
+                                <p class="input-hint">支持JPG、PNG等常见图片格式，文件大小不超过20MB</p>
+                            </div>
+                        </div>
+
+                    <div id="wenjuanxing" class="settings-section">
+                        <div class="modal-content ai-modal-content">
+                                <div class="modal-body" style="width: 600px; height: 700px; overflow-x: hidden">
+                                    <iframe 
+                                      src="https://www.wjx.cn/vm/wD94PAY.aspx" 
+                                      frameborder="0" 
+                                      width="100%" 
+                                      height="100%"
+                                      style="user-select: none; zoom: 1; transform: scale(1); transform-origin: 0 0;"
+                                    ></iframe>
+                                  </div>
+                            </div>
+                        </div>
+
+                        <div id="theme-settings" class="settings-section" style="--option-index: 1">
+                            <div class="settings-option">
+                                <input type="radio" id="light-theme" name="theme" value="light" checked>
+                                <label for="light-theme">浅色主题</label>
+                            </div>
+                            <div class="settings-option">
+                                <input type="radio" id="dark-theme" name="theme" value="dark">
+                                <label for="dark-theme">深色主题</label>
+                            </div>
+                            <div class="settings-option">
+                                <input type="radio" id="auto-theme" name="theme" value="auto">
+                                <label for="auto-theme">自动切换（18:00-6:00深色）</label>
+                            </div>
+                        </div>
+
+                        
+                        <div id="data-settings" class="settings-section">
+                            <div class="settings-option">
+                                <label for="backup-data">备份数据</label>
+                                <button id="backup-data" class="settings-btn primary">备份</button>
+                                <p class="input-hint">将导出所有数据为JSON文件</p>
+                            </div>
+                            <div class="settings-option">
+                                <label for="import-data">导入数据</label>
+                                <input type="file" id="import-data" accept=".json" class="settings-input" style="display: none;">
+                                <button id="import-data-btn" class="settings-btn primary">选择文件</button>
+                                <p class="input-hint">从JSON文件导入数据（将覆盖现有数据）</p>
+                            </div>
+                            <div class="settings-option danger-zone">
+                                <label for="clear-all-data">清除所有数据</label>
+                                <button id="clear-all-data" class="settings-btn danger">清除</button>
+                                <p class="input-hint warning">危险操作：将删除所有数据，此操作不可恢复</p>
+                            </div>
+                        </div>
+
+                        <div id="about" class="settings-section" style="--option-index: 5">
+                            <div class="about-content">
+                                <pre class="about-text">
+有数
+当前版本 3.0.1
+AI生成功能目前仅内嵌了Kimi网页版
+1. 日程与任务管理
+日程与任务管理是帮助用户高效安排时间、追踪任务进度的核心功能。
+搜索功能：提供日期搜索，用户可以直观地查看自己的日程安排，方便规划短期和长期任务。
+任务创建与分类：支持创建任务并按优先级、截止日期、项目类别等进行分类，确保重要任务不会遗漏。
+时间块管理：允许用户将一天的时间划分为不同的时间块，为每项任务分配固定的时间段，提高时间利用率。
+2. 大项目规划
+大项目规划功能旨在帮助用户管理复杂的项目，确保项目按计划推进并按时完成。
+项目分解：将大型项目分解为多个阶段或任务，每个阶段可以进一步细分为具体步骤。
+里程碑设置：允许用户设置关键里程碑，标记项目的重要节点，确保项目按计划推进。
+资源分配：支持为任务分配资源，如人员、时间、预算，确保项目资源合理分配。
+进度追踪：实时追踪项目进度，标记已完成、进行中或未开始的任务，帮助用户及时调整计划。
+3. 事件清单功能
+清单功能是帮助用户整理和追踪待办事项的工具，适合处理琐碎任务或短期目标。
+清单创建：用户可以创建多个清单，例如购物清单、待办事项清单、学习清单等。
+任务勾选：支持任务勾选功能，完成一项任务后可以标记为"已完成"，帮助用户直观地看到进度。
+子任务支持：允许在清单中添加子任务，将复杂任务分解为更小的步骤，便于逐步完成。
+优先级标记：可以为清单中的任务设置优先级，如高、中、低，确保重要任务优先完成。
+共享清单：支持与他人共享清单，方便团队协作或家庭成员共同完成任务。
+4. 番茄钟专注计时
+番茄钟专注计时功能源于心理学科提出的"番茄工作法"，通过时间管理帮助用户提高专注力和效率。
+番茄钟计时：设置25分钟或者更多自定义的专注时间段，即一个"番茄时间"，在此期间用户可专注于一项任务。
+计时提醒：在番茄时间结束时发出提醒，帮助用户保持节奏。
+专注记录：记录用户的专注时长和完成的番茄数量，生成统计数据，帮助用户了解自己的专注习惯。
+干扰屏蔽：支持屏蔽通知或锁定设备，减少外界干扰，确保专注。
+5. 打卡成就系统
+打卡成就系统通过奖励机制激励用户坚持完成任务，培养良好习惯。
+                                </pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 清除数据对话框 -->
+            <div class="clear-dialog-overlay" id="clear-dialog-overlay">
+                <div class="clear-dialog">
+                    <div class="clear-dialog-header">
+                        <h3>
+                            <i class="fas fa-exclamation-triangle warning-icon"></i>
+                            清除所有数据
+                        </h3>
+                        <button class="clear-dialog-close" id="clear-dialog-close">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="clear-dialog-body">
+                        <div class="clear-dialog-icon">🗑️</div>
+                        <div class="clear-dialog-title">确定要清除所有数据吗？</div>
+                        <div class="clear-dialog-description">
+                            此操作将永久删除您的所有数据，包括：
+                            <br>• 所有事件和任务
+                            <br>• 项目信息
+                            <br>• 清单和倒数日
+                            <br>• 专注记录和积分
+                            <br>• 用户设置和偏好
+                        </div>
+                        <div class="clear-dialog-warning">
+                            <div class="warning-text">
+                                <i class="fas fa-exclamation-circle"></i>
+                                <span>此操作不可恢复，请谨慎操作！</span>
+                            </div>
+                        </div>
+                        
+                        <!-- 第一步确认 -->
+                        <div class="clear-confirm-step" id="clear-step-1">
+                            <div class="clear-dialog-actions">
+                                <button class="clear-dialog-btn cancel" id="clear-cancel-btn">
+                                    <i class="fas fa-times"></i>
+                                    取消
+                                </button>
+                                <button class="clear-dialog-btn confirm" id="clear-confirm-btn">
+                                    <i class="fas fa-trash"></i>
+                                    确认清除
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- 第二步确认 -->
+                        <div class="clear-confirm-step" id="clear-step-2">
+                            <div class="clear-confirm-hint">
+                                请输入 <strong>"清除所有数据"</strong> 以确认操作
+                            </div>
+                            <input type="text" class="clear-confirm-input" id="clear-confirm-input" 
+                                   placeholder="请输入：清除所有数据">
+                            <div class="clear-dialog-actions">
+                                <button class="clear-dialog-btn cancel" id="clear-back-btn">
+                                    <i class="fas fa-arrow-left"></i>
+                                    返回
+                                </button>
+                                <button class="clear-dialog-btn confirm" id="clear-final-btn" disabled>
+                                    <i class="fas fa-trash"></i>
+                                    最终确认
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 保存提示 -->
+            <div class="save-indicator" id="save-indicator">
+                设置已保存
+            </div>
+            
+            <!-- 事件详情模态框 -->
+            <div id="event-details-modal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 id="detail-event-name"></h3>
+                        <button id="close-details">×</button>
+                    </div>
+                    <div class="event-details-content">
+                        <div class="detail-item">
+                            <span class="detail-label">项目：</span>
+                            <span id="detail-event-project"></span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">时间：</span>
+                            <span id="detail-event-time"></span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">地点：</span>
+                            <span id="detail-event-location"></span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">参与人员：</span>
+                            <span id="detail-event-participants"></span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">标签：</span>
+                            <div id="detail-event-tags" class="task-tags"></div>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">备注：</span>
+                            <p id="detail-event-notes"></p>
+                        </div>
+                    </div>
+                    <div class="modal-actions">
+                        <button id="edit-event-btn">编辑</button>
+                        <button id="delete-event-btn">删除</button>
+                    </div>
+                </div>
+            </div>
+        
+            <!-- 添加/编辑倒数日模态框 -->
+            <div id="countdown-modal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 id="countdown-modal-title">添加纪念日</h3>
+                        <button class="close-btn" id="close-countdown-modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="countdown-name">纪念日名称</label>
+                            <input type="text" id="countdown-name" required placeholder="例如：结婚纪念日">
+                        </div>
+                        <div class="form-group">
+                            <label for="countdown-date">日期</label>
+                            <input type="date" id="countdown-date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="countdown-type">类型</label>
+                            <select id="countdown-type">
+                                <option value="once">单次</option>
+                                <option value="yearly">每年重复</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="countdown-icon">图标</label>
+                            <div class="icon-selector" id="countdown-icon-selector">
+                                <button class="icon-option" data-icon="🎂">🎂</button>
+                                <button class="icon-option" data-icon="💑">💑</button>
+                                <button class="icon-option" data-icon="🎓">🎓</button>
+                                <button class="icon-option" data-icon="🏆">🏆</button>
+                                <button class="icon-option" data-icon="✈️">✈️</button>
+                                <button class="icon-option" data-icon="🎯">🎯</button>
+                                <button class="icon-option" data-icon="📅">📅</button>
+                            </div>
+                            <input type="hidden" id="countdown-icon" value="📅">
+                        </div>
+                        <div class="form-group">
+                            <label for="countdown-color">颜色</label>
+                            <input type="color" id="countdown-color" value="#4285f4">
+                        </div>
+                        <div class="form-group">
+                            <label for="countdown-notes">备注</label>
+                            <textarea id="countdown-notes" placeholder="添加一些备注信息..."></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-actions">
+                        <button id="save-countdown-btn" class="primary-btn">保存</button>
+                        <button id="cancel-countdown-btn" class="secondary-btn">取消</button>
+                    </div>
+                </div>
+            </div>
+            <!-- 清单文本导入模态框 -->
+            <div id="todolist-import-modal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>导入清单</h3>
+                        <button class="close-btn" id="close-todolist-import-modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="import-format-hint">
+                            <h4>导入格式说明：</h4>
+                            <pre>清单名称 | 事项内容 | 截止日期 | 优先级 | 标签
+例如：
+购物清单 | 买牛奶 | 2024-03-20 | 高 | 日常,生活
+购物清单 | 买面包 | 2024-03-20 | 中 | 日常,生活
+工作清单 | 完成报告 | 2024-03-25 | 高 | 工作,紧急
+工作清单 | 预约会议 | 2024-03-22 | 中 | 工作,会议</pre>
+                        </div>
+                        <div class="form-group">
+                            <label for="todolist-import-text">请输入清单内容：</label>
+                            <textarea id="todolist-import-text" rows="10" placeholder="请按照上述格式输入清单内容，每行一个事项"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-actions">
+                        <button id="confirm-todolist-import" class="primary-btn">导入</button>
+                        <button id="cancel-todolist-import" class="secondary-btn">取消</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 倒数日文本导入模态框 -->
+            <div id="countdown-import-modal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>导入倒数日</h3>
+                        <button class="close-btn" id="close-countdown-import-modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="import-format-hint">
+                            <h4>导入格式说明：</h4>
+                            <pre>纪念日名称 | 日期 | 类型 | 图标 | 颜色 | 备注
+例如：
+结婚纪念日 | 2020-05-20 | yearly | 💑 | #ff4081 | 我们的结婚纪念日
+生日 | 1990-01-01 | yearly | 🎂 | #4caf50 | 我的生日
+毕业纪念日 | 2015-06-30 | yearly | 🎓 | #2196f3 | 大学毕业纪念日</pre>
+                        </div>
+                        <div class="form-group">
+                            <label for="countdown-import-text">请输入倒数日内容：</label>
+                            <textarea id="countdown-import-text" rows="10" placeholder="请按照上述格式输入倒数日内容，每行一个倒数日"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-actions">
+                        <button id="confirm-countdown-import" class="primary-btn">导入</button>
+                        <button id="cancel-countdown-import" class="secondary-btn">取消</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI创建模态框 -->
+<div id="ai-modal" class="modal">
+    <div class="modal-content ai-modal-content">
+        <div class="modal-header">
+            <h3>AI助手（讯飞星辰智能体网页版）</h3>
+            <button class="close-btn" id="close-ai-modal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <iframe src="https://xinghuo.xfyun.cn/desk?sharebotId=0409199b5c13d5b193c96fc353a4ad98" frameborder="0" class="kimi-iframe"></iframe>
+            
+            <div class="ai-instructions">
+                <h4>复制以下内容到AI助手即可使用：</h4>
+                <div class="instruction-content">
+                    <h5>我有个日程软件，其中有清单功能、倒数日功能、还有事件新建</h5>
+                    <h5>请根据以下规则进行分类：</h5>
+                    
+                    <h5>1、清单中添加的内容是持续时间不超过半小时的事件作为清单按照清单格式生成</h5>
+                    <p>格式如下</p>
+                    <pre>清单名称 | 事项内容 | 截止日期 | 优先级 | 标签
+例如：
+购物清单 | 买牛奶 | 2024-03-20 | 高 | 日常,生活
+购物清单 | 买面包 | 2024-03-20 | 中 | 日常,生活
+工作清单 | 完成报告 | 2024-03-25 | 高 | 工作,紧急
+工作清单 | 预约会议 | 2024-03-22 | 中 | 工作,会议</pre>
+                    <p>用markdown生成、生成后提示用户在清单中的":"中点击文本导入然后再对话框输入即可</p>
+                    
+                    <h5>2、倒数日是用户认为重要的日子，如竞标日、面试日、生日、结婚纪念日、恋爱开始的日子、学习毕业的日子等类型的一日作为倒数日文本标准进行处理生成，要判断该日子是否会重复在进行生成</h5>
+                    <p>格式如下</p>
+                    <pre>纪念日名称 | 日期 | 类型 | 图标 | 颜色 | 备注
+例如：
+结婚纪念日 | 2020-05-20 | yearly | 💑 | #ff4081 | 我们的结婚纪念日
+生日 | 1990-01-01 | yearly | 🎂 | #4caf50 | 我的生日
+毕业纪念日 | 2015-06-30 | yearly | 🎓 | #2196f3 | 大学毕业纪念日</pre>
+                    <p>用markdown生成、生成后提示用户在倒数日中的":"中点击文本导入然后再对话框输入即可</p>
+                    
+                    <h5>3、事项添加、持续时间超过20分钟的事件作为事项去生成，如用户提及上班或者上学或者要重复的事件需要根据用户提供的内容设置对应的重复逻辑</h5>
+                    <p>格式如下</p>
+                    <pre>事件名称 | 开始时间 | 结束时间 | 地点 | 参与人员 | 标签 | 所属项目 | 重复设置
+例如：
+产品评审会 | 2024-03-20 14:00 | 2024-03-20 16:00 | 会议室A | 张三、李四 | 重要,会议 | 产品迭代 | daily,2024-04-20,10
+周会 | 2024-03-21 10:00 | 2024-03-21 11:30 | 线上 | 产品组 | 例会,产品 | 日常工作 | weekly,2024-06-21
+月报会议 | 2024-03-25 15:00 | 2024-03-25 16:00 | 会议室B | 全体 | 会议,月度 | 日常工作 | monthly,2024-12-25,12
+年会 | 2024-12-31 09:00 | 2024-12-31 18:00 | 总部 | 全体员工 | 重要,年会 | 公司活动 | yearly,2025-12-31</pre>
+                    <p>用markdown生成、生成后提示用户在新建中的外部导入中文本导入对话框输入即可</p>
+                    
+                    <h5>以下是用户输入内容的部分</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+            <!-- 倒数日文本编辑模态框 -->
+            <div id="countdown-edit-modal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>编辑倒数日</h3>
+                        <button class="close-btn" id="close-countdown-edit-modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="import-format-hint">
+                            <h4>编辑格式说明：</h4>
+                            <pre>纪念日名称 | 日期 | 类型 | 图标 | 颜色 | 备注
+例如：
+结婚纪念日 | 2020-05-20 | yearly | 💑 | #ff4081 | 我们的结婚纪念日
+生日 | 1990-01-01 | yearly | 🎂 | #4caf50 | 我的生日
+毕业纪念日 | 2015-06-30 | yearly | 🎓 | #2196f3 | 大学毕业纪念日</pre>
+                        </div>
+                        <div class="form-group">
+                            <label for="countdown-edit-text">编辑倒数日内容：</label>
+                            <textarea id="countdown-edit-text" rows="15" placeholder="请按照上述格式编辑倒数日内容，每行一个倒数日"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-actions">
+                        <button id="confirm-countdown-edit" class="primary-btn">保存更改</button>
+                        <button id="cancel-countdown-edit" class="secondary-btn">取消</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 清单文本编辑模态框 -->
+            <div id="todolist-edit-modal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>编辑清单</h3>
+                        <button id="close-todolist-edit-modal" class="close-btn">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="edit-format-hint">
+                            <h4>编辑格式说明：</h4>
+                            <pre>清单名称 | 事项内容 | 截止日期 | 优先级 | 标签
+例如：
+购物清单 | 买牛奶 | 2024-03-20 | 高 | 日常,生活
+购物清单 | 买面包 | 2024-03-20 | 中 | 日常,生活
+工作清单 | 完成报告 | 2024-03-25 | 高 | 工作,紧急
+工作清单 | 预约会议 | 2024-03-22 | 中 | 工作,会议</pre>
+                        </div>
+                        <div class="form-group">
+                            <label for="todolist-edit-text">编辑清单内容：</label>
+                            <textarea id="todolist-edit-text" rows="10" placeholder="请按照上述格式编辑清单内容，每行一个事项"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-actions">
+                        <button id="confirm-todolist-edit" class="primary-btn">保存</button>
+                        <button id="cancel-todolist-edit" class="secondary-btn">取消</button>
+                    </div>
+                </div>
+            </div>
         </main>
-    </body>
-</html>
+
+        <!-- 底部导航栏 -->
+        <nav class="bottom-nav">
+            <button id="nav-recent" class="nav-item active"><i class="fas fa-calendar-day"></i>最近要做</button>
+            <button id="nav-projects" class="nav-item"><i class="fas fa-project-diagram"></i>大项目</button>
+            <button id="nav-todolist" class="nav-item"><i class="fas fa-tasks"></i>清单</button>
+            <button id="nav-countdown" class="nav-item"><i class="fas fa-hourglass"></i>倒数日</button>
+            <button id="nav-create" class="nav-item"><i class="fas fa-plus-circle"></i>新建</button>
+            <button id="nav-focus" class="nav-item"><i class="fas fa-hourglass-half"></i>专注模式</button>
+            <button id="nav-relax" class="nav-item"><i class="fas fa-gamepad"></i>轻松一刻</button>
+        </nav>
+    </div>
+
+    <!-- 勋章解锁弹窗 -->
+    <div id="medal-unlock-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>🎉 恭喜解锁新勋章！</h3>
+                <button id="close-medal-unlock" class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="medal-info">
+                    <div class="medal-icon" id="unlocked-medal-icon"></div>
+                    <h4 id="unlocked-medal-name"></h4>
+                    <p id="unlocked-medal-description"></p>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button id="confirm-medal-unlock">确认</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 专注模式悬浮指示器 -->
+    <div class="focus-floating-indicator" id="focus-floating-indicator" onclick="openPomodoroTracker()">
+        <i class="fas fa-hourglass-half"></i>
+        <span class="focus-floating-text">专注进行中</span>
+        <span class="timer-mini" id="floating-timer">25:00</span>
+    </div>
+
+    <!-- 脚本链接 -->
+    <script src="js/app.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/tasks.js"></script>
+    <script src="js/focus.js"></script>
+    <script src="js/relax.js"></script>
+    <script src="js/ai.js"></script>
+    <script src="js/notification.js"></script>
+    <script src="js/weather.js"></script>
+    <script src="js/todolist.js"></script>
+    <script src="js/countdown.js"></script>
+    <script src="js/clear-dialog.js"></script>
+    <script src="js/project-search.js"></script>
+    <script src="js/event-detail-window.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/water-reminder.js"></script>
+    <script src="js/rest-reminder.js"></script>
+    <script src="js/hot-today.js"></script>
+    <script src="js/horoscope.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        if (window.WaterReminderManager) {
+            WaterReminderManager.init();
+        }
+    });
+    </script>
+</body>
+</html> 
