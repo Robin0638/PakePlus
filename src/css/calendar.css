@@ -1,0 +1,1213 @@
+/* 日历容器样式 */
+.calendar-container {
+    background: var(--card-bg-color);
+    border-radius: 12px;
+    box-shadow: var(--card-shadow);
+    padding: 20px;
+    margin: 20px;
+    transition: all 0.3s ease;
+}
+
+.calendar-container:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--card-shadow-hover);
+}
+
+/* 日历头部样式 */
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 10px;
+    background: var(--card-bg-color);
+    border-radius: 8px;
+    box-shadow: var(--card-shadow-soft);
+}
+
+/* 日历主体样式 */
+.calendar_default_main {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-template-rows: auto 1fr;
+    gap: 1px;
+    height: 600px;
+    background: var(--background-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* 星期表头样式 */
+.calendar_default_colheader {
+    background: var(--primary-gradient);
+    color: white;
+    padding: 12px;
+    text-align: center;
+    font-weight: 500;
+    border-radius: 8px 8px 0 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* 日期单元格样式 */
+.calendar_default_cell {
+    background: var(--card-bg-color);
+    border: 1px solid var(--border-color);
+    padding: 8px;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    min-height: 100px;
+}
+
+.calendar_default_cell:hover {
+    transform: scale(1.02);
+    box-shadow: var(--card-shadow-hover);
+    z-index: 1;
+}
+
+/* 今天日期样式 */
+.calendar_default_cell_today {
+    background: var(--primary-color-light);
+    border: 2px solid var(--primary-color);
+}
+
+/* 过去日期样式 */
+.past-date {
+    opacity: 0.8;
+    background: var(--card-bg-color-hover);
+}
+
+/* 未来日期样式 */
+.future-date {
+    background: var(--card-bg-color);
+}
+
+/* 日期标题样式 */
+.cell-date-header {
+    padding: 8px;
+    text-align: right;
+    font-weight: 500;
+    color: var(--text-secondary-color);
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 8px;
+}
+
+/* 事件容器样式 */
+.cell-events-container {
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px;
+}
+
+/* 事件样式 */
+.calendar_default_event {
+    margin: 4px 0;
+    padding: 8px;
+    border-radius: 6px;
+    background: var(--primary-gradient);
+    color: white;
+    font-size: 0.9em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    animation: slideIn 0.3s ease;
+}
+
+.calendar_default_event:hover {
+    transform: translateX(4px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.calendar_default_event_inner {
+    padding: 4px;
+}
+
+/* 完成的事件样式 */
+.completed-event {
+    opacity: 0.7;
+    background: var(--success-gradient) !important;
+}
+
+/* 导航按钮样式 */
+.calendar-nav-btn {
+    background: var(--primary-gradient);
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    color: white;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.calendar-nav-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    background: var(--primary-gradient-hover);
+}
+
+/* 滚动条样式 */
+.cell-events-container::-webkit-scrollbar {
+    width: 4px;
+}
+
+.cell-events-container::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 2px;
+}
+
+.cell-events-container::-webkit-scrollbar-track {
+    background: var(--background-color);
+    border-radius: 2px;
+}
+
+/* 动画效果 */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* 暗黑模式适配 */
+body.dark-theme .calendar-container {
+    background: var(--card-bg-color);
+}
+
+body.dark-theme .calendar-header {
+    background: var(--card-bg-color);
+}
+
+body.dark-theme .calendar_default_cell {
+    background: var(--card-bg-color);
+    border-color: var(--border-color);
+}
+
+body.dark-theme .calendar_default_cell_today {
+    background: var(--primary-color-light);
+}
+
+body.dark-theme .past-date {
+    background: var(--card-bg-color-hover);
+}
+
+body.dark-theme .future-date {
+    background: var(--card-bg-color);
+}
+
+body.dark-theme .cell-date-header {
+    color: var(--text-secondary-color);
+    border-color: var(--border-color);
+}
+
+body.dark-theme .cell-events-container::-webkit-scrollbar-track {
+    background: var(--background-color);
+}
+
+/* 日历视图样式 */
+#calendar-view {
+    padding: 10px;
+}
+
+#dp {
+    height: 700px;
+    background-color: var(--background-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    overflow: hidden;
+}
+
+/* DayPilot日历组件样式重写 */
+.calendar_default_main {
+    background-color: var(--background-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+}
+
+.calendar_default_colheader {
+    background-color: var(--background-color);
+    color: var(--text-primary-color);
+    padding: 10px;
+    font-weight: 600;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.calendar_default_rowheader {
+    background-color: var(--background-color);
+    border-right: 1px solid var(--border-color);
+    padding: 10px;
+    color: var(--text-secondary-color);
+}
+
+.calendar_default_cell_business {
+    background-color: var(--background-color);
+}
+
+.calendar_default_cell.calendar_default_cell_today {
+    background-color: var(--primary-color-light);
+    border: 2px solid var(--primary-color);
+}
+
+.calendar_default_cell.past-date {
+    background-color: var(--background-color);
+    opacity: 0.8;
+}
+
+.calendar_default_cell.future-date {
+    background-color: var(--background-color);
+    opacity: 0.95;
+}
+
+.calendar_default_event {
+    border-radius: var(--border-radius);
+    padding: 5px;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    margin: 2px 0;
+}
+
+.calendar_default_event:hover {
+    transform: translateX(4px);
+    box-shadow: var(--box-shadow);
+    z-index: 10;
+}
+
+.calendar_default_event_inner {
+    background: var(--primary-color);
+    color: white;
+    border-radius: 4px;
+    padding: 4px 8px;
+    opacity: 0.9;
+    transition: all 0.2s ease;
+}
+
+.calendar_default_event_inner:hover {
+    opacity: 1;
+    transform: scale(1.02);
+}
+
+.calendar_default_event_bar {
+    background-color: var(--primary-color);
+}
+
+.calendar_default_event_bar_inner {
+    background-color: var(--primary-color);
+    border-color: transparent;
+}
+
+.calendar_default_message {
+    background-color: var(--background-color);
+    color: var(--text-primary-color);
+    border-radius: var(--border-radius);
+    padding: 10px;
+    box-shadow: var(--box-shadow);
+}
+
+.calendar_default_timeheader_inner {
+    background-color: var(--background-color);
+    color: var(--text-secondary-color);
+    border-color: var(--border-color);
+    padding: 8px;
+}
+
+.calendar_default_scrollable {
+    border-color: var(--border-color);
+}
+
+/* 当前时间线 */
+.calendar_default_nowline {
+    border-color: var(--primary-color);
+    opacity: 0.6;
+}
+
+.calendar_default_nowline::before {
+    content: '';
+    position: absolute;
+    left: -4px;
+    top: -4px;
+    width: 8px;
+    height: 8px;
+    background-color: var(--primary-color);
+    border-radius: 50%;
+}
+
+/* 选中效果 */
+.calendar_default_selected .calendar_default_event_inner {
+    box-shadow: 0 0 0 2px var(--primary-color);
+    opacity: 1;
+}
+
+/* 工具提示 */
+.calendar_default_event_hover {
+    background-color: var(--background-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: 8px;
+    box-shadow: var(--box-shadow);
+    color: var(--text-primary-color);
+    font-size: 0.9em;
+}
+
+/* 月视图样式 */
+.calendar_default_month_cell_inner {
+    background-color: var(--background-color);
+    border-color: var(--border-color);
+    padding: 8px;
+}
+
+.calendar_default_month_header_inner {
+    background-color: var(--background-color);
+    color: var(--text-primary-color);
+    border-color: var(--border-color);
+    font-weight: bold;
+    padding: 10px;
+}
+
+.calendar_default_month_cell_header {
+    color: var(--text-secondary-color);
+    font-size: 0.9em;
+    padding: 4px;
+}
+
+/* 周末样式 */
+.calendar_default_cell_weekend {
+    background-color: var(--background-color);
+    opacity: 0.95;
+}
+
+/* 导航器样式 */
+.calendar_default_navigator_today,
+.calendar_default_navigator_prev,
+.calendar_default_navigator_next {
+    color: var(--text-primary-color);
+    background-color: var(--background-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: 6px 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-weight: 500;
+}
+
+.calendar_default_navigator_today:hover,
+.calendar_default_navigator_prev:hover,
+.calendar_default_navigator_next:hover {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+    transform: translateY(-1px);
+}
+
+/* 当前日期单元格 */
+.calendar_default_todaybox {
+    border: 2px solid var(--primary-color);
+    border-radius: var(--border-radius);
+}
+
+/* 暗黑模式适配 */
+body.dark-theme #dp {
+    background-color: #333;
+}
+
+body.dark-theme .calendar_default_main {
+    border-color: #444;
+}
+
+body.dark-theme .calendar_default_rowheader {
+    background-color: #222;
+    color: var(--light-text);
+    border-color: #444;
+}
+
+body.dark-theme .calendar_default_cell {
+    background-color: #333;
+    border-color: #444;
+    color: var(--light-text);
+}
+
+body.dark-theme .calendar_default_cell_business {
+    background-color: #2a2a2a;
+}
+
+body.dark-theme .calendar_default_cell.calendar_default_cell_today {
+    background-color: rgba(255, 0, 0, 0.1);
+}
+
+body.dark-theme .calendar_default_cell.past-date {
+    background-color: #282828;
+}
+
+body.dark-theme .calendar_default_cell.future-date {
+    background-color: rgba(66, 133, 244, 0.1);
+}
+
+/* 动画效果 */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.calendar_default_main {
+    animation: fadeIn 0.3s ease;
+}
+
+/* 滚动条美化 */
+.calendar_default_scrollable::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+.calendar_default_scrollable::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 3px;
+}
+
+.calendar_default_scrollable::-webkit-scrollbar-track {
+    background: var(--background-color);
+    border-radius: 3px;
+}
+
+/* 完成的事件样式 */
+.calendar_default_event.completed {
+    opacity: 0.7;
+}
+
+.calendar_default_event.completed .calendar_default_event_inner {
+    background: var(--success-color);
+    text-decoration: line-through;
+}
+
+/* 日历视图切换按钮 */
+.calendar-view-btn {
+    background: var(--card-bg-color);
+    border: 1px solid var(--border-color);
+    padding: 6px 12px;
+    border-radius: 20px;
+    color: var(--text-primary-color);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    min-width: 40px;
+    text-align: center;
+}
+
+.calendar-view-btn:hover {
+    background: var(--primary-color-light);
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.calendar-view-btn.active {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+}
+
+/* 今天按钮 */
+.calendar-today-btn {
+    background: var(--primary-gradient);
+    border: none;
+    padding: 6px 16px;
+    border-radius: 20px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    margin-left: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.calendar-today-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    background: var(--primary-gradient-hover);
+}
+
+/* 当前日期显示 */
+.calendar-current-date {
+    font-weight: bold;
+    font-size: 1.2em;
+    color: var(--text-primary-color);
+    padding: 8px 16px;
+    background: var(--card-bg-color);
+    border-radius: 20px;
+    box-shadow: var(--card-shadow-soft);
+}
+
+/* 日视图样式 */
+.calendar_default_main[style*="grid-template-columns: 1fr"] {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* 月视图样式 */
+.calendar_default_main[style*="grid-template-columns: repeat(7, 1fr)"][style*="grid-template-rows: auto repeat(5, 1fr)"] {
+    height: 800px;
+}
+
+/* 年视图样式 */
+.calendar_default_main[style*="grid-template-columns: repeat(4, 1fr)"][style*="grid-template-rows: repeat(3, 1fr)"] {
+    height: 800px;
+}
+
+.calendar_default_main[style*="grid-template-columns: repeat(4, 1fr)"][style*="grid-template-rows: repeat(3, 1fr)"] .calendar_default_cell {
+    padding: 10px;
+}
+
+.calendar_default_main[style*="grid-template-columns: repeat(4, 1fr)"][style*="grid-template-rows: repeat(3, 1fr)"] .cell-date-header {
+    font-size: 18px;
+    text-align: center;
+    padding: 10px;
+    border-bottom: 2px solid var(--border-color);
+}
+
+/* 暗黑模式适配 */
+body.dark-theme .calendar-view-btn {
+    background: var(--card-bg-color);
+    border-color: var(--border-color);
+    color: var(--text-primary-color);
+}
+
+body.dark-theme .calendar-view-btn:hover {
+    background: var(--primary-color-light);
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+body.dark-theme .calendar-view-btn.active {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+}
+
+body.dark-theme .calendar-today-btn {
+    background: var(--primary-gradient);
+}
+
+body.dark-theme .calendar-current-date {
+    background: var(--card-bg-color);
+    color: var(--text-primary-color);
+}
+
+/* 大屏幕日历适配 - 2K 屏幕 (1440p) */
+@media (min-width: 2560px) {
+    .calendar-container {
+        padding: 30px;
+        margin: 30px;
+        border-radius: 15px;
+    }
+    
+    .calendar-header {
+        padding: 15px;
+        margin-bottom: 25px;
+    }
+    
+    .calendar_default_cell {
+        min-height: 150px;
+    }
+    
+    .cell-date-header {
+        font-size: 1.2rem;
+        padding: 8px;
+    }
+    
+    .cell-events-container {
+        max-height: 300px;
+    }
+    
+    .calendar_default_event {
+        margin: 6px;
+        border-radius: 8px;
+    }
+    
+    .calendar_default_event_inner {
+        padding: 8px 12px;
+        font-size: 0.95rem;
+    }
+    
+    .calendar-nav-btn,
+    .calendar-view-btn,
+    .calendar-today-btn {
+        padding: 10px 18px;
+        font-size: 1.05rem;
+    }
+    
+    .calendar-current-date {
+        font-size: 1.3rem;
+        padding: 0 20px;
+    }
+}
+
+/* 超大屏幕日历适配 - 4K 屏幕 (2160p) */
+@media (min-width: 3840px) {
+    .calendar-container {
+        padding: 40px;
+        margin: 40px;
+        border-radius: 20px;
+    }
+    
+    .calendar-header {
+        padding: 20px;
+        margin-bottom: 30px;
+    }
+    
+    .calendar_default_cell {
+        min-height: 200px;
+    }
+    
+    .cell-date-header {
+        font-size: 1.4rem;
+        padding: 10px;
+    }
+    
+    .cell-events-container {
+        max-height: 400px;
+    }
+    
+    .calendar_default_event {
+        margin: 8px;
+        border-radius: 10px;
+    }
+    
+    .calendar_default_event_inner {
+        padding: 10px 15px;
+        font-size: 1.1rem;
+    }
+    
+    .calendar-nav-btn,
+    .calendar-view-btn,
+    .calendar-today-btn {
+        padding: 12px 22px;
+        font-size: 1.2rem;
+    }
+    
+    .calendar-current-date {
+        font-size: 1.6rem;
+        padding: 0 25px;
+    }
+}
+
+/* 电视屏幕日历适配 - 超大尺寸 */
+@media (min-width: 5120px) {
+    .calendar-container {
+        padding: 50px;
+        margin: 50px;
+        border-radius: 25px;
+    }
+    
+    .calendar-header {
+        padding: 25px;
+        margin-bottom: 40px;
+    }
+    
+    .calendar_default_cell {
+        min-height: 250px;
+    }
+    
+    .cell-date-header {
+        font-size: 1.8rem;
+        padding: 15px;
+    }
+    
+    .cell-events-container {
+        max-height: 500px;
+    }
+    
+    .calendar_default_event {
+        margin: 12px;
+        border-radius: 15px;
+    }
+    
+    .calendar_default_event_inner {
+        padding: 15px 20px;
+        font-size: 1.4rem;
+    }
+    
+    .calendar-nav-btn,
+    .calendar-view-btn,
+    .calendar-today-btn {
+        padding: 15px 30px;
+        font-size: 1.5rem;
+        border-radius: 12px;
+    }
+    
+    .calendar-current-date {
+        font-size: 2rem;
+        padding: 0 30px;
+    }
+    
+    /* 增强视觉效果 */
+    .calendar_default_colheader,
+    .calendar_default_rowheader {
+        font-size: 1.5rem;
+        padding: 15px;
+    }
+    
+    .calendar_default_event.completed .calendar_default_event_inner {
+        text-decoration: line-through;
+        text-decoration-thickness: 3px;
+    }
+    
+    /* 增强滚动条可见性 */
+    .cell-events-container::-webkit-scrollbar {
+        width: 12px;
+    }
+    
+    .cell-events-container::-webkit-scrollbar-thumb {
+        border-radius: 6px;
+    }
+}
+
+/* 为日历组件添加基本小屏幕适配样式 */
+@media (max-width: 768px) {
+    .calendar-container {
+        padding: 10px;
+    }
+    
+    .calendar-header {
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .calendar-header-left,
+    .calendar-header-right {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .calendar-view-buttons {
+        display: flex;
+        gap: 5px;
+    }
+    
+    /* 隐藏月视图和年视图按钮 */
+    .calendar-view-btn[data-view="月"],
+    .calendar-view-btn[data-view="年"] {
+        display: none !important;
+    }
+    
+    .calendar-view-btn, 
+    .calendar-today-btn,
+    .calendar-nav-btn {
+        padding: 6px 10px;
+        font-size: 0.9rem;
+    }
+    
+    .calendar-grid-container {
+        overflow-x: auto;
+    }
+    
+    .calendar-cell {
+        min-height: 80px;
+        padding: 4px;
+    }
+    
+    .calendar-event {
+        padding: 3px 5px;
+        font-size: 0.8rem;
+        margin-bottom: 3px;
+    }
+    
+    .calendar-current-date {
+        font-size: 1rem;
+        text-align: center;
+        min-width: 120px;
+    }
+    
+    /* 调整日历容器高度以适应移动屏幕 */
+    #dp {
+        height: 500px;
+    }
+}
+
+/* 手机屏幕日历适配 */
+@media (max-width: 480px) {
+    .calendar-container {
+        padding: 5px;
+        margin: 5px;
+    }
+    
+    .calendar-header {
+        padding: 5px;
+    }
+    
+    /* 隐藏月视图和年视图按钮 */
+    .calendar-view-btn[data-view="月"],
+    .calendar-view-btn[data-view="年"] {
+        display: none !important;
+    }
+    
+    .calendar-view-btn,
+    .calendar-today-btn,
+    .calendar-nav-btn {
+        padding: 5px 8px;
+        font-size: 0.8rem;
+        min-width: 0;
+    }
+    
+    .calendar-current-date {
+        font-size: 0.9rem;
+        padding: 0 5px;
+    }
+    
+    .calendar-cell {
+        min-height: 60px;
+        padding: 2px;
+    }
+    
+    .calendar-event {
+        padding: 2px 4px;
+        margin-bottom: 2px;
+        font-size: 0.7rem;
+    }
+    
+    /* 调整日历容器高度以适应移动屏幕 */
+    #dp {
+        height: 400px;
+    }
+    
+    /* 调整网格容器适应小屏幕 */
+    .calendar-grid-container {
+        font-size: 0.8rem;
+    }
+    
+    /* 调整列和行标题 */
+    .calendar-column-header,
+    .calendar-row-header {
+        padding: 3px;
+        font-size: 0.75rem;
+    }
+    
+    /* 视图按钮样式 */
+    .calendar-view-btn[data-view="日"]::before {
+        font-family: 'Font Awesome 6 Free';
+        font-weight: 900;
+        content: "\f783"; /* 日视图图标 */
+        margin-right: 4px;
+    }
+    
+    .calendar-view-btn[data-view="周"]::before {
+        font-family: 'Font Awesome 6 Free';
+        font-weight: 900;
+        content: "\f784"; /* 周视图图标 */
+        margin-right: 4px;
+    }
+    
+    .calendar-view-btn[data-view="月"]::before {
+        font-family: 'Font Awesome 6 Free';
+        font-weight: 900;
+        content: "\f133"; /* 月视图图标 */
+        margin-right: 4px;
+    }
+    
+    .calendar-view-btn[data-view="年"]::before {
+        font-family: 'Font Awesome 6 Free';
+        font-weight: 900;
+        content: "\f073"; /* 年视图图标 */
+        margin-right: 4px;
+    }
+    
+    /* 今天按钮样式 */
+    .calendar-today-btn::before {
+        font-family: 'Font Awesome 6 Free';
+        font-weight: 900;
+        content: "\f274"; /* 今天图标 */
+        margin-right: 4px;
+    }
+    
+    /* 超小屏幕下仅显示图标，隐藏文字 */
+    @media (max-width: 400px) {
+        .calendar-view-btn,
+        .calendar-today-btn {
+            font-size: 0;
+            padding: 8px;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .calendar-view-btn::before,
+        .calendar-today-btn::before {
+            margin-right: 0;
+            font-size: 1rem;
+        }
+    }
+    
+    .calendar_default_cell {
+        min-height: 50px;
+    }
+    
+    .cell-date-header {
+        font-size: 0.75rem;
+        padding: 2px;
+    }
+    
+    .cell-events-container {
+        max-height: 100px;
+    }
+    
+    .calendar_default_event {
+        margin: 2px;
+        border-radius: 3px;
+    }
+    
+    .calendar_default_event_inner {
+        padding: 2px 4px;
+        font-size: 0.7rem;
+    }
+    
+    /* 为月视图优化，将星期标头改为简写 */
+    .calendar_default_main[style*="grid-template-columns: repeat(7, 1fr)"] .calendar_default_colheader {
+        font-size: 0.7rem;
+        /* 将星期几文本替换为简写 */
+        max-width: 40px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    
+    /* 年视图优化 */
+    .calendar_default_main[style*="grid-template-columns: repeat(4, 1fr)"] .calendar_default_cell {
+        min-height: 40px;
+    }
+    
+    .calendar_default_main[style*="grid-template-columns: repeat(4, 1fr)"] .cell-date-header {
+        font-size: 0.7rem;
+        padding: 2px;
+    }
+    
+    /* 确保搜索框在小屏幕上正确显示 */
+    .calendar-search-box {
+        width: 100%;
+        max-width: none;
+    }
+    
+    .calendar-search-input {
+        width: calc(100% - 30px);
+        padding: 5px 8px;
+        font-size: 0.8rem;
+    }
+    
+    .calendar-search-clear {
+        width: 20px;
+        height: 20px;
+        right: 5px;
+        font-size: 0.8rem;
+    }
+}
+
+/* 极小屏幕适配 */
+@media (max-width: 320px) {
+    .calendar-header-right,
+    .calendar-header-left {
+        justify-content: space-between;
+    }
+    
+    .calendar-view-btn,
+    .calendar-today-btn,
+    .calendar-nav-btn {
+        padding: 4px 6px;
+        font-size: 0.75rem;
+        min-width: 0;
+    }
+    
+    .calendar_default_cell {
+        min-height: 40px;
+    }
+    
+    .cell-date-header {
+        font-size: 0.7rem;
+        padding: 1px;
+    }
+    
+    .calendar_default_event_inner {
+        padding: 1px 2px;
+        font-size: 0.65rem;
+    }
+    
+    /* 为超小屏幕优化月视图 */
+    .calendar_default_main[style*="grid-template-columns: repeat(7, 1fr)"] .calendar_default_colheader {
+        font-size: 0.65rem;
+        max-width: 30px;
+    }
+}
+
+/* 小尺寸长方形模式适配（窄屏但高度较大的设备） */
+@media (max-width: 480px) and (min-height: 700px) {
+    /* 容器布局优化 */
+    .calendar-container {
+        display: flex;
+        flex-direction: column;
+        height: calc(100vh - 100px);
+        margin: 5px;
+        padding: 8px;
+    }
+    
+    /* 头部紧凑化布局 */
+    .calendar-header {
+        flex-direction: column;
+        padding: 5px;
+        margin-bottom: 8px;
+        gap: 5px;
+    }
+    
+    .calendar-header-left,
+    .calendar-header-right {
+        width: 100%;
+        justify-content: center;
+        margin-bottom: 5px;
+    }
+    
+    /* 当前日期显示样式 */
+    .calendar-current-date {
+        width: 100%;
+        text-align: center;
+        order: -1;
+        margin-bottom: 5px;
+        font-size: 1rem;
+    }
+    
+    /* 视图按钮和控制按钮排列 */
+    .calendar-view-buttons {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        gap: 5px;
+        flex-wrap: wrap;
+    }
+    
+    /* 日历主体区域 */
+    .calendar_default_main {
+        flex: 1;
+        min-height: 500px;
+        height: auto;
+    }
+    
+    /* 日视图优化 */
+    .calendar_default_main[style*="grid-template-columns: 1fr"] {
+        max-width: none;
+        height: 100%;
+    }
+    
+    /* 单元格内容调整 */
+    .calendar_default_cell {
+        min-height: 60px;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    /* 事件显示优化 */
+    .cell-events-container {
+        max-height: none;
+        flex: 1;
+        overflow-y: auto;
+    }
+    
+    /* 搜索框优化 */
+    .calendar-search-box {
+        width: 100%;
+        margin: 5px 0;
+    }
+    
+    /* 周视图优化 */
+    .calendar_default_main[style*="grid-template-columns: repeat(7, 1fr)"] {
+        grid-template-rows: auto minmax(600px, 1fr);
+    }
+    
+    /* 月视图优化 */
+    .calendar_default_main[style*="grid-template-columns: repeat(7, 1fr)"][style*="grid-template-rows: auto repeat(5, 1fr)"] {
+        height: auto;
+        min-height: 600px;
+    }
+    
+    /* 年视图优化 - 改为纵向排列 */
+    .calendar_default_main[style*="grid-template-columns: repeat(4, 1fr)"][style*="grid-template-rows: repeat(3, 1fr)"] {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(6, 1fr);
+    }
+    
+    /* 增强垂直滚动体验 */
+    .calendar-grid-container {
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+    }
+    
+    /* 优化事件卡片垂直展示 */
+    .calendar_default_event {
+        margin: 3px 0;
+    }
+    
+    .calendar_default_event_inner {
+        padding: 4px 6px;
+        font-size: 0.8rem;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+    
+    /* 触摸友好按钮 */
+    .calendar-view-btn, 
+    .calendar-today-btn,
+    .calendar-nav-btn {
+        min-height: 36px;
+        padding: 8px 12px;
+        margin: 2px;
+        touch-action: manipulation;
+    }
+    
+    /* 触摸反馈效果 */
+    .calendar-view-btn:active,
+    .calendar-today-btn:active,
+    .calendar-nav-btn:active {
+        transform: scale(0.95);
+        opacity: 0.9;
+    }
+    
+    /* 增强事件触摸区域 */
+    .calendar_default_event {
+        min-height: 24px;
+        position: relative;
+    }
+    
+    /* 焦点状态优化 */
+    .calendar_default_event:focus,
+    .calendar_default_event:active {
+        outline: 2px solid var(--primary-color);
+        z-index: 10;
+    }
+    
+    /* 简化长文本显示 */
+    .cell-date-header {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
+    }
+    
+    /* 日历切换时的动画效果简化，提高性能 */
+    .calendar_default_main {
+        animation: none;
+        transition: opacity 0.2s ease;
+    }
+} 
