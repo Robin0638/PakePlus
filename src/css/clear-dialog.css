@@ -1,0 +1,574 @@
+/* 清除数据对话框样式 */
+.clear-dialog-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.clear-dialog-overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.clear-dialog {
+    background: var(--bg-color);
+    border-radius: 20px;
+    padding: 0;
+    max-width: 450px;
+    width: 100%;
+    max-height: 90vh;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    transform: scale(0.8) translateY(20px);
+    transition: all 0.3s ease;
+    border: 1px solid var(--border-color);
+    position: relative;
+}
+
+.clear-dialog-overlay.show .clear-dialog {
+    transform: scale(1) translateY(0);
+}
+
+.clear-dialog-header {
+    background: linear-gradient(135deg, #ff4757, #ff3742);
+    color: white;
+    padding: 25px 30px 20px;
+    text-align: center;
+    position: relative;
+}
+
+.clear-dialog-header h3 {
+    margin: 0;
+    font-size: 1.5em;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.clear-dialog-header .warning-icon {
+    font-size: 1.8em;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+.clear-dialog-close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    font-size: 16px;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.clear-dialog-close:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+}
+
+.clear-dialog-close:active {
+    transform: scale(0.95);
+}
+
+.clear-dialog-body {
+    padding: 30px;
+    text-align: center;
+    overflow-y: auto;
+    max-height: calc(90vh - 120px);
+}
+
+.clear-dialog-icon {
+    font-size: 4em;
+    margin-bottom: 20px;
+    color: #ff4757;
+    animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+.clear-dialog-title {
+    font-size: 1.4em;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: var(--text-color);
+}
+
+.clear-dialog-description {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 25px;
+    font-size: 1.1em;
+}
+
+.clear-dialog-warning {
+    background: rgba(255, 71, 87, 0.1);
+    border: 1px solid rgba(255, 71, 87, 0.3);
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 25px;
+    color: #ff4757;
+    font-weight: 500;
+}
+
+.clear-dialog-warning .warning-text {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.95em;
+}
+
+.clear-dialog-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.clear-dialog-btn {
+    padding: 12px 30px;
+    border-radius: 25px;
+    border: none;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 120px;
+    position: relative;
+    overflow: hidden;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+}
+
+.clear-dialog-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.clear-dialog-btn:hover::before {
+    left: 100%;
+}
+
+.clear-dialog-btn.cancel {
+    background: var(--border-color);
+    color: var(--text-color);
+    border: 2px solid var(--border-color);
+}
+
+.clear-dialog-btn.cancel:hover {
+    background: var(--bg-secondary);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.clear-dialog-btn.cancel:active {
+    transform: translateY(0);
+}
+
+.clear-dialog-btn.confirm {
+    background: linear-gradient(135deg, #ff4757, #ff3742);
+    color: white;
+    border: 2px solid #ff4757;
+}
+
+.clear-dialog-btn.confirm:hover {
+    background: linear-gradient(135deg, #ff3742, #ff2e3a);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(255, 71, 87, 0.3);
+}
+
+.clear-dialog-btn.confirm:active {
+    transform: translateY(0);
+}
+
+.clear-dialog-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+/* 确认步骤样式 */
+.clear-confirm-step {
+    display: none;
+    animation: fadeInUp 0.3s ease;
+}
+
+.clear-confirm-step.show {
+    display: block;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.clear-confirm-input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    font-size: 1em;
+    margin-bottom: 20px;
+    background: var(--bg-color);
+    color: var(--text-color);
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.clear-confirm-input:focus {
+    outline: none;
+    border-color: #ff4757;
+    box-shadow: 0 0 0 3px rgba(255, 71, 87, 0.1);
+}
+
+.clear-confirm-input.error {
+    border-color: #ff4757;
+    animation: shake 0.5s ease-in-out;
+}
+
+.clear-confirm-hint {
+    font-size: 0.9em;
+    color: var(--text-secondary);
+    margin-bottom: 20px;
+    font-style: italic;
+}
+
+/* 响应式设计 - 平板设备 */
+@media (max-width: 768px) {
+    .clear-dialog-overlay {
+        padding: 15px;
+    }
+    
+    .clear-dialog {
+        max-width: 500px;
+        border-radius: 16px;
+    }
+    
+    .clear-dialog-header {
+        padding: 22px 25px 18px;
+    }
+    
+    .clear-dialog-header h3 {
+        font-size: 1.4em;
+    }
+    
+    .clear-dialog-body {
+        padding: 25px;
+    }
+    
+    .clear-dialog-icon {
+        font-size: 3.5em;
+    }
+    
+    .clear-dialog-title {
+        font-size: 1.3em;
+    }
+    
+    .clear-dialog-description {
+        font-size: 1em;
+    }
+}
+
+/* 响应式设计 - 手机设备 */
+@media (max-width: 480px) {
+    .clear-dialog-overlay {
+        padding: 10px;
+        align-items: flex-end;
+    }
+    
+    .clear-dialog {
+        width: 100%;
+        max-width: none;
+        margin: 0;
+        border-radius: 20px 20px 0 0;
+        max-height: 85vh;
+        transform: scale(0.9) translateY(50px);
+    }
+    
+    .clear-dialog-overlay.show .clear-dialog {
+        transform: scale(1) translateY(0);
+    }
+    
+    .clear-dialog-header {
+        padding: 20px 20px 15px;
+        border-radius: 20px 20px 0 0;
+    }
+    
+    .clear-dialog-header h3 {
+        font-size: 1.2em;
+        gap: 8px;
+    }
+    
+    .clear-dialog-header .warning-icon {
+        font-size: 1.5em;
+    }
+    
+    .clear-dialog-close {
+        top: 12px;
+        right: 15px;
+        width: 28px;
+        height: 28px;
+        font-size: 14px;
+    }
+    
+    .clear-dialog-body {
+        padding: 20px;
+        max-height: calc(85vh - 100px);
+    }
+    
+    .clear-dialog-icon {
+        font-size: 3em;
+        margin-bottom: 15px;
+    }
+    
+    .clear-dialog-title {
+        font-size: 1.2em;
+        margin-bottom: 12px;
+    }
+    
+    .clear-dialog-description {
+        font-size: 0.95em;
+        margin-bottom: 20px;
+        line-height: 1.5;
+    }
+    
+    .clear-dialog-warning {
+        padding: 12px;
+        margin-bottom: 20px;
+        border-radius: 10px;
+    }
+    
+    .clear-dialog-warning .warning-text {
+        font-size: 0.9em;
+        gap: 6px;
+    }
+    
+    .clear-dialog-actions {
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    .clear-dialog-btn {
+        width: 100%;
+        min-width: auto;
+        padding: 14px 20px;
+        font-size: 1em;
+        border-radius: 12px;
+    }
+    
+    .clear-confirm-input {
+        padding: 14px 15px;
+        font-size: 16px; /* 防止iOS缩放 */
+        border-radius: 8px;
+    }
+    
+    .clear-confirm-hint {
+        font-size: 0.85em;
+        margin-bottom: 15px;
+    }
+}
+
+/* 超小屏幕设备 */
+@media (max-width: 360px) {
+    .clear-dialog-overlay {
+        padding: 5px;
+    }
+    
+    .clear-dialog {
+        border-radius: 16px 16px 0 0;
+        max-height: 90vh;
+    }
+    
+    .clear-dialog-header {
+        padding: 18px 15px 12px;
+        border-radius: 16px 16px 0 0;
+    }
+    
+    .clear-dialog-header h3 {
+        font-size: 1.1em;
+    }
+    
+    .clear-dialog-body {
+        padding: 15px;
+        max-height: calc(90vh - 90px);
+    }
+    
+    .clear-dialog-icon {
+        font-size: 2.5em;
+        margin-bottom: 12px;
+    }
+    
+    .clear-dialog-title {
+        font-size: 1.1em;
+        margin-bottom: 10px;
+    }
+    
+    .clear-dialog-description {
+        font-size: 0.9em;
+        margin-bottom: 15px;
+    }
+    
+    .clear-dialog-warning {
+        padding: 10px;
+        margin-bottom: 15px;
+    }
+    
+    .clear-dialog-warning .warning-text {
+        font-size: 0.85em;
+    }
+    
+    .clear-dialog-btn {
+        padding: 12px 16px;
+        font-size: 0.95em;
+    }
+}
+
+/* 横屏模式优化 */
+@media (max-height: 500px) and (orientation: landscape) {
+    .clear-dialog-overlay {
+        align-items: center;
+        padding: 10px;
+    }
+    
+    .clear-dialog {
+        max-height: 95vh;
+        border-radius: 16px;
+    }
+    
+    .clear-dialog-header {
+        padding: 15px 20px 10px;
+        border-radius: 16px 16px 0 0;
+    }
+    
+    .clear-dialog-body {
+        padding: 15px 20px;
+        max-height: calc(95vh - 80px);
+    }
+    
+    .clear-dialog-icon {
+        font-size: 2.5em;
+        margin-bottom: 10px;
+    }
+    
+    .clear-dialog-title {
+        font-size: 1.1em;
+        margin-bottom: 8px;
+    }
+    
+    .clear-dialog-description {
+        font-size: 0.9em;
+        margin-bottom: 15px;
+    }
+    
+    .clear-dialog-warning {
+        padding: 10px;
+        margin-bottom: 15px;
+    }
+    
+    .clear-dialog-actions {
+        flex-direction: row;
+        gap: 10px;
+    }
+    
+    .clear-dialog-btn {
+        width: auto;
+        min-width: 100px;
+        padding: 10px 20px;
+    }
+}
+
+/* 深色主题适配 */
+.dark-theme .clear-dialog {
+    background: var(--bg-color);
+    border-color: var(--border-color);
+}
+
+.dark-theme .clear-dialog-btn.cancel {
+    background: var(--bg-secondary);
+    color: var(--text-color);
+    border-color: var(--border-color);
+}
+
+.dark-theme .clear-dialog-btn.cancel:hover {
+    background: var(--border-color);
+}
+
+/* 触摸设备优化 */
+@media (hover: none) and (pointer: coarse) {
+    .clear-dialog-btn:hover {
+        transform: none;
+    }
+    
+    .clear-dialog-btn:active {
+        transform: scale(0.98);
+    }
+    
+    .clear-dialog-close:hover {
+        transform: none;
+    }
+    
+    .clear-dialog-close:active {
+        transform: scale(0.9);
+    }
+}
+
+/* 高DPI屏幕优化 */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .clear-dialog {
+        border-width: 0.5px;
+    }
+    
+    .clear-dialog-btn {
+        border-width: 1px;
+    }
+    
+    .clear-confirm-input {
+        border-width: 1px;
+    }
+} 
