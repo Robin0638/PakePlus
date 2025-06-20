@@ -1,0 +1,679 @@
+/* 喝水提醒功能样式 */
+
+/* 喝水提醒设置面板 */
+.water-reminder-panel {
+    background-color: var(--card-bg);
+    padding: 20px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    margin-bottom: 20px;
+}
+
+.water-reminder-panel h3 {
+    margin-bottom: 20px;
+    text-align: center;
+    color: var(--primary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.water-reminder-panel h3::before {
+    content: "💧";
+    font-size: 1.2em;
+}
+
+.water-reminder-settings {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.water-reminder-setting {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.water-reminder-setting label {
+    font-weight: 500;
+    color: var(--text-color);
+    font-size: 0.9rem;
+}
+
+.water-reminder-setting input,
+.water-reminder-setting select {
+    padding: 8px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background-color: var(--input-bg);
+    color: var(--text-color);
+    font-size: 0.9rem;
+}
+
+.water-reminder-setting select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    background-size: 16px;
+    padding-right: 32px;
+}
+
+.water-reminder-setting #water-custom-interval {
+    margin-top: 8px;
+    font-size: 0.85rem;
+    opacity: 0.9;
+}
+
+.water-reminder-setting #water-custom-interval:focus {
+    opacity: 1;
+}
+
+.water-reminder-setting input:focus,
+.water-reminder-setting select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(var(--primary-color-rgb), 0.1);
+}
+
+.water-reminder-controls {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.water-reminder-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+}
+
+.water-reminder-btn.primary {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.water-reminder-btn.primary:hover {
+    background-color: var(--primary-color-dark);
+    transform: translateY(-1px);
+}
+
+.water-reminder-btn.secondary {
+    background-color: var(--secondary-color);
+    color: white;
+}
+
+.water-reminder-btn.secondary:hover {
+    background-color: var(--secondary-color-dark);
+    transform: translateY(-1px);
+}
+
+.water-reminder-btn.danger {
+    background-color: var(--danger-color);
+    color: white;
+}
+
+.water-reminder-btn.danger:hover {
+    background-color: var(--danger-color-dark);
+    transform: translateY(-1px);
+}
+
+.water-reminder-status {
+    text-align: center;
+    padding: 10px;
+    border-radius: 6px;
+    margin-top: 15px;
+    font-size: 0.9rem;
+}
+
+.water-reminder-status.active {
+    background-color: rgba(var(--success-color-rgb), 0.1);
+    color: var(--success-color);
+    border: 1px solid rgba(var(--success-color-rgb), 0.2);
+}
+
+.water-reminder-status.inactive {
+    background-color: rgba(var(--warning-color-rgb), 0.1);
+    color: var(--warning-color);
+    border: 1px solid rgba(var(--warning-color-rgb), 0.2);
+}
+
+/* 喝水提醒通知弹窗 */
+.water-notification {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    padding: 25px;
+    z-index: 10000;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    animation: waterNotificationSlideIn 0.3s ease-out;
+}
+
+@keyframes waterNotificationSlideIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+.water-notification-header {
+    margin-bottom: 20px;
+}
+
+.water-notification-icon {
+    font-size: 3rem;
+    margin-bottom: 10px;
+    animation: waterDrop 2s infinite;
+}
+
+@keyframes waterDrop {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
+
+.water-notification-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 5px;
+}
+
+.water-notification-subtitle {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.water-notification-content {
+    margin-bottom: 25px;
+}
+
+.water-notification-message {
+    font-size: 1rem;
+    color: var(--text-color);
+    margin-bottom: 15px;
+    line-height: 1.5;
+}
+
+.water-notification-time {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    font-style: italic;
+}
+
+.water-notification-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.water-notification-btn {
+    padding: 12px 16px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+}
+
+.water-notification-btn.primary {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.water-notification-btn.primary:hover {
+    background-color: var(--primary-color-dark);
+    transform: translateY(-1px);
+}
+
+.water-notification-btn.secondary {
+    background-color: var(--secondary-color);
+    color: white;
+}
+
+.water-notification-btn.secondary:hover {
+    background-color: var(--secondary-color-dark);
+    transform: translateY(-1px);
+}
+
+.water-notification-btn.postpone {
+    background-color: var(--warning-color);
+    color: white;
+}
+
+.water-notification-btn.postpone:hover {
+    background-color: var(--warning-color-dark);
+    transform: translateY(-1px);
+}
+
+.water-notification-footer {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.water-notification-footer-btn {
+    padding: 8px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background-color: transparent;
+    color: var(--text-color);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.8rem;
+}
+
+.water-notification-footer-btn:hover {
+    background-color: var(--hover-bg);
+    border-color: var(--primary-color);
+}
+
+/* 喝水类型选择弹窗 */
+.water-type-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    padding: 25px;
+    z-index: 10001;
+    max-width: 350px;
+    width: 90%;
+    text-align: center;
+    animation: waterTypeModalSlideIn 0.3s ease-out;
+}
+
+@keyframes waterTypeModalSlideIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+.water-type-modal h3 {
+    margin-bottom: 20px;
+    color: var(--primary-color);
+}
+
+.water-type-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.water-type-option {
+    padding: 15px;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background-color: transparent;
+    color: var(--text-color);
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.water-type-option:hover {
+    border-color: var(--primary-color);
+    background-color: rgba(var(--primary-color-rgb), 0.05);
+    transform: translateY(-2px);
+}
+
+.water-type-option.selected {
+    border-color: var(--primary-color);
+    background-color: rgba(var(--primary-color-rgb), 0.1);
+    color: var(--primary-color);
+}
+
+.water-type-option .water-type-icon {
+    font-size: 1.5rem;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.water-type-option .water-type-name {
+    display: block;
+    margin-bottom: 3px;
+}
+
+.water-type-option .water-type-points {
+    font-size: 0.8rem;
+    opacity: 0.8;
+}
+
+.water-type-custom {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid var(--border-color);
+}
+
+.water-type-custom input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background-color: var(--input-bg);
+    color: var(--text-color);
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+}
+
+.water-type-custom input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(var(--primary-color-rgb), 0.1);
+}
+
+.water-type-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+/* 遮罩层 */
+.water-notification-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    animation: overlayFadeIn 0.3s ease-out;
+}
+
+@keyframes overlayFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* 响应式设计 */
+@media (max-width: 480px) {
+    .water-reminder-settings {
+        grid-template-columns: 1fr;
+    }
+    
+    .water-notification {
+        width: 95%;
+        padding: 20px;
+    }
+    
+    .water-notification-actions {
+        grid-template-columns: 1fr;
+    }
+    
+    .water-type-options {
+        grid-template-columns: 1fr;
+    }
+    
+    .water-type-modal {
+        width: 95%;
+        padding: 20px;
+    }
+}
+
+/* 积分奖励动画 */
+.points-reward {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: var(--success-color);
+    color: white;
+    padding: 15px 25px;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    z-index: 10002;
+    animation: pointsRewardFloat 2s ease-out forwards;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes pointsRewardFloat {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.5);
+    }
+    20% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.1);
+    }
+    80% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(1) translateY(-50px);
+    }
+}
+
+/* 喝水目标进度条 */
+.water-goal-progress {
+    margin-top: 15px;
+    padding: 15px;
+    background-color: rgba(var(--primary-color-rgb), 0.05);
+    border-radius: 8px;
+    border: 1px solid rgba(var(--primary-color-rgb), 0.1);
+}
+
+.water-goal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.water-goal-title {
+    font-weight: 500;
+    color: var(--primary-color);
+    font-size: 0.9rem;
+}
+
+.water-goal-count {
+    font-weight: 600;
+    color: var(--primary-color);
+    font-size: 0.9rem;
+}
+
+.water-goal-bar {
+    width: 100%;
+    height: 8px;
+    background-color: rgba(var(--primary-color-rgb), 0.2);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.water-goal-fill {
+    height: 100%;
+    background-color: var(--primary-color);
+    border-radius: 4px;
+    transition: width 0.5s ease;
+    position: relative;
+}
+
+.water-goal-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    animation: waterGoalShine 2s infinite;
+}
+
+@keyframes waterGoalShine {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+/* 深色模式适配 */
+body.dark-theme .water-reminder-panel {
+    background-color: #23283a;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+}
+body.dark-theme .water-reminder-panel h3 {
+    color: #90caf9;
+}
+body.dark-theme .water-reminder-setting label {
+    color: #b0c4e7;
+}
+body.dark-theme .water-reminder-setting input,
+body.dark-theme .water-reminder-setting select {
+    background-color: #181c2a;
+    color: #e0e6f0;
+    border: 1px solid #333a55;
+}
+body.dark-theme .water-reminder-setting input:focus,
+body.dark-theme .water-reminder-setting select:focus {
+    border-color: #5c9aff;
+    box-shadow: 0 0 0 2px rgba(92,154,255,0.15);
+}
+body.dark-theme .water-reminder-btn.primary {
+    background-color: #5c9aff;
+    color: #fff;
+}
+body.dark-theme .water-reminder-btn.primary:hover {
+    background-color: #4080ff;
+}
+body.dark-theme .water-reminder-btn.secondary {
+    background-color: #4ebb73;
+    color: #fff;
+}
+body.dark-theme .water-reminder-btn.secondary:hover {
+    background-color: #388e5c;
+}
+body.dark-theme .water-reminder-btn.danger {
+    background-color: #ff6c60;
+    color: #fff;
+}
+body.dark-theme .water-reminder-btn.danger:hover {
+    background-color: #d84315;
+}
+body.dark-theme .water-reminder-status.active {
+    background-color: rgba(76, 175, 80, 0.08);
+    color: #4ebb73;
+    border: 1px solid rgba(76, 175, 80, 0.18);
+}
+body.dark-theme .water-reminder-status.inactive {
+    background-color: rgba(255, 193, 7, 0.08);
+    color: #ffd14a;
+    border: 1px solid rgba(255, 193, 7, 0.18);
+}
+body.dark-theme .water-notification {
+    background-color: #23283a;
+    color: #e0e6f0;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+}
+body.dark-theme .water-notification-title {
+    color: #90caf9;
+}
+body.dark-theme .water-notification-btn.primary {
+    background-color: #5c9aff;
+    color: #fff;
+}
+body.dark-theme .water-notification-btn.primary:hover {
+    background-color: #4080ff;
+}
+body.dark-theme .water-notification-btn.secondary {
+    background-color: #4ebb73;
+    color: #fff;
+}
+body.dark-theme .water-notification-btn.secondary:hover {
+    background-color: #388e5c;
+}
+body.dark-theme .water-notification-btn.postpone {
+    background-color: #ffd14a;
+    color: #23283a;
+}
+body.dark-theme .water-notification-btn.postpone:hover {
+    background-color: #ffb300;
+}
+body.dark-theme .water-notification-footer-btn {
+    background-color: transparent;
+    color: #b0c4e7;
+    border: 1px solid #333a55;
+}
+body.dark-theme .water-notification-footer-btn:hover {
+    background-color: #181c2a;
+    border-color: #5c9aff;
+}
+body.dark-theme .water-type-modal {
+    background-color: #23283a;
+    color: #e0e6f0;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+}
+body.dark-theme .water-type-modal h3 {
+    color: #90caf9;
+}
+body.dark-theme .water-type-option {
+    background-color: transparent;
+    color: #e0e6f0;
+    border: 2px solid #333a55;
+}
+body.dark-theme .water-type-option:hover {
+    border-color: #5c9aff;
+    background-color: rgba(92,154,255,0.08);
+}
+body.dark-theme .water-type-option.selected {
+    border-color: #5c9aff;
+    background-color: rgba(92,154,255,0.15);
+    color: #5c9aff;
+}
+body.dark-theme .water-type-custom {
+    border-top: 1px solid #333a55;
+}
+body.dark-theme .water-type-custom input {
+    background-color: #181c2a;
+    color: #e0e6f0;
+    border: 1px solid #333a55;
+}
+body.dark-theme .water-type-custom input:focus {
+    border-color: #5c9aff;
+    box-shadow: 0 0 0 2px rgba(92,154,255,0.15);
+}
+body.dark-theme .points-reward {
+    background-color: #4ebb73;
+    color: #fff;
+}
+body.dark-theme .water-goal-progress {
+    background-color: rgba(92,154,255,0.08);
+    border: 1px solid rgba(92,154,255,0.18);
+}
+body.dark-theme .water-goal-title,
+body.dark-theme .water-goal-count {
+    color: #90caf9;
+}
+body.dark-theme .water-goal-bar {
+    background-color: rgba(92,154,255,0.18);
+}
+body.dark-theme .water-goal-fill {
+    background-color: #5c9aff;
+} 
