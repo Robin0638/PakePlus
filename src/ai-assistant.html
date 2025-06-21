@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI助手 - 讯飞星辰智能体</title>
+    <link rel="stylesheet" href="css/ai-assistant.css">
+</head>
+<body>
+    <div class="ai-container">
+        <!-- 顶部导航栏 -->
+        <header class="ai-header">
+            <div class="header-content">
+                <button class="back-btn" id="back-btn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M19 12H5M12 19L5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    返回主页
+                </button>
+                <h1 class="ai-title">AI助手</h1>
+                <div class="header-spacer"></div>
+            </div>
+        </header>
+
+        <!-- AI助手内容区域 -->
+        <main class="ai-main">
+            <div class="ai-frame-container" style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 320px;">
+                <button class="primary-btn ai-open-btn" onclick="window.open('https://xinghuo.xfyun.cn/desk?sharebotId=0409199b5c13d5b193c96fc353a4ad98', '_blank')">
+                    <svg style="margin-right:8px;vertical-align:middle;" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 5v14m7-7H5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    打开AI助手
+                </button>
+                <p style="margin-top:16px;color:#888;font-size:14px;">点击按钮将在新窗口打开讯飞星辰智能体</p>
+            </div>
+        </main>
+
+        <!-- 使用说明 -->
+        <div class="ai-instructions">
+            <div class="instructions-header">
+                <h3>使用说明</h3>
+                <button class="toggle-instructions" id="toggle-instructions">
+                    <span class="toggle-text">收起</span>
+                    <svg class="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                        <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="instructions-content" id="instructions-content">
+                <h4>复制以下内容到AI助手即可使用：</h4>
+                <div class="instruction-section">
+                    <h5>我有个日程软件，需要请您把用户输入的所有内容严格的按照以下逻辑转换成有清单功能、倒数日功能、还有事件新建，生成markdown时表头和内容要分成两个markdown文档生成，提示用户表头不用复制，表头的显示仅为提示用户，多谢</h5>
+                    
+                    <div class="rule-section">
+                        <h5>1、清单</h5>
+                        <p>生成规则清单中添加的内容是持续时间不超过半小时的事件作为清单按照清单格式生成</p>
+                        <p>格式如下</p>
+                        <pre>清单名称 | 事项内容 | 截止日期 | 优先级 | 标签
+例如：
+购物清单 | 买牛奶 | 2024-03-20 | 高 | 日常,生活
+购物清单 | 买面包 | 2024-03-20 | 中 | 日常,生活
+工作清单 | 完成报告 | 2024-03-25 | 高 | 工作,紧急
+工作清单 | 预约会议 | 2024-03-22 | 中 | 工作,会议</pre>
+                        <p>用markdown生成、生成后提示用户在清单中的":"中点击文本导入然后再对话框输入即可</p>
+                    </div>
+                    
+                    <div class="rule-section">
+                        <h5>2、倒数日</h5>
+                        <p>生成规则：倒数日是用户认为重要的日子，如竞标日、面试日、生日、结婚纪念日、恋爱开始的日子、学习毕业的日子等类型的一日作为倒数日文本标准进行处理生成，要判断该日子是否会重复在进行生成</p>
+                        <p>格式如下</p>
+                        <pre>纪念日名称 | 日期 | 类型 | 图标 | 颜色 | 备注
+例如：
+结婚纪念日 | 2020-05-20 | yearly | 💑 | #ff4081 | 我们的结婚纪念日
+生日 | 1990-01-01 | yearly | 🎂 | #4caf50 | 我的生日
+毕业纪念日 | 2015-06-30 | yearly | 🎓 | #2196f3 | 大学毕业纪念日</pre>
+                        <p>用markdown生成、生成后提示用户在倒数日中的":"中点击文本导入然后再对话框输入即可</p>
+                    </div>
+                    
+                    <div class="rule-section">
+                        <h5>3、事项</h5>
+                        <p>生成规则:添加、持续时间超过20分钟的事件作为事项去生成，如用户提及上班或者上学或者要重复的事件需要根据用户提供的内容设置对应的重复逻辑</p>
+                        <p>格式如下</p>
+                        <pre>事件名称 | 开始时间 | 结束时间 | 地点 | 参与人员 | 标签 | 所属项目 | 重复设置
+例如：
+产品评审会 | 2024-03-20 14:00 | 2024-03-20 16:00 | 会议室A | 张三、李四 | 重要,会议 | 产品迭代 | daily,2024-04-20,10
+周会 | 2024-03-21 10:00 | 2024-03-21 11:30 | 线上 | 产品组 | 例会,产品 | 日常工作 | weekly,2024-06-21
+月报会议 | 2024-03-25 15:00 | 2024-03-25 16:00 | 会议室B | 全体 | 会议,月度 | 日常工作 | monthly,2024-12-25,12
+年会 | 2024-12-31 09:00 | 2024-12-31 18:00 | 总部 | 全体员工 | 重要,年会 | 公司活动 | yearly,2025-12-31</pre>
+                        <p>用markdown生成、生成后提示用户在新建中的外部导入中文本导入对话框输入即可</p>
+                    </div>
+                    
+                    <h5>以下是用户输入内容的部分</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/ai-theme-switcher.js"></script>
+    <script src="js/ai-assistant.js"></script>
+</body>
+</html> 
