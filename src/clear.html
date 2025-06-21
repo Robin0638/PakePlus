@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>正在清除软件所有数据 - 有数</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/theme.css">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            background: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        .clear-container {
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .progress-container {
+            width: 100%;
+            background-color: var(--border-color);
+            border-radius: 10px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            width: 0%;
+            height: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+
+        .clear-message {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+
+        .clear-icon {
+            font-size: 3em;
+            margin-bottom: 20px;
+            color: #667eea;
+        }
+    </style>
+</head>
+<body class="dark-theme">
+    <div class="clear-container">
+        <div class="clear-icon">
+            <i class="fas fa-broom"></i>
+        </div>
+        <div class="clear-message">正在清除数据...</div>
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const progressBar = document.getElementById('progressBar');
+            let progress = 0;
+            
+            // 清除本地存储数据
+            function clearData() {
+                // 清除所有localStorage数据
+                localStorage.clear();
+                // 清除所有sessionStorage数据
+                sessionStorage.clear();
+                
+                // 特别清除番茄时钟相关数据（确保完全清除）
+                localStorage.removeItem('pomodoroAppData');
+                localStorage.removeItem('focusStats');
+                localStorage.removeItem('lastDailyReset');
+                localStorage.removeItem('lastSelectedTask');
+                localStorage.removeItem('toolsLastUseTime');
+                localStorage.removeItem('recentItems');
+                localStorage.removeItem('favorites');
+                sessionStorage.removeItem('focusTasks');
+                sessionStorage.removeItem('clearDataConfirmed');
+                
+                // 清除StorageManager中的focusState数据
+                try {
+                    const data = {
+                        user: {
+                            nickname: '',
+                            avatar: 'assets/avatar-default.png'
+                        },
+                        settings: {
+                            theme: 'system',
+                            notifications: true,
+                            sounds: true,
+                            autoStartBreak: true,
+                            strictMode: false
+                        },
+                        events: [],
+                        projects: [],
+                        focusTime: {
+                            total: 0,
+                            today: 0,
+                            history: []
+                        },
+                        // 确保清除番茄时钟相关数据
+                        focusState: null,
+                        focusLogs: [],
+                        taskFocusStats: {},
+                        lastSelectedTask: null,
+                        todayFocusTime: 0,
+                        totalFocusTime: 0,
+                        medals: [
+                            { id: 'newcomer', name: '初来乍到', icon: '🎯', description: '欢迎使用有数！', unlocked: true },
+                            { id: 'points-100', name: '积分达人', icon: '🌟', description: '累计获得100积分', unlocked: false },
+                            { id: 'points-500', name: '积分大师', icon: '💫', description: '累计获得500积分', unlocked: false },
+                            { id: 'points-1000', name: '积分王者', icon: '✨', description: '累计获得1000积分', unlocked: false },
+                            { id: 'time-1h', name: '时间探索者', icon: '⏱️', description: '累计使用1小时', unlocked: false },
+                            { id: 'time-5h', name: '时间管理者', icon: '⌛', description: '累计使用5小时', unlocked: false },
+                            { id: 'time-24h', name: '时间大师', icon: '⏳', description: '累计使用24小时', unlocked: false },
+                            { id: 'streak-3', name: '坚持不懈', icon: '🔥', description: '连续使用3天', unlocked: false },
+                            { id: 'streak-7', name: '持之以恒', icon: '💪', description: '连续使用7天', unlocked: false },
+                            { id: 'streak-30', name: '习惯养成', icon: '🏆', description: '连续使用30天', unlocked: false }
+                        ],
+                        points: 0,
+                        wheelItems: [
+                            { text: '听听歌', color: '#4285f4' },
+                            { text: '歇会儿', color: '#34a853' },
+                            { text: '打局游戏', color: '#fbbc05' },
+                            { text: '出去走走', color: '#ea4335' },
+                            { text: '再忙会儿', color: '#673ab7' },
+                            { text: '喝杯水', color: '#3f51b5' }
+                        ],
+                        loginDates: [],
+                        lastLogin: null,
+                        repeatTypes: {
+                            none: '不重复',
+                            daily: '每天',
+                            weekly: '每周',
+                            monthly: '每月',
+                            yearly: '每年'
+                        }
+                    };
+                    
+                    // 保存重置后的默认数据
+                    localStorage.setItem('schedule_app_data', JSON.stringify(data));
+                } catch (error) {
+                    console.error('重置默认数据失败:', error);
+                }
+
+                // 清除用户相关数据
+                localStorage.removeItem('userLocation');
+                localStorage.removeItem('userAvatar');
+                localStorage.removeItem('userNickname');
+                localStorage.removeItem('tempUserNickname');
+                localStorage.removeItem('tempUserAvatar');
+            }
+
+            // 更新进度条
+            function updateProgress() {
+                progress += 1;
+                progressBar.style.width = progress + '%';
+                
+                if (progress < 100) {
+                    setTimeout(updateProgress, 20); // 2秒内完成
+                } else {
+                    clearData();
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 500);
+                }
+            }
+
+            // 开始进度条动画
+            updateProgress();
+        });
+    </script>
+</body>
+</html> 
