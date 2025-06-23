@@ -538,6 +538,7 @@
 body.dark-theme .water-reminder-panel {
     background-color: #23283a;
     box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    color: #e0e6f0;
 }
 body.dark-theme .water-reminder-panel h3 {
     color: #90caf9;
@@ -676,4 +677,19 @@ body.dark-theme .water-goal-bar {
 }
 body.dark-theme .water-goal-fill {
     background-color: #5c9aff;
+}
+body.dark-theme .water-notification-subtitle {
+    color: #b0c4e7;
+}
+body.dark-theme .water-notification-message {
+    color: #e0e6f0;
+}
+body.dark-theme .water-notification-time {
+    color: #a0aec0;
+}
+body.dark-theme .water-reminder-status {
+    color: #e0e6f0;
+}
+body.dark-theme .water-type-option {
+    color: #e0e6f0;
 } 
