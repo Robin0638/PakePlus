@@ -44,17 +44,91 @@ document.addEventListener('DOMContentLoaded', () => {
                 // 将任务数据存储到sessionStorage
                 sessionStorage.setItem('focusTasks', JSON.stringify(tasks));
                 
-                // 直接跳转到番茄时钟页面，而不是打开新窗口
-                window.location.href = './pomodoro_tracker.html';
-                
+                // 尝试打开新窗口
+                window.location.href = 'pomodoro_tracker.html';
             } catch (error) {
                 console.error('打开专注模式窗口时出错:', error);
-                alert('打开专注模式窗口失败: ' + error.message);
             }
         });
     } else {
         console.error('未找到打开专注模式按钮');
     }
+
+    // 监听来自番茄时钟窗口的消息
+    window.addEventListener('message', function(event) {
+        if (event.data.type === 'focusStats') {
+            updateFocusStats(event.data.data);
+        }
+        
+        // 处理其他消息类型
+        console.log('收到消息:', event.data); // 添加调试日志
+        const data = event.data;
+        
+        switch (data.type) {
+            case 'focusStart':
+                console.log('开始专注:', data.data); // 添加调试日志
+                // 显示专注模式悬浮指示器
+                const floatingIndicator = document.getElementById('focus-floating-indicator');
+                if (floatingIndicator) {
+                    floatingIndicator.classList.add('show');
+                    // 更新事件名称
+                    const floatingText = floatingIndicator.querySelector('.focus-floating-text');
+                    if (floatingText) {
+                        floatingText.textContent = `专注进行中: ${data.data.eventName}`;
+                    }
+                    console.log('已显示悬浮指示器'); // 添加调试日志
+                } else {
+                    console.error('未找到悬浮指示器元素'); // 添加调试日志
+                }
+                break;
+                
+            case 'focusTimerUpdate':
+                // 更新悬浮指示器的时间
+                const floatingTimer = document.getElementById('floating-timer');
+                if (floatingTimer) {
+                    floatingTimer.textContent = data.data.timeString;
+                }
+                // 更新事件名称（如果发生变化）
+                const floatingIndicator2 = document.getElementById('focus-floating-indicator');
+                if (floatingIndicator2 && data.data.currentEvent) {
+                    const floatingText = floatingIndicator2.querySelector('.focus-floating-text');
+                    if (floatingText) {
+                        floatingText.textContent = `专注进行中: ${data.data.currentEvent}`;
+                    }
+                }
+                break;
+                
+            case 'focusPause':
+                // 暂停时保持浮窗显示，但更新文本
+                const floatingIndicator3 = document.getElementById('focus-floating-indicator');
+                if (floatingIndicator3) {
+                    const floatingText = floatingIndicator3.querySelector('.focus-floating-text');
+                    if (floatingText) {
+                        floatingText.textContent = '专注已暂停';
+                    }
+                }
+                break;
+                
+            case 'focusReset':
+            case 'focusComplete':
+                // 隐藏专注模式悬浮指示器
+                const indicator = document.getElementById('focus-floating-indicator');
+                if (indicator) {
+                    indicator.classList.remove('show');
+                }
+                
+                // 如果是专注完成，更新积分显示
+                if (data.type === 'focusComplete') {
+                    // 延迟一下确保积分已经更新
+                    setTimeout(() => {
+                        if (window.UIManager) {
+                            UIManager.updateHeaderPoints();
+                        }
+                    }, 500);
+                }
+                break;
+        }
+    });
 
     // 定期检查并更新统计数据
     function checkAndUpdateStats() {
