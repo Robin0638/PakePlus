@@ -44,16 +44,34 @@ document.addEventListener('DOMContentLoaded', function() {
     // 设置每日重置检查
     setInterval(checkDailyReset, 60000); // 每分钟检查一次
     
-    // 保存初始状态到localStorage
-    const focusStats = {
-        isRunning: false,
-        currentEvent: currentEvent ? currentEvent.name : '无',
-        completedPomodoros: completedPomodoros,
-        totalFocusTime: totalFocusTime,
-        dailyTarget: dailyTarget,
-        totalPomodoros: totalPomodoros
-    };
-    localStorage.setItem('focusStats', JSON.stringify(focusStats));
+    // 通知主页当前状态
+    try {
+        if (window.opener && !window.opener.closed) {
+            const message = {
+                type: 'focusStart',
+                data: {
+                    eventName: currentEvent ? currentEvent.name : '无',
+                    duration: currentEvent ? currentEvent.duration : 25
+                }
+            };
+            console.log('发送初始状态到主页:', message);
+            window.opener.postMessage(message, '*');
+        }
+        
+        // 保存初始状态到localStorage
+        const focusStats = {
+            isRunning: false,
+            currentEvent: currentEvent ? currentEvent.name : '无',
+            completedPomodoros: completedPomodoros,
+            totalFocusTime: totalFocusTime,
+            dailyTarget: dailyTarget,
+            totalPomodoros: totalPomodoros
+        };
+        localStorage.setItem('focusStats', JSON.stringify(focusStats));
+        
+    } catch (error) {
+        console.error('发送初始状态失败:', error);
+    }
     
     // 页面卸载时保存数据
     window.addEventListener('beforeunload', saveData);
@@ -201,17 +219,36 @@ function updateDisplay() {
         floatingTimer.textContent = timeString;
     }
 
-    // 保存到localStorage供主页检查
-    const focusStats = {
-        isRunning: isRunning,
-        timeString: timeString,
-        currentEvent: currentEvent ? currentEvent.name : '无',
-        completedPomodoros: completedPomodoros,
-        totalFocusTime: totalFocusTime,
-        dailyTarget: dailyTarget,
-        totalPomodoros: totalPomodoros
-    };
-    localStorage.setItem('focusStats', JSON.stringify(focusStats));
+    // 同步到 index.html
+    try {
+        if (window.opener && !window.opener.closed) {
+            const message = {
+                type: 'focusTimerUpdate',
+                data: {
+                    timeString: timeString,
+                    isRunning: isRunning,
+                    currentEvent: currentEvent ? currentEvent.name : '无'
+                }
+            };
+            console.log('发送计时器更新到主页:', message);
+            window.opener.postMessage(message, '*');
+        }
+        
+        // 同时保存到localStorage供主页检查
+        const focusStats = {
+            isRunning: isRunning,
+            timeString: timeString,
+            currentEvent: currentEvent ? currentEvent.name : '无',
+            completedPomodoros: completedPomodoros,
+            totalFocusTime: totalFocusTime,
+            dailyTarget: dailyTarget,
+            totalPomodoros: totalPomodoros
+        };
+        localStorage.setItem('focusStats', JSON.stringify(focusStats));
+        
+    } catch (error) {
+        console.error('同步计时器数据失败:', error);
+    }
 }
 
 // 计时器控制
@@ -227,17 +264,35 @@ function startTimer() {
     document.getElementById('completeBtn').style.display = 'inline-block';
     document.getElementById('timerLabel').textContent = '专注中...';
     
-    // 保存专注状态到localStorage
-    const focusStats = {
-        isRunning: true,
-        currentEvent: currentEvent.name,
-        duration: currentEvent.duration,
-        completedPomodoros: completedPomodoros,
-        totalFocusTime: totalFocusTime,
-        dailyTarget: dailyTarget,
-        totalPomodoros: totalPomodoros
-    };
-    localStorage.setItem('focusStats', JSON.stringify(focusStats));
+    // 通知 index.html 开始专注
+    try {
+        if (window.opener && !window.opener.closed) {
+            const message = {
+                type: 'focusStart',
+                data: {
+                    eventName: currentEvent.name,
+                    duration: currentEvent.duration
+                }
+            };
+            console.log('发送开始专注消息到主页:', message);
+            window.opener.postMessage(message, '*');
+        }
+        
+        // 保存专注状态到localStorage
+        const focusStats = {
+            isRunning: true,
+            currentEvent: currentEvent.name,
+            duration: currentEvent.duration,
+            completedPomodoros: completedPomodoros,
+            totalFocusTime: totalFocusTime,
+            dailyTarget: dailyTarget,
+            totalPomodoros: totalPomodoros
+        };
+        localStorage.setItem('focusStats', JSON.stringify(focusStats));
+        
+    } catch (error) {
+        console.error('通知开始专注失败:', error);
+    }
 
     timer = setInterval(() => {
         timeLeft--;
@@ -258,10 +313,24 @@ function pauseTimer() {
     document.getElementById('pauseBtn').style.display = 'none';
     document.getElementById('timerLabel').textContent = '已暂停';
     
-    // 保存暂停状态到localStorage
-    const focusStats = JSON.parse(localStorage.getItem('focusStats') || '{}');
-    focusStats.isRunning = false;
-    localStorage.setItem('focusStats', JSON.stringify(focusStats));
+    // 通知 index.html 暂停专注
+    try {
+        if (window.opener && !window.opener.closed) {
+            const message = {
+                type: 'focusPause'
+            };
+            console.log('发送暂停专注消息到主页:', message);
+            window.opener.postMessage(message, '*');
+        }
+        
+        // 保存暂停状态到localStorage
+        const focusStats = JSON.parse(localStorage.getItem('focusStats') || '{}');
+        focusStats.isRunning = false;
+        localStorage.setItem('focusStats', JSON.stringify(focusStats));
+        
+    } catch (error) {
+        console.error('通知暂停专注失败:', error);
+    }
 }
 
 function resetTimer() {
@@ -273,10 +342,24 @@ function resetTimer() {
     document.getElementById('completeBtn').style.display = 'none';
     document.getElementById('timerLabel').textContent = '准备开始专注';
     
-    // 清除localStorage中的专注状态
-    const focusStats = JSON.parse(localStorage.getItem('focusStats') || '{}');
-    focusStats.isRunning = false;
-    localStorage.setItem('focusStats', JSON.stringify(focusStats));
+    // 通知 index.html 重置专注
+    try {
+        if (window.opener && !window.opener.closed) {
+            const message = {
+                type: 'focusReset'
+            };
+            console.log('发送重置专注消息到主页:', message);
+            window.opener.postMessage(message, '*');
+        }
+        
+        // 清除localStorage中的专注状态
+        const focusStats = JSON.parse(localStorage.getItem('focusStats') || '{}');
+        focusStats.isRunning = false;
+        localStorage.setItem('focusStats', JSON.stringify(focusStats));
+        
+    } catch (error) {
+        console.error('通知重置专注失败:', error);
+    }
     
     updateDisplay();
     updateProgressRing();
@@ -342,10 +425,29 @@ function completePomodoro() {
     // 播放完成音效
     playNotificationSound();
     
-    // 清除localStorage中的专注状态
-    const focusStats = JSON.parse(localStorage.getItem('focusStats') || '{}');
-    focusStats.isRunning = false;
-    localStorage.setItem('focusStats', JSON.stringify(focusStats));
+    // 通知主页专注完成
+    try {
+        if (window.opener && !window.opener.closed) {
+            const message = {
+                type: 'focusComplete',
+                data: {
+                    completedPomodoros: completedPomodoros,
+                    totalFocusTime: dailyStats[today].focusTime, // 使用今日专注时长
+                    currentEvent: currentEvent ? currentEvent.name : '无'
+                }
+            };
+            console.log('发送专注完成消息到主页:', message);
+            window.opener.postMessage(message, '*');
+        }
+        
+        // 清除localStorage中的专注状态
+        const focusStats = JSON.parse(localStorage.getItem('focusStats') || '{}');
+        focusStats.isRunning = false;
+        localStorage.setItem('focusStats', JSON.stringify(focusStats));
+        
+    } catch (error) {
+        console.error('通知专注完成失败:', error);
+    }
     
     // 重置计时器
     resetTimer();
@@ -465,16 +567,30 @@ function updateStats() {
     }
 
     // 同步数据到主页面
-    const stats = {
-        completedPomodoros: completedPomodoros,
-        totalFocusTime: totalFocusTimeAll, // 使用计算出的总专注时长
-        currentEvent: currentEvent ? currentEvent.name : '无',
-        dailyTarget: targetText, // 发送格式化的目标文本
-        targetCompletionRate: targetRate,
-        totalPomodoros: totalPomodoros,
-        totalCompletionRate: totalRate
-    };
-    localStorage.setItem('focusStats', JSON.stringify(stats));
+    try {
+        const stats = {
+            completedPomodoros: completedPomodoros,
+            totalFocusTime: totalFocusTimeAll, // 使用计算出的总专注时长
+            currentEvent: currentEvent ? currentEvent.name : '无',
+            dailyTarget: targetText, // 发送格式化的目标文本
+            targetCompletionRate: targetRate,
+            totalPomodoros: totalPomodoros,
+            totalCompletionRate: totalRate
+        };
+        localStorage.setItem('focusStats', JSON.stringify(stats));
+        
+        // 如果主页面窗口存在，直接更新
+        if (window.opener && !window.opener.closed) {
+            const message = {
+                type: 'focusStats',
+                data: stats
+            };
+            console.log('发送统计数据到主页:', message);
+            window.opener.postMessage(message, '*');
+        }
+    } catch (error) {
+        console.error('同步统计数据失败:', error);
+    }
 }
 
 // 显示事件详细统计
