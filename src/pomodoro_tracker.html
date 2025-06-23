@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>有数专注时钟</title>
+    <link rel="stylesheet" href="css/pomodoro.css">
+    <link rel="stylesheet" href="css/pomodorodark.css">
+</head>
+<body>
+    <!-- 返回按钮 -->
+    <button class="back-btn" onclick="window.location.href='index.html'">
+        <i class="fas fa-arrow-left"></i>
+        返回主界面
+    </button>
+
+    <div class="container">
+        <!-- 侧边栏 (桌面端) -->
+        <div class="sidebar">
+            <h2>🍅 有数专注时钟</h2>
+            
+            <!-- 添加事件表单 -->
+            <div class="event-form">
+                <h3 style="margin-bottom: 15px; color: #667eea;">添加新事件</h3>
+                <div class="form-group">
+                    <label>事件名称</label>
+                    <input type="text" id="eventName" placeholder="输入事件名称">
+                </div>
+                <div class="form-group">
+                    <label>专注时长 (分钟)</label>
+                    <div style="display: flex; gap: 10px;">
+                        <select id="eventDuration" style="flex: 1;">
+                            <option value="25">25分钟</option>
+                            <option value="30">30分钟</option>
+                            <option value="45">45分钟</option>
+                            <option value="60">60分钟</option>
+                            <option value="custom">自定义时长</option>
+                        </select>
+                        <input type="number" id="customDuration" placeholder="自定义分钟" style="display: none; width: 120px;" min="1" max="180">
+                    </div>
+                </div>
+                <button class="btn" onclick="addEvent()" style="width: 100%;">添加事件</button>
+            </div>
+
+            <!-- 事件列表 -->
+            <div class="event-list" id="eventList">
+                <!-- 动态生成 -->
+            </div>
+
+            <!-- 统计信息 -->
+            <div class="stats">
+                <h3>今日统计</h3>   
+                <div class="stat-item"> 
+                     <span>当前事件:</span>
+                     <span id="currentEventName">无</span>
+                </div>
+                <div class="stat-item">
+                    <span>今日完成:</span>
+                    <span id="completedPomodoros">0</span>
+                </div>
+                <div class="stat-item">
+                    <span>专注时长:</span>
+                    <span id="totalTime">0分钟</span>
+                </div>
+                <div class="stat-item">
+                    <span>今日目标:</span>
+                    <div style="display: flex; align-items: center; gap: 5px;">
+                        <span id="dailyTarget">0分钟</span>
+                        <button class="btn btn-small" onclick="setDailyTarget()">设置</button>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <span>目标达成率:</span>
+                    <span id="targetCompletionRate">0%</span>
+                </div>
+
+                <h3>总统计</h3>
+                <div class="stat-item">
+                    <span>总番茄数:</span>
+                    <span id="totalPomodoros">0</span>
+                </div>
+                <div class="stat-item">
+                    <span>总目标达成率:</span>
+                    <span id="totalCompletionRate">0%</span>
+                </div>
+                <div class="stat-item">
+                    <span>总专注时长:</span>
+                    <span id="totalFocusTime">0分钟</span>
+                </div>
+            </div>
+
+            <!-- 数据管理 -->
+            <div class="data-management">
+                <h3 style="color: #667eea; margin-bottom: 15px;">数据管理</h3>
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <button class="btn secondary" onclick="showEventStats()" style="width: 100%;">
+                        📊 查看详细统计
+                    </button>
+                    <button class="btn secondary" onclick="showDailyStats()" style="width: 100%;">
+                        📅 查看每日统计
+                    </button>
+                    <button class="btn secondary" onclick="exportData()" style="width: 100%;">
+                        📥 导出数据
+                    </button>
+                    <div style="position: relative;">
+                        <input type="file" id="importFile" accept=".json" style="display: none;" onchange="importData(event)">
+                        <button class="btn secondary" onclick="document.getElementById('importFile').click()" style="width: 100%;">
+                            📤 导入数据
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 主内容区 -->
+        <div class="main-content">
+            <div class="timer-container">
+                <div class="timer-label" id="timerLabel">准备开始专注</div>
+                
+                <!-- 进度环 -->
+                <svg class="progress-ring" width="200" height="200">
+                    <circle class="progress-ring-circle" cx="100" cy="100" r="90" 
+                            stroke-dasharray="565.48" stroke-dashoffset="565.48" id="progressCircle">
+                    </circle>
+                </svg>
+                
+                <div class="timer-display" id="timerDisplay">25:00</div>
+                
+                <div class="current-event" id="currentEvent" style="display: none;">
+                    当前事件: <span id="currentEventDisplay">无</span>
+                </div>
+
+                <div>
+                    <button class="btn" id="startBtn" onclick="startTimer()">开始</button>
+                    <button class="btn secondary" id="pauseBtn" onclick="pauseTimer()" style="display: none;">暂停</button>
+                    <button class="btn secondary" onclick="resetTimer()">重置</button>
+                    <button class="btn success" onclick="completePomodoro()" id="completeBtn" style="display: none;">完成</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 移动端导航栏 -->
+    <div class="mobile-nav">
+        <div class="nav-buttons">
+            <button class="nav-btn active" onclick="showMobileSection('timer')">计时器</button>
+            <button class="nav-btn" onclick="showMobileSection('events')">事件管理</button>
+            <button class="nav-btn" onclick="showMobileSection('stats')">统计</button>
+        </div>
+    </div>
+
+    <!-- 移动端模态框 -->
+    <div class="mobile-modal" id="mobileModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">事件管理</h3>
+                <button class="close-btn" onclick="closeMobileModal()">&times;</button>
+            </div>
+            <div id="modalContent">
+                <!-- 动态内容 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 专注模式悬浮指示器 -->
+    <div class="focus-floating-indicator" id="focus-floating-indicator" onclick="openPomodoroTracker()">
+        <i class="fas fa-hourglass-half"></i>
+        <span class="focus-floating-text">专注进行中</span>
+        <span class="timer-mini" id="floating-timer">25:00</span>
+    </div>
+
+    <script src="js/storage.js"></script>
+    <script src="js/pomodoro.js"></script>
+    <script>
+        // 添加自动切换深色/浅色模式的函数
+        function updateThemeBasedOnTime() {
+            const currentHour = new Date().getHours();
+            const isDarkMode = currentHour >= 18 || currentHour < 6;
+            
+            if (isDarkMode) {
+                document.body.classList.add('dark-mode');
+            } else {
+                document.body.classList.remove('dark-mode');
+            }
+        }
+
+        // 页面加载时执行一次
+        updateThemeBasedOnTime();
+        
+        // 每分钟检查一次时间
+        setInterval(updateThemeBasedOnTime, 60000);
+    </script>
+</body>
+</html>
