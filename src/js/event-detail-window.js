@@ -182,6 +182,9 @@ class EventDetailWindow {
 
         // 监听主题变化
         this.observeThemeChanges();
+
+        // 触控内容区滚动兼容
+        this.enableTouchScrollOnContent();
     }
 
     /**
@@ -1042,6 +1045,40 @@ class EventDetailWindow {
         } finally {
             document.body.removeChild(textArea);
         }
+    }
+
+    // 新增方法
+    enableTouchScrollOnContent() {
+        const content = this.window.querySelector('.event-detail-content');
+        if (!content) return;
+
+        let startY = 0;
+        let canScroll = false;
+
+        content.addEventListener('touchstart', function(e) {
+            if (content.scrollHeight > content.clientHeight) {
+                canScroll = true;
+                startY = e.touches[0].clientY;
+            } else {
+                canScroll = false;
+            }
+        }, { passive: false });
+
+        content.addEventListener('touchmove', function(e) {
+            if (!canScroll) return;
+            const y = e.touches[0].clientY;
+            const up = y > startY;
+            const down = y < startY;
+            const atTop = content.scrollTop === 0;
+            const atBottom = content.scrollTop + content.clientHeight >= content.scrollHeight - 1;
+
+            if ((atTop && up) || (atBottom && down)) {
+                // 阻止"橡皮筋"或穿透
+                e.preventDefault();
+            }
+            // 阻止冒泡到body
+            e.stopPropagation();
+        }, { passive: false });
     }
 }
 
