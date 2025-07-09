@@ -1,0 +1,557 @@
+/* 最近清单预览样式 */
+
+/* 清单预览区域基础样式 */
+.todolist-preview {
+    border-left: 3px solid #4285f4;
+    padding-left: 10px;
+    margin-bottom: 20px;
+    background: var(--card-bg, #ffffff);
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.todolist-preview:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+}
+
+/* 预览容器样式 */
+.preview-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+}
+
+/* 预览项目卡片样式 */
+.preview-item.todo-preview {
+    background: var(--card-bg, #ffffff);
+    border: 1px solid var(--border-color, #e0e0e0);
+    border-radius: 8px;
+    padding: 10px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.preview-item.todo-preview:hover {
+    border-color: var(--accent-color, #4285f4);
+    box-shadow: 0 4px 12px rgba(66, 133, 244, 0.15);
+    transform: translateY(-2px);
+}
+
+/* 预览头部样式 */
+.preview-header {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-bottom: 8px;
+}
+
+.preview-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-weight: 600;
+    color: var(--text-primary-color, #333);
+    font-size: 13px;
+}
+
+.preview-title i {
+    margin-right: 8px;
+    color: var(--accent-color, #4285f4);
+}
+
+/* 优先级标签样式 */
+.priority-tag {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.priority-high {
+    background-color: rgba(244, 67, 54, 0.15);
+    color: #f44336;
+    border: 1px solid rgba(244, 67, 54, 0.3);
+}
+
+.priority-medium {
+    background-color: rgba(255, 152, 0, 0.15);
+    color: #ff9800;
+    border: 1px solid rgba(255, 152, 0, 0.3);
+}
+
+.priority-low {
+    background-color: rgba(76, 175, 80, 0.15);
+    color: #4caf50;
+    border: 1px solid rgba(76, 175, 80, 0.3);
+}
+
+/* 进度条容器样式 */
+.preview-progress-container {
+    height: 6px;
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 3px;
+    overflow: hidden;
+    margin: 8px 0;
+}
+
+.preview-progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent-color, #4285f4), #64b5f6);
+    border-radius: 3px;
+    transition: width 0.6s ease;
+    position: relative;
+}
+
+.preview-progress-bar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+/* 预览信息样式 */
+.preview-info {
+    font-size: 11px;
+    color: var(--text-secondary-color, #666);
+    text-align: right;
+    font-weight: 500;
+}
+
+/* 预览项目列表样式 */
+.preview-items {
+    margin: 8px 0;
+    max-height: 80px;
+    overflow-y: auto;
+}
+
+.preview-list-item {
+    display: flex;
+    align-items: center;
+    padding: 5px 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
+}
+
+.preview-list-item:last-child {
+    border-bottom: none;
+}
+
+.preview-list-item:hover {
+    background-color: rgba(0, 0, 0, 0.02);
+    border-radius: 4px;
+    padding-left: 8px;
+    padding-right: 8px;
+    margin-left: -8px;
+    margin-right: -8px;
+}
+
+.preview-list-item.completed {
+    opacity: 0.6;
+}
+
+.preview-list-item.completed .preview-item-title {
+    text-decoration: line-through;
+    color: var(--text-secondary-color, #666);
+}
+
+/* 预览复选框样式 */
+.preview-checkbox {
+    width: 16px;
+    height: 16px;
+    border: 2px solid var(--border-color, #ddd);
+    border-radius: 3px;
+    margin-right: 10px;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.preview-checkbox.checked {
+    background-color: var(--accent-color, #4285f4);
+    border-color: var(--accent-color, #4285f4);
+}
+
+.preview-checkbox.checked::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+/* 预览项目内容样式 */
+.preview-item-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.preview-item-title {
+    font-size: 12px;
+    color: var(--text-primary-color, #333);
+    font-weight: 500;
+    line-height: 1.3;
+}
+
+.preview-item-tags {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+/* 预览优先级标签样式 */
+.preview-priority-tag {
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 8px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
+.preview-priority-tag.priority-high {
+    background-color: rgba(244, 67, 54, 0.15);
+    color: #f44336;
+}
+
+.preview-priority-tag.priority-medium {
+    background-color: rgba(255, 152, 0, 0.15);
+    color: #ff9800;
+}
+
+.preview-priority-tag.priority-low {
+    background-color: rgba(76, 175, 80, 0.15);
+    color: #4caf50;
+}
+
+/* 预览截止日期样式 */
+.preview-due-date {
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 6px;
+    font-weight: 500;
+}
+
+.due-overdue {
+    background-color: rgba(244, 67, 54, 0.15);
+    color: #f44336;
+}
+
+.due-today {
+    background-color: rgba(255, 152, 0, 0.15);
+    color: #ff9800;
+}
+
+.due-soon {
+    background-color: rgba(33, 150, 243, 0.15);
+    color: #2196F3;
+}
+
+.due-future {
+    background-color: rgba(76, 175, 80, 0.15);
+    color: #4caf50;
+}
+
+/* 预览操作按钮样式 */
+.preview-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid var(--border-color, #e0e0e0);
+}
+
+.preview-actions button {
+    flex: 1;
+    padding: 6px 10px;
+    border: 1px solid var(--border-color, #e0e0e0);
+    border-radius: 6px;
+    background: var(--card-bg, #ffffff);
+    color: var(--text-primary-color, #333);
+    font-size: 11px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+}
+
+.preview-actions button:hover {
+    background: var(--accent-color, #4285f4);
+    color: white;
+    border-color: var(--accent-color, #4285f4);
+    transform: translateY(-1px);
+}
+
+.preview-actions button:active {
+    transform: translateY(0);
+}
+
+/* 查看全部按钮样式 */
+.preview-more {
+    text-align: center;
+    padding: 8px;
+}
+
+.view-all-btn {
+    background: linear-gradient(135deg, var(--accent-color, #4285f4), #64b5f6);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(66, 133, 244, 0.3);
+}
+
+.view-all-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(66, 133, 244, 0.4);
+}
+
+.view-all-btn:active {
+    transform: translateY(0);
+}
+
+/* 空预览状态样式 */
+.empty-preview {
+    text-align: center;
+    padding: 20px;
+    color: var(--text-secondary-color, #666);
+    font-style: italic;
+    font-size: 13px;
+}
+
+/* 深色模式适配 */
+.dark-theme .todolist-preview {
+    background: var(--card-bg-dark, #2d2d2d);
+    border-left-color: #64b5f6;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.dark-theme .todolist-preview:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.dark-theme .preview-item.todo-preview {
+    background: var(--card-bg-dark, #2d2d2d);
+    border-color: var(--border-color-dark, #444);
+}
+
+.dark-theme .preview-item.todo-preview:hover {
+    border-color: #64b5f6;
+    box-shadow: 0 4px 12px rgba(100, 181, 246, 0.2);
+}
+
+.dark-theme .preview-title {
+    color: var(--text-primary-color-dark, #ffffff);
+}
+
+.dark-theme .preview-title i {
+    color: #64b5f6;
+}
+
+.dark-theme .preview-info {
+    color: var(--text-secondary-color-dark, #aaa);
+}
+
+.dark-theme .preview-progress-container {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark-theme .preview-progress-bar {
+    background: linear-gradient(90deg, #64b5f6, #90caf9);
+}
+
+.dark-theme .preview-list-item {
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark-theme .preview-list-item:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.dark-theme .preview-list-item.completed .preview-item-title {
+    color: var(--text-secondary-color-dark, #aaa);
+}
+
+.dark-theme .preview-checkbox {
+    border-color: var(--border-color-dark, #555);
+}
+
+.dark-theme .preview-checkbox.checked {
+    background-color: #64b5f6;
+    border-color: #64b5f6;
+}
+
+.dark-theme .preview-item-title {
+    color: var(--text-primary-color-dark, #ffffff);
+}
+
+.dark-theme .preview-actions {
+    border-top-color: var(--border-color-dark, #444);
+}
+
+.dark-theme .preview-actions button {
+    background: var(--card-bg-dark, #2d2d2d);
+    color: var(--text-primary-color-dark, #ffffff);
+    border-color: var(--border-color-dark, #444);
+}
+
+.dark-theme .preview-actions button:hover {
+    background: #64b5f6;
+    color: white;
+    border-color: #64b5f6;
+}
+
+.dark-theme .view-all-btn {
+    background: linear-gradient(135deg, #64b5f6, #90caf9);
+    box-shadow: 0 2px 8px rgba(100, 181, 246, 0.3);
+}
+
+.dark-theme .view-all-btn:hover {
+    box-shadow: 0 4px 12px rgba(100, 181, 246, 0.4);
+}
+
+.dark-theme .empty-preview {
+    color: var(--text-secondary-color-dark, #aaa);
+}
+
+/* 优先级标签深色模式适配 */
+.dark-theme .priority-high {
+    background-color: rgba(244, 67, 54, 0.25);
+    color: #ff6b61;
+    border-color: rgba(244, 67, 54, 0.4);
+}
+
+.dark-theme .priority-medium {
+    background-color: rgba(255, 152, 0, 0.25);
+    color: #ffb74d;
+    border-color: rgba(255, 152, 0, 0.4);
+}
+
+.dark-theme .priority-low {
+    background-color: rgba(76, 175, 80, 0.25);
+    color: #81c784;
+    border-color: rgba(76, 175, 80, 0.4);
+}
+
+.dark-theme .preview-priority-tag.priority-high {
+    background-color: rgba(244, 67, 54, 0.25);
+    color: #ff6b61;
+}
+
+.dark-theme .preview-priority-tag.priority-medium {
+    background-color: rgba(255, 152, 0, 0.25);
+    color: #ffb74d;
+}
+
+.dark-theme .preview-priority-tag.priority-low {
+    background-color: rgba(76, 175, 80, 0.25);
+    color: #81c784;
+}
+
+/* 截止日期深色模式适配 */
+.dark-theme .due-overdue {
+    background-color: rgba(244, 67, 54, 0.25);
+    color: #ff6b61;
+}
+
+.dark-theme .due-today {
+    background-color: rgba(255, 152, 0, 0.25);
+    color: #ffb74d;
+}
+
+.dark-theme .due-soon {
+    background-color: rgba(33, 150, 243, 0.25);
+    color: #64b5f6;
+}
+
+.dark-theme .due-future {
+    background-color: rgba(76, 175, 80, 0.25);
+    color: #81c784;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .preview-container {
+        padding: 8px;
+    }
+    
+    .preview-item.todo-preview {
+        padding: 8px;
+    }
+    
+    .preview-actions {
+        flex-direction: column;
+        gap: 6px;
+    }
+    
+    .preview-actions button {
+        width: 100%;
+    }
+    
+    .preview-title {
+        font-size: 12px;
+    }
+    
+    .preview-item-title {
+        font-size: 11px;
+    }
+}
+
+@media (max-width: 480px) {
+    .todolist-preview {
+        margin-bottom: 12px;
+        padding-left: 6px;
+    }
+    
+    .preview-container {
+        padding: 6px;
+    }
+    
+    .preview-item.todo-preview {
+        padding: 8px;
+    }
+    
+    .preview-title {
+        font-size: 11px;
+    }
+    
+    .preview-item-title {
+        font-size: 10px;
+    }
+    
+    .preview-actions button {
+        padding: 5px 8px;
+        font-size: 10px;
+    }
+} 
