@@ -1,0 +1,485 @@
+/* 新的底部导航栏样式 */
+.bottom-nav-new {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    padding: 12px 8px;
+    background-color: var(--card-bg);
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.08);
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-top: 1px solid var(--border-color);
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+/* 确保主内容区域不被底部导航栏遮挡 */
+.app-container {
+    padding-bottom: 80px; /* 为底部导航栏留出空间 */
+}
+
+main {
+    padding-bottom: 80px; /* 确保主内容不被遮挡 */
+}
+
+/* 视图内容区域调整 */
+.view-content {
+    padding-bottom: 20px; /* 额外的底部间距 */
+}
+
+.nav-item-new {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 12px;
+    border-radius: 12px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    color: var(--text-secondary);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+    min-width: 80px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.nav-item-new::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-radius: 12px;
+    z-index: -1;
+}
+
+.nav-item-new i {
+    font-size: 20px;
+    margin-bottom: 4px;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 1;
+}
+
+.nav-item-new span {
+    font-size: 11px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 1;
+}
+
+.nav-item-new:hover {
+    transform: translateY(-2px);
+    color: var(--primary-color);
+    background-color: var(--hover-bg);
+}
+
+.nav-item-new:hover::before {
+    opacity: 0.1;
+}
+
+.nav-item-new.active {
+    color: var(--primary-color);
+    background-color: var(--accent-bg-light);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(66, 133, 244, 0.15);
+}
+
+.nav-item-new.active::before {
+    opacity: 0.15;
+}
+
+.nav-item-new.active i {
+    transform: scale(1.1);
+}
+
+/* 专注模式特殊样式 */
+.nav-item-new.focus-active {
+    background: linear-gradient(135deg, rgba(255, 193, 7, 0.1), rgba(255, 152, 0, 0.1));
+    border: 1px solid rgba(255, 193, 7, 0.3);
+    animation: focusPulse 2s infinite;
+}
+
+@keyframes focusPulse {
+    0%, 100% {
+        box-shadow: 0 4px 12px rgba(255, 193, 7, 0.2);
+    }
+    50% {
+        box-shadow: 0 4px 20px rgba(255, 193, 7, 0.4);
+    }
+}
+
+/* 轻松一刻特殊样式 */
+.nav-item-new.relax-active {
+    background: linear-gradient(135deg, rgba(76, 175, 80, 0.1), rgba(139, 195, 74, 0.1));
+    border: 1px solid rgba(76, 175, 80, 0.3);
+}
+
+/* 禁用状态 */
+.nav-item-new.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+    filter: grayscale(100%);
+    cursor: not-allowed;
+}
+
+.nav-item-new.disabled:hover {
+    transform: none;
+    background: none;
+}
+
+/* 深色模式样式 */
+.dark-theme .bottom-nav-new {
+    background-color: var(--card-bg-dark);
+    border-top-color: var(--border-color-dark);
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.dark-theme .nav-item-new:hover {
+    background-color: var(--hover-bg-dark);
+}
+
+.dark-theme .nav-item-new.active {
+    background-color: rgba(66, 133, 244, 0.2);
+    box-shadow: 0 4px 12px rgba(66, 133, 244, 0.25);
+}
+
+.dark-theme .nav-item-new.focus-active {
+    background: linear-gradient(135deg, rgba(255, 193, 7, 0.15), rgba(255, 152, 0, 0.15));
+    border: 1px solid rgba(255, 193, 7, 0.4);
+}
+
+.dark-theme .nav-item-new.relax-active {
+    background: linear-gradient(135deg, rgba(76, 175, 80, 0.15), rgba(139, 195, 74, 0.15));
+    border: 1px solid rgba(76, 175, 80, 0.4);
+}
+
+/* 移动设备适配 */
+@media (max-width: 768px) {
+    .bottom-nav-new {
+        padding: 8px 3px; /* 减少上下内边距 */
+    }
+    
+    .app-container {
+        padding-bottom: 65px; /* 减少底部间距 */
+    }
+    
+    main {
+        padding-bottom: 65px;
+    }
+    
+    .nav-item-new {
+        font-size: 10px;
+        padding: 5px 6px; /* 减少内边距 */
+        min-width: 65px; /* 减少最小宽度 */
+    }
+    
+    .nav-item-new i {
+        font-size: 16px; /* 减少图标大小 */
+        margin-bottom: 2px; /* 减少图标和文字间距 */
+    }
+    
+    .nav-item-new span {
+        font-size: 9px; /* 减少文字大小 */
+    }
+}
+
+@media (max-width: 480px) {
+    .bottom-nav-new {
+        padding: 6px 2px; /* 进一步减少内边距 */
+    }
+    
+    .app-container {
+        padding-bottom: 60px; /* 进一步减少底部间距 */
+    }
+    
+    main {
+        padding-bottom: 60px;
+    }
+    
+    .nav-item-new {
+        font-size: 9px;
+        padding: 4px 5px; /* 进一步减少内边距 */
+        min-width: 55px; /* 进一步减少最小宽度 */
+    }
+    
+    .nav-item-new i {
+        font-size: 14px; /* 进一步减少图标大小 */
+        margin-bottom: 1px; /* 进一步减少间距 */
+    }
+    
+    .nav-item-new span {
+        font-size: 8px; /* 进一步减少文字大小 */
+    }
+}
+
+/* 横屏适配 */
+@media (orientation: landscape) and (max-width: 896px) {
+    .bottom-nav-new {
+        padding: 6px 4px;
+    }
+    
+    .app-container {
+        padding-bottom: 60px; /* 横屏模式减少间距 */
+    }
+    
+    main {
+        padding-bottom: 60px;
+    }
+    
+    .nav-item-new {
+        padding: 4px 8px;
+    }
+    
+    .nav-item-new i {
+        font-size: 16px;
+        margin-bottom: 2px;
+    }
+    
+    .nav-item-new span {
+        font-size: 9px;
+    }
+}
+
+/* 大屏幕适配 - 电脑模式 */
+@media (min-width: 1200px) {
+    .bottom-nav-new {
+        padding: 8px 16px; /* 减少上下内边距 */
+        border-radius: 16px 16px 0 0; /* 顶部圆角 */
+        margin: 0 20px; /* 左右边距，让导航栏看起来像圆角矩形 */
+        width: calc(100% - 40px); /* 调整宽度以适应边距 */
+        max-width: 800px; /* 限制最大宽度 */
+        left: 50%; /* 居中定位 */
+        transform: translateX(-50%); /* 居中定位 */
+    }
+    
+    .app-container {
+        padding-bottom: 60px; /* 减少底部间距 */
+    }
+    
+    main {
+        padding-bottom: 60px;
+    }
+    
+    /* 电脑模式下改为水平布局 */
+    .nav-item-new {
+        flex-direction: row; /* 改为水平排列 */
+        font-size: 12px;
+        padding: 6px 12px;
+        min-width: 120px;
+        justify-content: flex-start; /* 左对齐 */
+        gap: 8px; /* 图标和文字之间的间距 */
+    }
+    
+    .nav-item-new i {
+        font-size: 16px;
+        margin-bottom: 0; /* 移除底部边距 */
+        margin-right: 0; /* 移除右边距，使用gap控制间距 */
+    }
+    
+    .nav-item-new span {
+        font-size: 12px;
+    }
+}
+
+/* 超大屏幕适配 */
+@media (min-width: 1600px) {
+    .bottom-nav-new {
+        padding: 6px 20px; /* 进一步减少上下内边距 */
+        border-radius: 20px 20px 0 0; /* 更大的顶部圆角 */
+        margin: 0 40px; /* 更大的左右边距 */
+        width: calc(100% - 80px); /* 调整宽度 */
+        max-width: 1000px; /* 增加最大宽度 */
+    }
+    
+    .app-container {
+        padding-bottom: 50px; /* 进一步减少底部间距 */
+    }
+    
+    main {
+        padding-bottom: 50px;
+    }
+    
+    .nav-item-new {
+        padding: 5px 10px;
+        min-width: 100px;
+        gap: 6px;
+    }
+    
+    .nav-item-new i {
+        font-size: 14px;
+    }
+    
+    .nav-item-new span {
+        font-size: 11px;
+    }
+}
+
+/* 动画效果 */
+@keyframes navItemIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.nav-item-new {
+    animation: navItemIn 0.5s ease-out;
+}
+
+.nav-item-new:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.nav-item-new:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.nav-item-new:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+/* 响应式图标大小 */
+@media (max-width: 320px) {
+    .bottom-nav-new {
+        padding: 5px 1px; /* 超小屏幕进一步减少内边距 */
+    }
+    
+    .app-container {
+        padding-bottom: 55px; /* 超小屏幕进一步减少底部间距 */
+    }
+    
+    main {
+        padding-bottom: 55px;
+    }
+    
+    .nav-item-new {
+        padding: 3px 4px; /* 超小屏幕进一步减少内边距 */
+        min-width: 50px; /* 超小屏幕进一步减少最小宽度 */
+    }
+    
+    .nav-item-new i {
+        font-size: 13px; /* 超小屏幕进一步减少图标大小 */
+        margin-bottom: 1px;
+    }
+    
+    .nav-item-new span {
+        font-size: 7px; /* 超小屏幕进一步减少文字大小 */
+    }
+}
+
+/* 高对比度模式支持 */
+@media (prefers-contrast: high) {
+    .nav-item-new {
+        border: 1px solid var(--border-color);
+    }
+    
+    .nav-item-new.active {
+        border: 2px solid var(--primary-color);
+    }
+}
+
+/* 减少动画模式支持 */
+@media (prefers-reduced-motion: reduce) {
+    .nav-item-new,
+    .nav-item-new::before,
+    .nav-item-new i,
+    .nav-item-new span {
+        transition: none;
+        animation: none;
+    }
+    
+    .nav-item-new:hover {
+        transform: none;
+    }
+    
+    .nav-item-new.active {
+        transform: none;
+    }
+    
+    .nav-item-new.active i {
+        transform: none;
+    }
+}
+
+/* 确保悬浮指示器不被底部导航栏遮挡 */
+.focus-floating-indicator {
+    bottom: 90px !important; /* 调整悬浮指示器位置 */
+}
+
+@media (max-width: 768px) {
+    .focus-floating-indicator {
+        bottom: 80px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .focus-floating-indicator {
+        bottom: 75px !important;
+    }
+}
+
+/* 电脑模式下的悬浮指示器位置调整 */
+@media (min-width: 1200px) {
+    .focus-floating-indicator {
+        bottom: 70px !important;
+    }
+}
+
+@media (min-width: 1600px) {
+    .focus-floating-indicator {
+        bottom: 60px !important;
+    }
+}
+
+@media (max-width: 599px) {
+  .bottom-nav {
+    height: 46px;
+    padding: 0 2px;
+  }
+  .bottom-nav .nav-item {
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 0 0 2px 0;
+    margin: 0 1px;
+    background: none;
+    border: none;
+    outline: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1px;
+    font-size: 10px;
+    height: 44px;
+    line-height: 1.1;
+  }
+  .bottom-nav .nav-item i {
+    font-size: 15px;
+    margin: 0 0 0.5px 0;
+    display: block;
+  }
+  .bottom-nav .nav-item span,
+  .bottom-nav .nav-item {
+    font-size: 10px;
+    margin: 0;
+    padding: 0;
+  }
+} 
