@@ -1,0 +1,218 @@
+/* 专注模式与轻松一刻交互样式 */
+
+/* 专注模式激活时的轻松一刻按钮样式 */
+.nav-item.relax-disabled,
+.nav-item-new.relax-disabled {
+    position: relative;
+    opacity: 0.6 !important;
+    filter: grayscale(80%) !important;
+    cursor: not-allowed !important;
+    transition: all 0.3s ease !important;
+    background: linear-gradient(135deg, rgba(128, 128, 128, 0.1), rgba(96, 96, 96, 0.1)) !important;
+    border: 1px solid rgba(128, 128, 128, 0.2) !important;
+}
+
+/* 禁用状态下的悬停效果 */
+.nav-item.relax-disabled:hover,
+.nav-item-new.relax-disabled:hover {
+    transform: none !important;
+    background: linear-gradient(135deg, rgba(128, 128, 128, 0.15), rgba(96, 96, 96, 0.15)) !important;
+    box-shadow: 0 2px 8px rgba(128, 128, 128, 0.2) !important;
+}
+
+/* 禁用状态下的图标样式 */
+.nav-item.relax-disabled i,
+.nav-item-new.relax-disabled i {
+    opacity: 0.7;
+    filter: grayscale(100%);
+}
+
+/* 禁用状态下的文字样式 */
+.nav-item.relax-disabled span,
+.nav-item-new.relax-disabled span {
+    opacity: 0.7;
+    color: rgba(128, 128, 128, 0.8) !important;
+}
+
+/* 专注模式激活时的提示动画 */
+.nav-item.relax-disabled::before,
+.nav-item-new.relax-disabled::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, #ff6b6b, #ee5a24, #ff6b6b);
+    border-radius: inherit;
+    z-index: -1;
+    opacity: 0;
+    animation: relaxDisabledPulse 2s infinite;
+}
+
+@keyframes relaxDisabledPulse {
+    0%, 100% {
+        opacity: 0;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.3;
+        transform: scale(1.02);
+    }
+}
+
+/* 专注模式激活时的工具提示 */
+.nav-item.relax-disabled::after,
+.nav-item-new.relax-disabled::after {
+    content: '专注进行中，请先完成专注';
+    position: absolute;
+    bottom: 120%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 1000;
+    pointer-events: none;
+}
+
+.nav-item.relax-disabled::after::before,
+.nav-item-new.relax-disabled::after::before {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: rgba(0, 0, 0, 0.8);
+}
+
+/* 悬停时显示工具提示 */
+.nav-item.relax-disabled:hover::after,
+.nav-item-new.relax-disabled:hover::after {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(-5px);
+}
+
+/* 专注模式激活时的轻松一刻视图样式 */
+.relax-view-disabled {
+    position: relative;
+    opacity: 0.3;
+    pointer-events: none;
+    filter: grayscale(100%);
+}
+
+.relax-view-disabled::before {
+    content: '专注模式进行中，轻松一刻暂时不可用';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 16px;
+    z-index: 100;
+    white-space: nowrap;
+}
+
+/* 深色模式适配 */
+.dark-theme .nav-item.relax-disabled,
+.dark-theme .nav-item-new.relax-disabled {
+    background: linear-gradient(135deg, rgba(64, 64, 64, 0.2), rgba(48, 48, 48, 0.2)) !important;
+    border: 1px solid rgba(128, 128, 128, 0.3) !important;
+}
+
+.dark-theme .nav-item.relax-disabled:hover,
+.dark-theme .nav-item-new.relax-disabled:hover {
+    background: linear-gradient(135deg, rgba(64, 64, 64, 0.25), rgba(48, 48, 48, 0.25)) !important;
+}
+
+/* 专注模式完成后的恢复动画 */
+.nav-item.relax-recovering,
+.nav-item-new.relax-recovering {
+    animation: relaxRecover 0.5s ease-out;
+}
+
+@keyframes relaxRecover {
+    0% {
+        opacity: 0.6;
+        filter: grayscale(80%);
+        transform: scale(0.95);
+    }
+    50% {
+        opacity: 0.8;
+        filter: grayscale(40%);
+        transform: scale(1.05);
+    }
+    100% {
+        opacity: 1;
+        filter: none;
+        transform: scale(1);
+    }
+}
+
+/* 专注模式状态指示器 */
+.focus-status-indicator {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    width: 12px;
+    height: 12px;
+    background: #ff6b6b;
+    border-radius: 50%;
+    border: 2px solid white;
+    animation: focusStatusPulse 1.5s infinite;
+    z-index: 10;
+}
+
+@keyframes focusStatusPulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.2);
+        opacity: 0.7;
+    }
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+    .nav-item.relax-disabled::after,
+    .nav-item-new.relax-disabled::after {
+        font-size: 11px;
+        padding: 6px 10px;
+        bottom: 110%;
+    }
+    
+    .relax-view-disabled::before {
+        font-size: 14px;
+        padding: 15px;
+        white-space: normal;
+        max-width: 200px;
+    }
+}
+
+/* 无障碍支持 */
+@media (prefers-reduced-motion: reduce) {
+    .nav-item.relax-disabled::before,
+    .nav-item-new.relax-disabled::before,
+    .focus-status-indicator {
+        animation: none;
+    }
+    
+    .nav-item.relax-recovering,
+    .nav-item-new.relax-recovering {
+        animation: none;
+    }
+} 
