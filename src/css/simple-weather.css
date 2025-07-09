@@ -1,0 +1,150 @@
+/* 简化出行建议样式 */
+.simple-weather-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: var(--card-bg-color, #f8f9fa);
+    border: 1px solid var(--border-color, #e0e0e0);
+    border-radius: 20px;
+    font-size: 13px;
+    color: var(--text-secondary-color, #666666);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    max-width: 280px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-left: auto;
+    margin-right: 15px;
+}
+
+.simple-weather-container:hover {
+    background: var(--card-bg-color-hover, #f0f2f5);
+    border-color: var(--primary-color, #4285f4);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(66, 133, 244, 0.15);
+}
+
+.simple-weather-icon {
+    font-size: 16px;
+    color: var(--primary-color, #4285f4);
+    flex-shrink: 0;
+}
+
+.simple-weather-text {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: 500;
+    min-width: 0;
+}
+
+.simple-weather-temp {
+    font-weight: 600;
+    color: var(--text-primary-color, #333);
+    flex-shrink: 0;
+    margin-left: 4px;
+}
+
+/* 暗黑主题样式 */
+.dark-theme .simple-weather-container {
+    background: var(--card-bg-color, #1a1a1a);
+    border-color: var(--border-color, #333333);
+    color: var(--text-secondary-color, #aaaaaa);
+}
+
+.dark-theme .simple-weather-container:hover {
+    background: var(--card-bg-color-hover, #2a2a2a);
+    border-color: var(--primary-color, #5c9aff);
+}
+
+.dark-theme .simple-weather-icon {
+    color: var(--primary-color, #5c9aff);
+}
+
+.dark-theme .simple-weather-temp {
+    color: var(--text-primary-color, #f8f9fa);
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+    .simple-weather-container {
+        padding: 6px 10px;
+        font-size: 12px;
+        max-width: 240px;
+        gap: 6px;
+        margin-right: 10px;
+    }
+    
+    .simple-weather-icon {
+        font-size: 14px;
+    }
+    
+    .simple-weather-temp {
+        margin-left: 2px;
+    }
+}
+
+@media (max-width: 480px) {
+    .simple-weather-container {
+        padding: 5px 8px;
+        font-size: 11px;
+        max-width: 200px;
+        gap: 4px;
+        margin-right: 8px;
+    }
+    
+    .simple-weather-icon {
+        font-size: 13px;
+    }
+    
+    .simple-weather-text {
+        max-width: 120px;
+    }
+}
+
+@media (max-width: 360px) {
+    .simple-weather-container {
+        padding: 4px 6px;
+        font-size: 10px;
+        max-width: 180px;
+        gap: 3px;
+        margin-right: 5px;
+    }
+    
+    .simple-weather-icon {
+        font-size: 12px;
+    }
+    
+    .simple-weather-text {
+        max-width: 100px;
+    }
+}
+
+/* 动画效果 */
+.simple-weather-container {
+    animation: fadeInSlide 0.3s ease;
+}
+
+@keyframes fadeInSlide {
+    from {
+        opacity: 0;
+        transform: translateX(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* 错误状态 */
+.simple-weather-container.error {
+    border-color: var(--danger-color, #ea4335);
+    background-color: rgba(234, 67, 53, 0.1);
+}
+
+.simple-weather-container.error .simple-weather-icon {
+    color: var(--danger-color, #ea4335);
+} 
