@@ -1,0 +1,102 @@
+/* 日期推算卡片样式 */
+.date-calc-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  padding: 24px 20px 20px 20px;
+  margin: 20px 0;
+  max-width: 400px;
+  width: 100%;
+  font-size: 16px;
+}
+.date-calc-card h4 {
+  margin-bottom: 16px;
+  font-size: 20px;
+  color: #4285f4;
+}
+.date-calc-card .form-group {
+  margin-bottom: 14px;
+}
+.date-calc-card label {
+  display: block;
+  margin-bottom: 6px;
+  color: #333;
+}
+.date-calc-card input[type="date"],
+.date-calc-card input[type="number"] {
+  width: 100%;
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+.date-calc-card .actions {
+  margin-top: 12px;
+  text-align: right;
+}
+.date-calc-card button {
+  background: linear-gradient(90deg, #4285f4 60%, #6ab7ff 100%);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(66,133,244,0.08);
+  transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+  margin-right: 8px;
+}
+.date-calc-card button:hover {
+  background: linear-gradient(90deg, #3367d6 60%, #4fc3f7 100%);
+  box-shadow: 0 4px 16px rgba(66,133,244,0.15);
+  transform: translateY(-2px) scale(1.04);
+}
+.date-calc-card #date-calc-close-btn {
+  background: none !important;
+  color: #bbb !important;
+  border: none;
+  font-size: 24px;
+  padding: 0 8px;
+  box-shadow: none;
+  border-radius: 50%;
+  transition: background 0.18s, color 0.18s;
+  margin: 0;
+}
+.date-calc-card #date-calc-close-btn:hover {
+  background: #f2f2f2 !important;
+  color: #e53935 !important;
+}
+.date-calc-card .result {
+  margin-top: 16px;
+  color: #222;
+  font-weight: bold;
+  font-size: 17px;
+}
+
+/* 深色模式适配 */
+body.dark-theme .date-calc-card {
+  background: #181818 !important;
+  color: #fff !important;
+}
+body.dark-theme .date-calc-card input,
+body.dark-theme .date-calc-card select,
+body.dark-theme .date-calc-card textarea {
+  background: #222 !important;
+  color: #fff !important;
+  border: 1px solid #444 !important;
+}
+body.dark-theme .date-calc-card label,
+body.dark-theme .date-calc-card .date-calc-title,
+body.dark-theme .date-calc-card .date-calc-result {
+  color: #fff !important;
+}
+body.dark-theme .date-calc-card button {
+  background: #222 !important;
+  color: #fff !important;
+  border: 1px solid #444 !important;
+}
+body.dark-theme .date-calc-card button:hover {
+  background: #444 !important;
+  color: #fff !important;
+} 
