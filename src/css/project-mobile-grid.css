@@ -1,0 +1,17 @@
+@media (max-width: 600px) {
+  .projects-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5px;
+    padding: 2px;
+  }
+  .project-card {
+    min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0;
+    font-size: 0.01px;
+    padding: 0 !important;
+    border-radius: 0 !important;
+  }
+} 
