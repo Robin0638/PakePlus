@@ -1,0 +1,125 @@
+/* 自定义抽奖卡片样式 */
+.lottery-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  padding: 24px 20px 20px 20px;
+  max-width: 400px;
+  width: 100%;
+  font-size: 16px;
+  position: relative;
+}
+.lottery-card h4 {
+  margin-bottom: 16px;
+  font-size: 20px;
+  color: #ff9800;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.lottery-card .form-group {
+  margin-bottom: 14px;
+}
+.lottery-card label {
+  display: block;
+  margin-bottom: 6px;
+  color: #333;
+}
+.lottery-card textarea {
+  width: 100%;
+  min-height: 60px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-size: 15px;
+  resize: vertical;
+}
+.lottery-card input[type="number"] {
+  width: 80px;
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 15px;
+  margin-left: 8px;
+}
+.lottery-card .actions {
+  margin-top: 12px;
+  text-align: right;
+}
+.lottery-card button {
+  background: linear-gradient(90deg, #ff9800 60%, #ffd54f 100%);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(255,152,0,0.08);
+  transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+  margin-right: 8px;
+}
+.lottery-card button:hover {
+  background: linear-gradient(90deg, #f57c00 60%, #ffe082 100%);
+  box-shadow: 0 4px 16px rgba(255,152,0,0.15);
+  transform: translateY(-2px) scale(1.04);
+}
+.lottery-card .result {
+  margin-top: 18px;
+  color: #e65100;
+  font-weight: bold;
+  font-size: 18px;
+  text-align: center;
+}
+.lottery-card .lottery-anim {
+  display: inline-block;
+  animation: shake 0.5s linear infinite alternate;
+}
+@keyframes shake {
+  0% { transform: rotate(-8deg); }
+  100% { transform: rotate(8deg); }
+}
+.lottery-card #lottery-close-btn {
+  background: none !important;
+  color: #bbb !important;
+  border: none;
+  font-size: 24px;
+  padding: 0 8px;
+  box-shadow: none;
+  border-radius: 50%;
+  transition: background 0.18s, color 0.18s;
+  margin: 0;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+.lottery-card #lottery-close-btn:hover {
+  background: #f2f2f2 !important;
+  color: #e53935 !important;
+}
+
+/* 深色模式适配 */
+body.dark-theme .lottery-card {
+  background: #181818 !important;
+  color: #fff !important;
+}
+body.dark-theme .lottery-card input,
+body.dark-theme .lottery-card select,
+body.dark-theme .lottery-card textarea {
+  background: #222 !important;
+  color: #fff !important;
+  border: 1px solid #444 !important;
+}
+body.dark-theme .lottery-card label,
+body.dark-theme .lottery-card .lottery-title,
+body.dark-theme .lottery-card .lottery-result {
+  color: #fff !important;
+}
+body.dark-theme .lottery-card button {
+  background: #222 !important;
+  color: #fff !important;
+  border: 1px solid #444 !important;
+}
+body.dark-theme .lottery-card button:hover {
+  background: #444 !important;
+  color: #fff !important;
+} 
