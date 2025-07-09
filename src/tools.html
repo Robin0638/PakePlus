@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Robin_1(布吉岛与我不造)的博客资源</title>
+    <link rel="stylesheet" href="css/tools.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        .back-to-home {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            background-color: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 20px;
+            padding: 8px 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: #333;
+        }
+        .back-to-home:hover {
+            transform: scale(1.05);
+            background-color: rgba(255, 255, 255, 1);
+        }
+        .dark-mode .back-to-home {
+            background-color: rgba(51, 51, 51, 0.9);
+            color: #fff;
+        }
+        .dark-mode .back-to-home:hover {
+            background-color: rgba(51, 51, 51, 1);
+        }
+        .back-to-home i {
+            color: inherit;
+        }
+        .back-to-home span {
+            color: inherit;
+            font-size: 14px;
+        }
+        .iframe-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            z-index: 1000;
+            display: none;
+        }
+        .iframe-container.active {
+            display: block;
+        }
+        .top-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: none;
+            z-index: 1001;
+            align-items: center;
+            padding: 0 20px;
+        }
+        .top-bar.active {
+            display: flex;
+        }
+        .back-button {
+            background: none;
+            border: none;
+            color: #333;
+            font-size: 16px;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+        .back-button:hover {
+            background-color: rgba(0,0,0,0.05);
+        }
+        .back-button i {
+            font-size: 18px;
+        }
+        .dark-mode .top-bar {
+            background: rgba(51, 51, 51, 0.95);
+        }
+        .dark-mode .back-button {
+            color: #fff;
+        }
+        .dark-mode .back-button:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+        .main-content {
+            padding-top: 80px;
+        }
+        
+        /* 加载动画样式 */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1002;
+            flex-direction: column;
+        }
+        .loading-overlay.active {
+            display: flex;
+        }
+        .dark-mode .loading-overlay {
+            background: rgba(51, 51, 51, 0.95);
+        }
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+        .dark-mode .loading-spinner {
+            border: 4px solid #444;
+            border-top: 4px solid #3498db;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .loading-text {
+            font-size: 18px;
+            color: #333;
+        }
+        .dark-mode .loading-text {
+            color: #fff;
+        }
+        
+        /* 错误提示样式 */
+        .error-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1002;
+            flex-direction: column;
+        }
+        .error-overlay.active {
+            display: flex;
+        }
+        .dark-mode .error-overlay {
+            background: rgba(51, 51, 51, 0.95);
+        }
+        .error-icon {
+            font-size: 64px;
+            color: #e74c3c;
+            margin-bottom: 20px;
+        }
+        .error-title {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        .dark-mode .error-title {
+            color: #fff;
+        }
+        .error-message {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 30px;
+            text-align: center;
+            max-width: 400px;
+        }
+        .dark-mode .error-message {
+            color: #ccc;
+        }
+        .error-actions {
+            display: flex;
+            gap: 15px;
+        }
+        .error-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        .error-btn.retry {
+            background: #3498db;
+            color: white;
+        }
+        .error-btn.retry:hover {
+            background: #2980b9;
+        }
+        .error-btn.close {
+            background: #95a5a6;
+            color: white;
+        }
+        .error-btn.close:hover {
+            background: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-to-home" aria-label="返回首页">
+        <i class="fas fa-home"></i>
+        <span>返回首页</span>
+    </a>
+    <button class="theme-toggle" id="themeToggle" aria-label="切换暗色模式">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+    </button>
+    <div class="weather-bg" id="weatherBg"></div>
+    <div class="main-content">
+    <header>
+        <h1>有数小工具</h1>
+        <p class="subtitle">在有数小工具中，有自有的工具和产品，还有精心挑选的工具、平台以及资源</p>
+    </header>
+    
+    <div class="search-container">
+        <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" class="search-input" placeholder="搜索资源...">
+    </div>
+    
+    <div class="categories">
+        <button class="category-btn active">全部</button>
+        <button class="category-btn">效率工具</button>
+        <button class="category-btn">学习软件</button>
+        <button class="category-btn">艺术与欣赏</button>
+        <button class="category-btn">心理测试</button>
+        <button class="category-btn">我的收藏</button>
+    </div>
+    
+    <div class="resources-container">
+        <!-- 社交平台主页 -->
+        <div class="resource-card" data-category="心理测试">
+            <div class="card-header">
+               <span class="card-tag">心理测试</span>
+               <i class="fas fa-brain card-icon"></i>
+            </div>
+            <div class="card-content">
+                <h3 class="card-title">Robin的心理测试</h3>
+                <p class="card-description">一款极简的心理测试网站</p>
+                <div class="card-footer">
+                    <!-- 替换为实际的网站链接 -->
+                <a href="javascript:void(0)" onclick="openInIframe('https://robintest123.netlify.app/login.html')" class="card-link">
+                        访问网站
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </a>
+                    <button class="favorite-btn" aria-label="收藏">
+                        <i class="far fa-heart"></i>
+                    </button>
+                    <div class="card-ratin
+                        <span class="text">免费的心理测试网站</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="resource-card" data-category="效率工具">
+            <div class="card-header">
+                <span class="card-tag">效率工具</span>
+                <i class="fas fa-crop-alt card-icon"></i>
+            </div>
+            <div class="card-content">
+                <h3 class="card-title">图片圆角生成器</h3>
+                <p class="card-description">为图片加上圆角,更现代化更美观</p>
+                <div class="card-footer">
+                   <!-- 替换为实际的网站链接 -->
+                <a href="javascript:void(0)" onclick="openInIframe('https://pptpictureround.netlify.app')" class="card-link">
+                        访问网站
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </a>
+                    <button class="favorite-btn" aria-label="收藏">
+                        <i class="far fa-heart"></i>
+                    </button>
+                    <div class="card-ratin
+                        <span class="text">一款简单的图片工具</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="resource-card" data-category="效率工具">
+            <div class="card-header">
+                <span class="card-tag">效率工具</span>
+                <i class="fas fa-file-audio card-icon"></i>
+            </div>
+            <div class="card-content">
+                <h3 class="card-title">视频转音频</h3>
+                <p class="card-description">支持视频内容输入,音频内容输出</p>
+                <div class="card-footer">
+                   <!-- 替换为实际的网站链接 -->
+                <a href="javascript:void(0)" onclick="openInIframe('https://tomusic.netlify.app')" class="card-link">
+                        访问网站
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </a>
+                    <button class="favorite-btn" aria-label="收藏">
+                        <i class="far fa-heart"></i>
+                    </button>
+                    <div class="card-ratin
+                        <span class="text">一款免费好用的转换器</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+       <div class="resource-card" data-category="学习软件">
+            <div class="card-header">
+                <span class="card-tag">学习软件</span>
+                <i class="fas fa-book-open card-icon"></i>
+            </div>
+            <div class="card-content">
+                <h3 class="card-title">词过过</h3>
+                <p class="card-description">一款好用的背单词软件</p>
+                <div class="card-footer">
+                   <!-- 替换为实际的网站链接 -->
+                <a href="javascript:void(0)" onclick="openInIframe('https://ciguoguo-new.netlify.app/')" class="card-link">
+                        访问网站
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </a>
+                    <button class="favorite-btn" aria-label="收藏">
+                        <i class="far fa-heart"></i>
+                    </button>
+                    <div class="card-ratin
+                        <span class="text">自制软件</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="resource-card" data-category="学习软件">
+            <div class="card-header">
+                <span class="card-tag">学习软件</span>
+                <i class="fas fa-language card-icon"></i>
+            </div>
+            <div class="card-content">
+                <h3 class="card-title">法语听力训练</h3>
+                <p class="card-description">专业的法语听力训练平台</p>
+                <div class="card-footer">
+                   <!-- 替换为实际的网站链接 -->
+                <a href="javascript:void(0)" onclick="openInIframe('https://robinfrlearning.netlify.app/')" class="card-link">
+                        访问网站
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </a>
+                    <button class="favorite-btn" aria-label="收藏">
+                        <i class="far fa-heart"></i>
+                    </button>
+                    <div class="card-ratin
+                        <span class="text">法语学习必备工具</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="resource-card" data-category="学习软件">
+            <div class="card-header">
+                <span class="card-tag">学习软件</span>
+                <i class="fas fa-calculator card-icon"></i>
+            </div>
+            <div class="card-content">
+                <h3 class="card-title">有分</h3>
+                <p class="card-description">专业的大学生算分平台</p>
+                <div class="card-footer">
+                   <!-- 替换为实际的网站链接 -->
+                <a href="javascript:void(0)" onclick="openInIframe('https://youfen-robin.netlify.app/')" class="card-link">
+                        访问网站
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </a>
+                    <button class="favorite-btn" aria-label="收藏">
+                        <i class="far fa-heart"></i>
+                    </button>
+                    <div class="card-ratin
+                        <span class="text">大学生学习必备工具</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="resource-card" data-category="学习软件">
+            <div class="card-header">
+                <span class="card-tag">学习软件</span>
+                <i class="fas fa-tasks card-icon"></i>
+            </div>
+            <div class="card-content">
+                <h3 class="card-title">智慧答题软件</h3>
+                <p class="card-description">一款多端好用的练习软件</p>
+                <div class="card-footer">
+                   <!-- 替换为实际的网站链接 -->
+                <a href="javascript:void(0)" onclick="openInIframe('https://test-subject-robin123.netlify.app/')" class="card-link">
+                        访问网站
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </a>
+                    <button class="favorite-btn" aria-label="收藏">
+                        <i class="far fa-heart"></i>
+                    </button>
+                    <div class="card-ratin
+                        <span class="text">多端好用的练习软件</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+      <div class="resource-card" data-category="效率工具">
+            <div class="card-header">
+                <span class="card-tag">效率工具</span>
+                <i class="fas fa-clock card-icon"></i>
+            </div>
+            <div class="card-content">
+                <h3 class="card-title">翻页时钟</h3>
+                <p class="card-description">小工具</p>
+                <div class="card-footer">
+                   <!-- 替换为实际的网站链接 -->
+                <a href="javascript:void(0)" onclick="openInIframe('https://clock-robin.netlify.app')" class="card-link">
+                        访问网站
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </a>
+                    <button class="favorite-btn" aria-label="收藏">
+                        <i class="far fa-heart"></i>
+                    </button>
+                    <div class="card-ratin
+                        <span class="text">自制软件</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+       <div class="resource-card" data-category="艺术与欣赏">
+            <div class="card-header">
+                <span class="card-tag">艺术与欣赏</span>
+                <i class="fas fa-music card-icon"></i>
+            </div>
+            <div class="card-content">
+        <h3 class="card-title">音乐播放器</h3>
+                <p class="card-description">支持音频内容输入</p>
+                <div class="card-footer">
+                   <!-- 替换为实际的网站链接 -->
+                <a href="javascript:void(0)" onclick="openInIframe('https://music-robin.netlify.app/')" class="card-link">
+                        访问网站
+                        <svg xmlns="https://music-robin.netlify.app" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </a>
+                    <button class="favorite-btn" aria-label="收藏">
+                        <i class="far fa-heart"></i>
+                    </button>
+                    <div class="card-ratin
+                        <span class="text">极简风的音乐播放器</span>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 加载动画覆盖层 -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">正在加载网站...</div>
+    </div>
+    
+    <!-- 错误提示覆盖层 -->
+    <div class="error-overlay" id="errorOverlay">
+        <div class="error-icon">
+            <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        <div class="error-title">加载失败</div>
+        <div class="error-message" id="errorMessage">网站暂时无法访问，请稍后再试</div>
+        <div class="error-actions">
+            <button class="error-btn retry" onclick="retryLoad()">重试</button>
+            <button class="error-btn close" onclick="closeError()">关闭</button>
+        </div>
+    </div>
+    
+    <div class="top-bar" id="topBar">
+        <button class="back-button" onclick="closeIframe()">
+            <i class="fas fa-arrow-left"></i>
+            <span>返回Tools</span>
+        </button>
+    </div>
+    <div class="iframe-container" id="iframeContainer">
+        <iframe id="contentFrame" style="width: 100%; height: calc(100% - 60px); border: none; margin-top: 60px;"></iframe>
+    </div>
+    <script src="js/script.js"></script>
+    <script>
+        let currentUrl = '';
+        let loadTimeout = null;
+        
+        function openInIframe(url) {
+            currentUrl = url;
+            document.getElementById('iframeContainer').classList.add('active');
+            document.getElementById('topBar').classList.add('active');
+            document.getElementById('loadingOverlay').classList.add('active');
+            document.getElementById('errorOverlay').classList.remove('active');
+            
+            const iframe = document.getElementById('contentFrame');
+            iframe.src = url;
+            
+            // 设置加载超时
+            loadTimeout = setTimeout(() => {
+                showError('加载超时，请检查网络连接');
+            }, 30000); // 30秒超时
+            
+            // 监听iframe加载事件
+            iframe.onload = function() {
+                clearTimeout(loadTimeout);
+                document.getElementById('loadingOverlay').classList.remove('active');
+            };
+            
+            iframe.onerror = function() {
+                clearTimeout(loadTimeout);
+                showError('网站加载失败，请检查网络连接');
+            };
+        }
+
+        function closeIframe() {
+            clearTimeout(loadTimeout);
+            document.getElementById('iframeContainer').classList.remove('active');
+            document.getElementById('topBar').classList.remove('active');
+            document.getElementById('loadingOverlay').classList.remove('active');
+            document.getElementById('errorOverlay').classList.remove('active');
+            document.getElementById('contentFrame').src = '';
+            currentUrl = '';
+        }
+        
+        function showError(message) {
+            document.getElementById('loadingOverlay').classList.remove('active');
+            document.getElementById('errorMessage').textContent = message;
+            document.getElementById('errorOverlay').classList.add('active');
+        }
+        
+        function retryLoad() {
+            if (currentUrl) {
+                openInIframe(currentUrl);
+            }
+        }
+        
+        function closeError() {
+            document.getElementById('errorOverlay').classList.remove('active');
+            closeIframe();
+        }
+        
+        // 监听iframe的loadstart事件（如果支持）
+        document.addEventListener('DOMContentLoaded', function() {
+            const iframe = document.getElementById('contentFrame');
+            
+            // 尝试监听更多事件来检测加载状态
+            iframe.addEventListener('loadstart', function() {
+                console.log('开始加载');
+            });
+            
+            iframe.addEventListener('load', function() {
+                console.log('加载完成');
+                clearTimeout(loadTimeout);
+                document.getElementById('loadingOverlay').classList.remove('active');
+            });
+            
+            iframe.addEventListener('error', function() {
+                console.log('加载错误');
+                clearTimeout(loadTimeout);
+                showError('网站加载失败，请检查网络连接');
+            });
+        });
+    </script>
+</body>
+</html> 
