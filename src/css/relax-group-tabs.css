@@ -1,0 +1,290 @@
+.relax-group-tabs {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 0 10px 0;
+  background: transparent;
+  border-bottom: 1px solid #ececec;
+  margin-bottom: 18px;
+}
+.relax-group-tab {
+  background: #f5f5f7;
+  border: none;
+  outline: none;
+  padding: 8px 22px;
+  border-radius: 20px;
+  font-size: 15px;
+  color: #666;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.relax-group-tab.active {
+  background: #4285f4;
+  color: #fff;
+  font-weight: bold;
+  box-shadow: 0 2px 8px rgba(66,133,244,0.08);
+}
+.relax-group-tab:hover:not(.active) {
+  background: #e3e8f0;
+  color: #4285f4;
+}
+
+/* PC端和平板端（>=600px）侧边栏布局 */
+@media (min-width: 600px) {
+  .relax-container {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+  }
+  .relax-group-sidebar {
+    width: 180px;
+    min-width: 140px;
+    margin-right: 32px;
+    padding-top: 18px;
+    padding-bottom: 18px;
+    border-right: 1px solid #ececec;
+    background: transparent;
+    height: 100%;
+  }
+  .relax-group-tabs {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    border-bottom: none;
+    border-right: none;
+    margin-bottom: 0;
+    padding: 0;
+  }
+  .relax-group-tab {
+    width: 100%;
+    text-align: left;
+    border-radius: 8px;
+    padding: 12px 18px;
+    font-size: 16px;
+    background: #f5f5f7;
+    color: #666;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+  }
+  .relax-group-tab.active {
+    background: #4285f4;
+    color: #fff;
+    font-weight: bold;
+    box-shadow: 0 2px 8px rgba(66,133,244,0.08);
+  }
+  .relax-group-tab:hover:not(.active) {
+    background: #e3e8f0;
+    color: #4285f4;
+  }
+  .relax-main-content {
+    flex: 1 1 0%;
+    min-width: 0;
+    padding-top: 18px;
+    padding-bottom: 18px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 28px 32px;
+    align-items: flex-start;
+  }
+  .relax-main-content > .medals-wall,
+  .relax-main-content > .points-display,
+  .relax-main-content > .lucky-wheel,
+  .relax-main-content > #horoscope-section,
+  .relax-main-content > .hot-section,
+  .relax-main-content > .history-section,
+  .relax-main-content > #water-reminder-panel {
+    flex: 1 1 320px;
+    max-width: 420px;
+    min-width: 280px;
+    box-sizing: border-box;
+  }
+}
+
+/* 移动端（<600px）横排小按钮 */
+@media (max-width: 599px) {
+  .relax-container {
+    display: block;
+  }
+  .relax-group-sidebar {
+    width: 100%;
+    border-right: none;
+    margin-right: 0;
+    padding: 0;
+  }
+  .relax-group-tabs {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    padding: 12px 0 8px 0;
+    border-bottom: 1px solid #ececec;
+    margin-bottom: 14px;
+    justify-content: flex-start;
+    align-items: center;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .relax-group-tabs::-webkit-scrollbar {
+    display: none;
+  }
+  .relax-group-tab {
+    border-radius: 18px;
+    padding: 8px 12px 6px 12px;
+    font-size: 10px;
+    width: auto;
+    min-width: 54px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    line-height: 1.1;
+    justify-content: center;
+  }
+  .relax-group-tab i {
+    font-size: 13px;
+    margin: 0 0 0.5px 0;
+    display: block;
+  }
+  .relax-group-tab span,
+  .relax-group-tab {
+    font-size: 10px;
+    margin: 0;
+    padding: 0;
+  }
+  .relax-main-content {
+    padding-top: 0;
+    padding-bottom: 0;
+    display: block;
+  }
+  .relax-main-content > * {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    margin-bottom: 18px;
+  }
+  /* 卡片内所有文字整体缩小 */
+  .relax-main-content,
+  .relax-main-content * {
+    font-size: 13px !important;
+  }
+  .relax-main-content h3,
+  .relax-main-content h4 {
+    font-size: 15px !important;
+  }
+}
+
+/* 统一卡片样式 */
+.relax-main-content > .medals-wall,
+.relax-main-content > .points-display,
+.relax-main-content > .lucky-wheel,
+.relax-main-content > #horoscope-section,
+.relax-main-content > .hot-section,
+.relax-main-content > .history-section,
+.relax-main-content > #water-reminder-panel {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 2px 12px rgba(66,133,244,0.08), 0 1.5px 4px rgba(0,0,0,0.04);
+  padding: 28px 28px 22px 28px;
+  margin: 0;
+  margin-bottom: 0;
+  transition: box-shadow 0.2s, transform 0.2s;
+  position: relative;
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+.relax-main-content > .medals-wall:not(:last-child),
+.relax-main-content > .points-display:not(:last-child),
+.relax-main-content > .lucky-wheel:not(:last-child),
+.relax-main-content > #horoscope-section:not(:last-child),
+.relax-main-content > .hot-section:not(:last-child),
+.relax-main-content > .history-section:not(:last-child),
+.relax-main-content > #water-reminder-panel:not(:last-child) {
+  margin-bottom: 0;
+}
+
+/* 卡片标题统一样式 */
+.relax-main-content h3,
+.relax-main-content h4 {
+  font-size: 1.18em;
+  font-weight: 600;
+  color: #2d3a4a;
+  margin-bottom: 16px;
+  margin-top: 0;
+}
+
+/* 卡片内容间距优化 */
+.relax-main-content .medals-container,
+.relax-main-content .points-value,
+.relax-main-content .tools-container,
+.relax-main-content .hot-list,
+.relax-main-content .history-list,
+.relax-main-content .focus-stats {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+/* 卡片hover效果 */
+@media (hover: hover) {
+  .relax-main-content > .medals-wall:hover,
+  .relax-main-content > .points-display:hover,
+  .relax-main-content > .lucky-wheel:hover,
+  .relax-main-content > #horoscope-section:hover,
+  .relax-main-content > .hot-section:hover,
+  .relax-main-content > .history-section:hover,
+  .relax-main-content > #water-reminder-panel:hover {
+    box-shadow: 0 4px 20px rgba(66,133,244,0.13), 0 2px 8px rgba(0,0,0,0.06);
+    transform: translateY(-2px) scale(1.012);
+  }
+}
+
+/* PC端卡片最大宽度限制，保证并排美观 */
+@media (min-width: 900px) {
+  .relax-main-content > * {
+    max-width: 420px;
+    min-width: 280px;
+  }
+}
+
+/* 移动端卡片全宽 */
+@media (max-width: 899px) {
+  .relax-main-content > * {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    margin-bottom: 18px;
+  }
+}
+
+/* 深色模式适配 */
+body.dark-theme .relax-group-tabs {
+  background: #101014 !important;
+  color: #fff !important;
+}
+body.dark-theme .relax-group-tab {
+  background: #18181c !important;
+  color: #fff !important;
+  border: 1px solid #22222a !important;
+}
+body.dark-theme .relax-group-tab.active {
+  background: #40916c !important;
+  color: #fff !important;
+  border: 1px solid #40916c !important;
+}
+body.dark-theme .relax-group-tabs button:hover,
+body.dark-theme .relax-group-tab:hover {
+  background: #23232a !important;
+  color: #fff !important;
+}
+body.dark-theme .relax-group-sidebar {
+  background: #101014 !important;
+  color: #fff !important;
+}
+body.dark-theme .relax-main-content {
+  background: #101014 !important;
+  color: #fff !important;
+} 
