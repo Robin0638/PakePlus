@@ -1,0 +1,335 @@
+/* 筛选区域折叠功能样式 */
+
+/* 筛选操作按钮组 */
+.tag-filter-actions,
+.date-filter-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* 折叠按钮样式 - 带动画效果 */
+.filter-toggle-btn {
+    background: #f8f9fa;
+    color: #6c757d;
+    border: 1px solid #dee2e6;
+    border-radius: 3px;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    outline: none;
+    user-select: none;
+    font-size: 10px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+/* 按钮悬停动画 */
+.filter-toggle-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+    transition: left 0.6s ease;
+}
+
+.filter-toggle-btn:hover::before {
+    left: 100%;
+}
+
+.filter-toggle-btn:hover {
+    background: #e9ecef;
+    color: #495057;
+    transform: scale(1.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* 按钮点击动画 */
+.filter-toggle-btn:active {
+    transform: scale(0.95);
+    transition: transform 0.1s ease;
+}
+
+/* 按钮图标动画 */
+.filter-toggle-btn i {
+    transition: transform 0.3s ease;
+}
+
+/* 折叠状态下的图标旋转动画 */
+.filter-toggle-btn.collapsed i {
+    transform: rotate(180deg);
+}
+
+/* 筛选内容区域 */
+.tag-filter-content,
+.date-filter-content {
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    max-height: 500px; /* 设置一个足够大的最大高度 */
+}
+
+/* 折叠状态下的内容区域 */
+.tag-filter-content.collapsed,
+.date-filter-content.collapsed {
+    max-height: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+/* 暗色主题适配 */
+body.dark-theme .filter-toggle-btn {
+    background: #3c3c3c;
+    color: #adb5bd;
+    border-color: #495057;
+}
+
+body.dark-theme .filter-toggle-btn:hover {
+    background: #4a4a4a;
+    color: #ced4da;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .tag-filter-actions,
+    .date-filter-actions {
+        gap: 4px;
+    }
+    
+    .filter-toggle-btn {
+        width: 18px;
+        height: 18px;
+        font-size: 9px;
+    }
+}
+
+@media (max-width: 480px) {
+    .filter-toggle-btn {
+        width: 16px;
+        height: 16px;
+        font-size: 8px;
+    }
+}
+
+/* 保存折叠状态的持久化样式 */
+.tag-filter-container[data-collapsed="true"] .tag-filter-content,
+.date-filter-container[data-collapsed="true"] .date-filter-content {
+    max-height: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+/* 按钮脉冲动画 */
+@keyframes buttonPulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(108, 117, 125, 0.4);
+    }
+    70% {
+        box-shadow: 0 0 0 6px rgba(108, 117, 125, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(108, 117, 125, 0);
+    }
+}
+
+/* 按钮焦点时的脉冲效果 */
+.filter-toggle-btn:focus {
+    animation: buttonPulse 1.5s infinite;
+}
+
+/* 按钮呼吸动画 */
+@keyframes buttonBreathe {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+/* 悬停时的呼吸效果 */
+.filter-toggle-btn:hover {
+    animation: buttonBreathe 2s ease-in-out infinite;
+} 
+
+/* 项目筛选区域样式 */
+.project-filter-container {
+    margin: 4px 0;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    background: #fff;
+}
+
+.project-filter-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 8px;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.project-filter-title {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    font-weight: 500;
+    color: #495057;
+    font-size: 11px;
+}
+
+.project-filter-actions {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
+.project-filter-content {
+    padding: 6px;
+}
+
+.project-select {
+    width: 100%;
+    padding: 4px 8px;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    font-size: 10px;
+    background: #fff;
+    color: #495057;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.project-select:hover {
+    border-color: var(--primary-color);
+}
+
+.project-select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.2);
+}
+
+.clear-project-filter-btn {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 3px 6px;
+    font-size: 9px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    box-shadow: 0 1px 2px rgba(255, 107, 107, 0.3);
+}
+
+.clear-project-filter-btn:hover {
+    background: linear-gradient(135deg, #ee5a52 0%, #ff6b6b 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 3px 6px rgba(255, 107, 107, 0.4);
+}
+
+/* 暗色主题适配 */
+body.dark-theme .project-filter-container {
+    background: #2d2d2d;
+    border-color: #404040;
+}
+
+body.dark-theme .project-filter-header {
+    border-bottom-color: #404040;
+}
+
+body.dark-theme .project-filter-title {
+    color: #e9ecef;
+}
+
+body.dark-theme .project-select {
+    background-color: #2d2d2d;
+    border-color: #404040;
+    color: #e9ecef;
+}
+
+body.dark-theme .project-select:hover {
+    border-color: #505050;
+}
+
+body.dark-theme .project-select:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+body.dark-theme .clear-project-filter-btn {
+    background: #404040;
+    border-color: #505050;
+    color: #adb5bd;
+}
+
+body.dark-theme .clear-project-filter-btn:hover {
+    background: #505050;
+    color: #e9ecef;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .project-filter-container {
+        margin: 3px 0;
+    }
+    
+    .project-filter-header {
+        padding: 3px 6px;
+    }
+    
+    .project-filter-content {
+        padding: 4px;
+    }
+    
+    .project-select {
+        padding: 3px 6px;
+        font-size: 9px;
+    }
+    
+    .clear-project-filter-btn {
+        padding: 2px 5px;
+        font-size: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .project-filter-container {
+        margin: 2px 0;
+    }
+    
+    .project-filter-header {
+        padding: 2px 4px;
+    }
+    
+    .project-filter-content {
+        padding: 3px;
+    }
+    
+    .project-select {
+        padding: 2px 4px;
+        font-size: 8px;
+    }
+    
+    .clear-project-filter-btn {
+        padding: 2px 4px;
+        font-size: 7px;
+    }
+    
+    .project-filter-title {
+        font-size: 10px;
+    }
+} 
