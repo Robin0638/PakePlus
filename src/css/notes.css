@@ -1,0 +1,821 @@
+/* 笔记功能样式 */
+
+/* 笔记搜索框 */
+.notes-search-fixed {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background-color: var(--bg-color, #ffffff);
+    padding: 10px 15px;
+    border-bottom: 1px solid var(--border-color, #e0e0e0);
+}
+
+.notes-search {
+    display: flex;
+    align-items: center;
+    background-color: var(--card-bg-color, #f8f9fa);
+    border-radius: 20px;
+    padding: 8px 15px;
+    border: 1px solid var(--border-color, #e0e0e0);
+}
+
+.notes-search i {
+    color: var(--text-secondary-color, #666666);
+    margin-right: 8px;
+}
+
+.notes-search input {
+    flex: 1;
+    border: none;
+    background: none;
+    outline: none;
+    font-size: 14px;
+    color: var(--text-color, #333333);
+}
+
+.notes-search input::placeholder {
+    color: var(--text-secondary-color, #999999);
+}
+
+/* 笔记容器 */
+.notes-container {
+    padding: 15px;
+}
+
+/* 笔记列表 */
+.notes-list {
+    display: grid;
+    gap: 15px;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+}
+
+/* 笔记卡片 */
+.note-card {
+    background-color: var(--card-bg-color, #ffffff);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--border-color, #e0e0e0);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.note-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.note-card.selected {
+    border-color: var(--primary-color, #4285f4);
+    background-color: rgba(66, 133, 244, 0.05);
+}
+
+/* 笔记标题 */
+.note-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-color, #333333);
+    margin-bottom: 10px;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* 笔记内容预览 */
+.note-content-preview {
+    color: var(--text-secondary-color, #666666);
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 15px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* 笔记元信息 */
+.note-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    color: var(--text-secondary-color, #999999);
+    margin-bottom: 15px;
+}
+
+.note-date {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.note-tags {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+}
+
+.note-tag {
+    background-color: var(--primary-color-light, rgba(66, 133, 244, 0.1));
+    color: var(--primary-color, #4285f4);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 10px;
+}
+
+/* 笔记操作按钮 */
+.note-actions {
+    display: flex;
+    gap: 8px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.note-card:hover .note-actions {
+    opacity: 1;
+}
+
+.note-action-btn {
+    background: none;
+    border: none;
+    padding: 6px;
+    border-radius: 6px;
+    cursor: pointer;
+    color: var(--text-secondary-color, #666666);
+    transition: all 0.2s ease;
+}
+
+.note-action-btn:hover {
+    background-color: var(--hover-bg, rgba(0, 0, 0, 0.05));
+    color: var(--text-color, #333333);
+}
+
+.note-action-btn.edit:hover {
+    color: var(--primary-color, #4285f4);
+}
+
+.note-action-btn.delete:hover {
+    color: var(--danger-color, #ea4335);
+}
+
+.note-action-btn.share:hover {
+    color: var(--success-color, #34a853);
+}
+
+/* 空状态 */
+.empty-notes-message {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-secondary-color, #999999);
+}
+
+.empty-notes-message .empty-icon {
+    font-size: 48px;
+    margin-bottom: 20px;
+}
+
+.empty-notes-message p {
+    margin: 10px 0;
+    font-size: 16px;
+}
+
+.empty-notes-message .sub-text {
+    font-size: 14px;
+    opacity: 0.7;
+}
+
+/* 笔记编辑模态框 */
+.note-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+.note-modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: var(--bg-color, #ffffff);
+    border-radius: 12px;
+    padding: 0;
+    width: 90%;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.note-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border-color, #e0e0e0);
+    background-color: var(--card-bg-color, #f8f9fa);
+}
+
+.note-modal-header h3 {
+    margin: 0;
+    color: var(--text-color, #333333);
+    font-size: 18px;
+}
+
+.note-modal-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--text-secondary-color, #666666);
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.note-modal-close:hover {
+    background-color: var(--hover-bg, rgba(0, 0, 0, 0.05));
+    color: var(--text-color, #333333);
+}
+
+.note-modal-body {
+    padding: 24px;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+.note-form-group {
+    margin-bottom: 20px;
+}
+
+.note-form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--text-color, #333333);
+}
+
+.note-form-input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border-color, #e0e0e0);
+    border-radius: 8px;
+    font-size: 14px;
+    background-color: var(--bg-color, #ffffff);
+    color: var(--text-color, #333333);
+    transition: border-color 0.3s ease;
+}
+
+.note-form-input:focus {
+    outline: none;
+    border-color: var(--primary-color, #4285f4);
+}
+
+.note-form-textarea {
+    width: 100%;
+    min-height: 200px;
+    padding: 12px;
+    border: 1px solid var(--border-color, #e0e0e0);
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    background-color: var(--bg-color, #ffffff);
+    color: var(--text-color, #333333);
+    resize: vertical;
+    transition: border-color 0.3s ease;
+}
+
+.note-form-textarea:focus {
+    outline: none;
+    border-color: var(--primary-color, #4285f4);
+}
+
+.note-form-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.note-tag-input {
+    flex: 1;
+    min-width: 120px;
+    padding: 6px 10px;
+    border: 1px solid var(--border-color, #e0e0e0);
+    border-radius: 6px;
+    font-size: 12px;
+    background-color: var(--bg-color, #ffffff);
+    color: var(--text-color, #333333);
+}
+
+.note-modal-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    padding: 20px 24px;
+    border-top: 1px solid var(--border-color, #e0e0e0);
+    background-color: var(--card-bg-color, #f8f9fa);
+}
+
+.note-modal-btn {
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.note-modal-btn.primary {
+    background-color: var(--primary-color, #4285f4);
+    color: white;
+}
+
+.note-modal-btn.primary:hover {
+    background-color: var(--primary-color-dark, #3367d6);
+}
+
+.note-modal-btn.secondary {
+    background-color: var(--card-bg-color, #f8f9fa);
+    color: var(--text-color, #333333);
+    border: 1px solid var(--border-color, #e0e0e0);
+}
+
+.note-modal-btn.secondary:hover {
+    background-color: var(--hover-bg, rgba(0, 0, 0, 0.05));
+}
+
+.note-modal-btn.danger {
+    background-color: var(--danger-color, #ea4335);
+    color: white;
+}
+
+.note-modal-btn.danger:hover {
+    background-color: #d32f2f;
+}
+
+/* 批量选择模式 */
+.notes-list.batch-mode .note-card {
+    cursor: default;
+}
+
+.notes-list.batch-mode .note-card:hover {
+    transform: none;
+}
+
+.note-checkbox {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--border-color, #e0e0e0);
+    border-radius: 4px;
+    background-color: var(--bg-color, #ffffff);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: none;
+}
+
+.notes-list.batch-mode .note-checkbox {
+    display: block;
+}
+
+.note-checkbox.checked {
+    background-color: var(--primary-color, #4285f4);
+    border-color: var(--primary-color, #4285f4);
+}
+
+.note-checkbox.checked::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+/* 暗黑主题适配 */
+.dark-theme .notes-search-fixed {
+    background-color: var(--bg-color, #1a1a1a);
+    border-bottom-color: var(--border-color, #333333);
+}
+
+.dark-theme .notes-search {
+    background-color: var(--card-bg-color, #2a2a2a);
+    border-color: var(--border-color, #333333);
+}
+
+.dark-theme .note-card {
+    background-color: var(--card-bg-color, #2a2a2a);
+    border-color: var(--border-color, #333333);
+    color: #fff;
+}
+
+.dark-theme .note-title {
+    color: #fff;
+}
+
+.dark-theme .note-content-preview {
+    color: #fff;
+}
+
+.dark-theme .note-meta {
+    color: #fff;
+}
+
+.dark-theme .note-tag {
+    background-color: var(--primary-color-dark, rgba(66,133,244,0.15));
+    color: #fff;
+}
+
+.dark-theme .note-action-btn {
+    color: #fff;
+}
+
+.dark-theme .note-action-btn:hover {
+    background-color: var(--hover-bg, rgba(255,255,255,0.08));
+    color: #fff;
+}
+
+.dark-theme .note-modal-content {
+    background-color: var(--bg-color, #1a1a1a);
+    color: #fff;
+}
+
+.dark-theme .note-modal-header {
+    background-color: var(--card-bg-color, #2a2a2a);
+    border-bottom-color: var(--border-color, #333333);
+    color: #fff;
+}
+
+.dark-theme .note-modal-actions {
+    background-color: var(--card-bg-color, #2a2a2a);
+    border-top-color: var(--border-color, #333333);
+    color: #fff;
+}
+
+.dark-theme .note-modal-header h3,
+.dark-theme .note-modal-close,
+.dark-theme .note-modal-body,
+.dark-theme .note-form-group label,
+.dark-theme .note-form-input,
+.dark-theme .note-form-textarea,
+.dark-theme .note-modal-btn {
+    color: #fff;
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+    .notes-list {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+    
+    .note-card {
+        padding: 16px;
+    }
+    
+    .note-modal-content {
+        width: 95%;
+        max-height: 90vh;
+    }
+    
+    .note-modal-body {
+        padding: 16px;
+        max-height: 70vh;
+    }
+    
+    .note-modal-actions {
+        padding: 16px;
+        flex-direction: column;
+    }
+    
+    .note-modal-btn {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .notes-search-fixed {
+        padding: 8px 12px;
+    }
+    
+    .notes-container {
+        padding: 12px;
+    }
+    
+    .note-title {
+        font-size: 16px;
+    }
+    
+    .note-content-preview {
+        font-size: 13px;
+    }
+}
+
+/* Markdown内容样式 */
+#note-detail-content h1,
+#note-detail-content h2,
+#note-detail-content h3,
+#note-detail-content h4,
+#note-detail-content h5,
+#note-detail-content h6 {
+    margin: 16px 0 8px 0;
+    color: var(--text-color, #333333);
+    font-weight: 600;
+}
+
+#note-detail-content h1 { font-size: 20px; }
+#note-detail-content h2 { font-size: 18px; }
+#note-detail-content h3 { font-size: 16px; }
+#note-detail-content h4 { font-size: 15px; }
+#note-detail-content h5 { font-size: 14px; }
+#note-detail-content h6 { font-size: 13px; }
+
+#note-detail-content p {
+    margin: 8px 0;
+    line-height: 1.6;
+}
+
+#note-detail-content ul,
+#note-detail-content ol {
+    margin: 8px 0;
+    padding-left: 20px;
+}
+
+#note-detail-content li {
+    margin: 4px 0;
+    line-height: 1.5;
+}
+
+#note-detail-content blockquote {
+    margin: 12px 0;
+    padding: 8px 12px;
+    border-left: 4px solid var(--primary-color, #4285f4);
+    background-color: var(--card-bg-color, #f8f9fa);
+    color: var(--text-secondary-color, #666666);
+    font-style: italic;
+}
+
+#note-detail-content code {
+    background-color: var(--card-bg-color, #f8f9fa);
+    color: var(--text-color, #333333);
+    padding: 2px 4px;
+    border-radius: 3px;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+}
+
+#note-detail-content pre {
+    background-color: var(--card-bg-color, #f8f9fa);
+    border: 1px solid var(--border-color, #e0e0e0);
+    border-radius: 6px;
+    padding: 12px;
+    margin: 12px 0;
+    overflow-x: auto;
+}
+
+#note-detail-content pre code {
+    background: none;
+    padding: 0;
+    border-radius: 0;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+#note-detail-content a {
+    color: var(--primary-color, #4285f4);
+    text-decoration: none;
+}
+
+#note-detail-content a:hover {
+    text-decoration: underline;
+}
+
+#note-detail-content table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 12px 0;
+}
+
+#note-detail-content th,
+#note-detail-content td {
+    border: 1px solid var(--border-color, #e0e0e0);
+    padding: 8px 12px;
+    text-align: left;
+}
+
+#note-detail-content th {
+    background-color: var(--card-bg-color, #f8f9fa);
+    font-weight: 600;
+}
+
+#note-detail-content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 6px;
+    margin: 8px 0;
+}
+
+#note-detail-content hr {
+    border: none;
+    border-top: 1px solid var(--border-color, #e0e0e0);
+    margin: 16px 0;
+}
+
+/* 暗黑主题下的Markdown样式调整 */
+[data-theme="dark"] #note-detail-content blockquote {
+    background-color: var(--card-bg-color, #2d3748);
+    border-left-color: var(--primary-color, #63b3ed);
+}
+
+[data-theme="dark"] #note-detail-content code {
+    background-color: var(--card-bg-color, #2d3748);
+    color: var(--text-color, #e2e8f0);
+}
+
+[data-theme="dark"] #note-detail-content pre {
+    background-color: var(--card-bg-color, #2d3748);
+    border-color: var(--border-color, #4a5568);
+}
+
+[data-theme="dark"] #note-detail-content th {
+    background-color: var(--card-bg-color, #2d3748);
+}
+
+/* 笔记编辑预览样式 */
+#note-preview-content h1,
+#note-preview-content h2,
+#note-preview-content h3,
+#note-preview-content h4,
+#note-preview-content h5,
+#note-preview-content h6 {
+    margin: 16px 0 8px 0;
+    color: var(--text-color, #333333);
+    font-weight: 600;
+}
+
+#note-preview-content h1 { font-size: 20px; }
+#note-preview-content h2 { font-size: 18px; }
+#note-preview-content h3 { font-size: 16px; }
+#note-preview-content h4 { font-size: 15px; }
+#note-preview-content h5 { font-size: 14px; }
+#note-preview-content h6 { font-size: 13px; }
+
+#note-preview-content p {
+    margin: 8px 0;
+    line-height: 1.6;
+}
+
+#note-preview-content ul,
+#note-preview-content ol {
+    margin: 8px 0;
+    padding-left: 20px;
+}
+
+#note-preview-content li {
+    margin: 4px 0;
+    line-height: 1.5;
+}
+
+#note-preview-content blockquote {
+    margin: 12px 0;
+    padding: 8px 12px;
+    border-left: 4px solid var(--primary-color, #4285f4);
+    background-color: var(--card-bg-color, #f8f9fa);
+    color: var(--text-secondary-color, #666666);
+    font-style: italic;
+}
+
+#note-preview-content code {
+    background-color: var(--card-bg-color, #f8f9fa);
+    color: var(--text-color, #333333);
+    padding: 2px 4px;
+    border-radius: 3px;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+}
+
+#note-preview-content pre {
+    background-color: var(--card-bg-color, #f8f9fa);
+    border: 1px solid var(--border-color, #e0e0e0);
+    border-radius: 6px;
+    padding: 12px;
+    margin: 12px 0;
+    overflow-x: auto;
+}
+
+#note-preview-content pre code {
+    background: none;
+    padding: 0;
+    border-radius: 0;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+#note-preview-content a {
+    color: var(--primary-color, #4285f4);
+    text-decoration: none;
+}
+
+#note-preview-content a:hover {
+    text-decoration: underline;
+}
+
+#note-preview-content table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 12px 0;
+}
+
+#note-preview-content th,
+#note-preview-content td {
+    border: 1px solid var(--border-color, #e0e0e0);
+    padding: 8px 12px;
+    text-align: left;
+}
+
+#note-preview-content th {
+    background-color: var(--card-bg-color, #f8f9fa);
+    font-weight: 600;
+}
+
+#note-preview-content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 6px;
+    margin: 8px 0;
+}
+
+#note-preview-content hr {
+    border: none;
+    border-top: 1px solid var(--border-color, #e0e0e0);
+    margin: 16px 0;
+}
+
+/* 暗黑主题下的预览样式调整 */
+[data-theme="dark"] #note-preview-content blockquote {
+    background-color: var(--card-bg-color, #2d3748);
+    border-left-color: var(--primary-color, #63b3ed);
+}
+
+[data-theme="dark"] #note-preview-content code {
+    background-color: var(--card-bg-color, #2d3748);
+    color: var(--text-color, #e2e8f0);
+}
+
+[data-theme="dark"] #note-preview-content pre {
+    background-color: var(--card-bg-color, #2d3748);
+    border-color: var(--border-color, #4a5568);
+}
+
+[data-theme="dark"] #note-preview-content th {
+    background-color: var(--card-bg-color, #2d3748);
+}
+
+/* 收藏星星按钮 */
+.note-star {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: none;
+    border: none;
+    color: #bbb;
+    font-size: 20px;
+    cursor: pointer;
+    z-index: 2;
+    transition: color 0.2s;
+    padding: 0;
+}
+.note-star.active {
+    color: var(--primary-color, #f7b500);
+    text-shadow: 0 2px 8px rgba(247,181,0,0.15);
+}
+.note-star:hover {
+    color: var(--primary-color, #f7b500);
+}
+
+/* 详情页星星按钮位置微调 */
+#note-detail-star-btn {
+    position: static;
+    font-size: 22px;
+    vertical-align: middle;
+    margin-left: 8px;
+} 
