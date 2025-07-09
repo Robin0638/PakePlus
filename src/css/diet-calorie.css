@@ -1,0 +1,182 @@
+/* 饮食卡路里计算器样式 */
+.diet-calorie-card {
+  background: #f8fff8;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(60,180,120,0.08);
+  padding: 28px 24px 20px 24px;
+  max-width: 420px;
+  margin: 0 auto;
+  font-family: 'PingFang SC', 'Microsoft YaHei', Arial, sans-serif;
+}
+.diet-calorie-card h3 {
+  color: #3cb478;
+  margin-bottom: 18px;
+  font-size: 1.4em;
+  text-align: center;
+}
+.diet-calorie-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.diet-calorie-form label {
+  font-weight: 500;
+  color: #2d6a4f;
+  margin-bottom: 2px;
+}
+.diet-calorie-form input[type="number"],
+.diet-calorie-form select {
+  border: 1px solid #b7e4c7;
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 1em;
+  background: #fff;
+  margin-bottom: 6px;
+}
+.diet-calorie-form .diet-calc-btn {
+  background: linear-gradient(90deg, #3cb478 60%, #95d5b2 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 0;
+  font-size: 1.1em;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: background 0.2s;
+}
+.diet-calorie-form .diet-calc-btn:hover {
+  background: linear-gradient(90deg, #2d6a4f 60%, #74c69d 100%);
+}
+.diet-bmi-result {
+  margin: 10px 0 6px 0;
+  font-size: 1.1em;
+  color: #40916c;
+  text-align: center;
+}
+.diet-calorie-advice {
+  background: #e9f5e1;
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin: 10px 0;
+  color: #2d6a4f;
+  font-size: 0.98em;
+}
+.diet-meal-section {
+  margin: 12px 0 8px 0;
+}
+.diet-meal-section h4 {
+  color: #40916c;
+  margin-bottom: 6px;
+  font-size: 1.08em;
+}
+.diet-meal-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.diet-meal-list input[type="text"],
+.diet-meal-list input[type="number"] {
+  width: 48%;
+  display: inline-block;
+  margin-right: 4px;
+}
+.diet-meal-list .meal-row {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.diet-meal-list .remove-meal-btn {
+  background: #e63946;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 2px 8px;
+  cursor: pointer;
+  font-size: 0.9em;
+}
+.diet-add-meal-btn {
+  background: #52b788;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 4px 12px;
+  margin-top: 4px;
+  cursor: pointer;
+  font-size: 0.98em;
+}
+.diet-total-calorie {
+  color: #1b4332;
+  font-weight: bold;
+  margin: 8px 0 0 0;
+  text-align: right;
+}
+.diet-seasonal-advice {
+  background: #f1faee;
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin: 12px 0 0 0;
+  color: #457b9d;
+  font-size: 0.98em;
+}
+.fold-header {
+  display: flex;
+  align-items: center;
+  margin: 10px 0 2px 0;
+}
+.fold-btn {
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: #e9f5e1;
+  border-radius: 50%;
+  margin-right: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+  font-size: 1.25em;
+  color: #40916c;
+  box-shadow: 0 1px 3px rgba(60,180,120,0.06);
+}
+.fold-btn:hover {
+  background: #b7e4c7;
+  color: #1b4332;
+}
+.fold-btn span {
+  font-size: 1.3em;
+  font-weight: bold;
+  display: inline-block;
+  transition: transform 0.2s;
+}
+/* 深色模式适配 */
+body.dark-theme .diet-calorie-card {
+  background: #181818;
+  color: #fff;
+}
+body.dark-theme .diet-calorie-card input,
+body.dark-theme .diet-calorie-card select,
+body.dark-theme .diet-calorie-card textarea {
+  background: #222;
+  color: #fff;
+  border: 1px solid #444;
+}
+body.dark-theme .diet-calorie-card .diet-calorie-form label,
+body.dark-theme .diet-calorie-card .diet-bmi-result,
+body.dark-theme .diet-calorie-card .diet-calorie-advice,
+body.dark-theme .diet-calorie-card .diet-total-calorie {
+  color: #fff;
+}
+body.dark-theme .diet-calorie-card .fold-btn {
+  background: #222;
+  color: #fff;
+}
+body.dark-theme .diet-calorie-card .fold-btn:hover {
+  background: #444;
+  color: #fff;
+}
+body.dark-theme .diet-calorie-card .diet-meal-section,
+body.dark-theme .diet-calorie-card .diet-seasonal-advice {
+  background: transparent;
+  color: #fff;
+} 
