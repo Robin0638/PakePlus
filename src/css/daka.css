@@ -425,3 +425,164 @@
     font-size: 13px;
     margin-right: 2px;
 } 
+
+/* 深色模式适配 */
+.dark-theme .daka-search-fixed {
+    background-color: var(--bg-color, #1a1a1a);
+    border-bottom: 1px solid var(--border-color, #333333);
+}
+.dark-theme .daka-search {
+    background-color: var(--card-bg-color, #232323);
+    border: 1px solid var(--border-color, #333333);
+}
+.dark-theme .daka-search i {
+    color: var(--text-secondary-color, #aaaaaa);
+}
+.dark-theme .daka-search input {
+    color: var(--text-primary-color, #f8f9fa);
+}
+.dark-theme .daka-search input::placeholder {
+    color: var(--text-secondary-color, #666666);
+}
+.dark-theme .daka-container {
+    background: var(--bg-color, #1a1a1a);
+}
+.dark-theme .daka-list {
+    /* grid背景无需特殊处理 */
+}
+.dark-theme .daka-card {
+    background-color: var(--card-bg-color, #232323);
+    border: 1px solid var(--border-color, #333333);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+.dark-theme .daka-card.selected {
+    border-color: var(--primary-color, #5c9aff);
+    background: rgba(92,154,255,0.08);
+    box-shadow: 0 0 0 2px #5c9aff33;
+}
+.dark-theme .daka-title {
+    color: var(--text-primary-color, #f8f9fa);
+}
+.dark-theme .daka-content-preview {
+    color: var(--text-secondary-color, #aaaaaa);
+}
+.dark-theme .daka-meta {
+    color: var(--text-secondary-color, #999999);
+}
+.dark-theme .daka-tag {
+    background-color: var(--primary-color-light, rgba(92,154,255,0.15));
+    color: var(--primary-color, #5c9aff);
+}
+.dark-theme .daka-actions {
+    /* 无需特殊处理 */
+}
+.dark-theme .daka-action-btn {
+    color: var(--text-secondary-color, #aaaaaa);
+}
+.dark-theme .daka-action-btn:hover {
+    background-color: var(--hover-bg, rgba(92,154,255,0.15));
+    color: var(--text-primary-color, #f8f9fa);
+}
+.dark-theme .daka-action-btn.edit:hover {
+    color: var(--primary-color, #5c9aff);
+}
+.dark-theme .daka-action-btn.delete:hover {
+    color: var(--danger-color, #ff6c60);
+}
+.dark-theme .daka-action-btn.share:hover {
+    color: var(--success-color, #4ebb73);
+}
+.dark-theme .daka-stats {
+    color: var(--text-secondary-color, #aaaaaa);
+}
+.dark-theme .daka-action-btn.punch {
+    background: var(--primary-color, #5c9aff);
+    color: #fff;
+}
+.dark-theme .daka-action-btn.punch:disabled,
+.dark-theme .daka-action-btn.punch[disabled] {
+    background: #444;
+    color: #fff;
+}
+.dark-theme .daka-action-btn.punch:not(:disabled):hover {
+    background: #4080ff;
+}
+.dark-theme .empty-daka-message {
+    color: var(--text-secondary-color, #666666);
+}
+.dark-theme .daka-modal-content {
+    background-color: var(--modal-bg, #1a1a1a);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+}
+.dark-theme .daka-modal-header {
+    background-color: var(--card-bg-color, #232323);
+    border-bottom: 1px solid var(--border-color, #333333);
+}
+.dark-theme .daka-modal-header h3 {
+    color: var(--text-primary-color, #f8f9fa);
+}
+.dark-theme .daka-modal-close {
+    color: var(--text-secondary-color, #aaaaaa);
+}
+.dark-theme .daka-modal-close:hover {
+    background-color: var(--hover-bg, rgba(92,154,255,0.15));
+}
+.dark-theme .daka-modal-body {
+    background: var(--bg-color, #1a1a1a);
+}
+.dark-theme .daka-form-group label {
+    color: var(--text-secondary-color, #aaaaaa);
+}
+.dark-theme .daka-form-input,
+.dark-theme .daka-form-textarea {
+    border: 1px solid var(--border-color, #333333);
+    color: var(--text-primary-color, #f8f9fa);
+    background: none;
+}
+.dark-theme .daka-form-input:focus,
+.dark-theme .daka-form-textarea:focus {
+    border-color: var(--primary-color, #5c9aff);
+}
+.dark-theme .daka-modal-actions {
+    background: var(--card-bg-color, #232323);
+    border-top: 1px solid var(--border-color, #333333);
+}
+.dark-theme .daka-modal-btn.primary {
+    background: var(--primary-color, #5c9aff);
+    color: #fff;
+}
+.dark-theme .daka-modal-btn.primary:hover {
+    background: #4080ff;
+}
+.dark-theme .daka-modal-btn.secondary {
+    background: #232323;
+    color: var(--text-primary-color, #f8f9fa);
+}
+.dark-theme .daka-modal-btn.secondary:hover {
+    background: #333333;
+}
+.dark-theme .daka-modal-btn.danger {
+    background: var(--danger-color, #ff6c60);
+    color: #fff;
+}
+.dark-theme .daka-modal-btn.danger:hover {
+    background: #c62828;
+}
+.dark-theme .daka-detail-punch-item {
+    background: #232323;
+    border: 1px solid #333;
+    color: #f8f9fa;
+}
+.dark-theme .daka-detail-punch-item:hover {
+    box-shadow: 0 4px 16px rgba(92,154,255,0.13);
+}
+.dark-theme .daka-detail-punch-date {
+    color: #5c9aff;
+}
+.dark-theme .daka-detail-punch-text {
+    color: #f8f9fa;
+}
+.dark-theme .daka-detail-punch-attachment {
+    background: #1a1a1a;
+    color: #5c9aff;
+} 
