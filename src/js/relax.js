@@ -362,7 +362,7 @@ const RelaxManager = {
         // 每日登录奖励
         data.points = (data.points || 0) + 10;
         UIManager.showNotification('每日登录 +10积分');
-        
+        StorageManager.addPoints(10, '登录奖励', '每日首次登录');
         StorageManager.saveData(data);
         
         // 刷新显示
@@ -396,7 +396,7 @@ const RelaxManager = {
             this.showMedalUnlockModal(medal);
             
             // 解锁勋章奖励积分
-            StorageManager.addPoints(50);
+            StorageManager.addPoints(50, '勋章', `解锁勋章：${medal.name}`);
             
             return true;
         }
