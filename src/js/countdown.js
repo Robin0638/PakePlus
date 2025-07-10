@@ -543,72 +543,84 @@ const CountdownManager = {
             deleteBtn.addEventListener('click', () => this.deleteCountdown(countdown.id));
             if (shareBtn) {
                 shareBtn.addEventListener('click', () => {
-                    // 组装分享文本
-                    let shareText = `⏳【倒数日】${countdown.icon} ${countdown.name}\n`;
-                    shareText += `-----------------------------\n`;
-                    shareText += `📅 日期：${this.formatDate(countdown.date)}`;
-                    if (countdown.type !== 'once') {
-                        shareText += `（${this.formatTypeShort(countdown.type)}）`;
-                    }
-                    shareText += `\n`;
-                    shareText += `🕒 剩余：${this.formatDays(days)}\n`;
-                    if (countdown.notes) {
-                        shareText += `📝 备注：${countdown.notes}\n`;
-                    }
-                    if (countdown.participants) {
-                        shareText += `👥 参与者：${countdown.participants}\n`;
-                    }
-                    shareText += `-----------------------------\n`;
-                    shareText += `🎉 来自有数`;
-                    // 复制到剪贴板
-                    const showShareTip = () => {
-                        if (window.UIManager && typeof UIManager.showNotification === 'function') {
-                            UIManager.showNotification('倒数日信息已复制，可粘贴到微信/QQ等', 3000);
+                    // 弹窗选择分享方式
+                    const modal = document.createElement('div');
+                    modal.className = 'share-daka-image-modal';
+                    modal.innerHTML = `
+                        <div class='share-daka-image-popup'>
+                            <button class='share-daka-image-close' title='关闭'>×</button>
+                            <div style='font-size:18px;font-weight:600;margin-bottom:18px;text-align:center;'>选择分享方式</div>
+                            <div class='share-daka-image-actions' style='margin-bottom:8px;'>
+                                <button class='share-daka-image-btn' id='countdown-img-share-btn'><i class='fas fa-image'></i> 图片分享</button>
+                                <button class='share-daka-image-btn' id='countdown-text-share-btn'><i class='fas fa-font'></i> 文字分享</button>
+                            </div>
+                        </div>
+                    `;
+                    document.body.appendChild(modal);
+                    modal.querySelector('.share-daka-image-close').onclick = () => modal.remove();
+                    modal.onclick = (e) => { if (e.target === modal) modal.remove(); };
+                    // 图片分享
+                    modal.querySelector('#countdown-img-share-btn').onclick = () => {
+                        modal.remove();
+                        const days = CountdownManager.calculateDays(countdown);
+                        const data = {
+                            icon: countdown.icon,
+                            name: countdown.name,
+                            date: CountdownManager.formatDate(countdown.date),
+                            typeShort: countdown.type !== 'once' ? CountdownManager.formatTypeShort(countdown.type) : '',
+                            daysText: CountdownManager.formatDays(days),
+                            notes: countdown.notes,
+                            participants: countdown.participants
+                        };
+                        if (window.showShareCountdownImageModal) {
+                            window.showShareCountdownImageModal(data);
                         } else {
-                            // 兜底：直接页面底部弹窗
-                            let notification = document.querySelector('.notification');
-                            if (!notification) {
-                                notification = document.createElement('div');
-                                notification.className = 'notification';
-                                document.body.appendChild(notification);
-                                notification.style.position = 'fixed';
-                                notification.style.bottom = '70px';
-                                notification.style.left = '50%';
-                                notification.style.transform = 'translateX(-50%)';
-                                notification.style.padding = '10px 20px';
-                                notification.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
-                                notification.style.color = 'white';
-                                notification.style.borderRadius = '4px';
-                                notification.style.zIndex = '9999';
-                                notification.style.transition = 'opacity 0.3s';
-                            }
-                            notification.textContent = '倒数日信息已复制，可粘贴到微信/QQ等';
-                            notification.style.opacity = '1';
-                            if (window._shareTipTimer) clearTimeout(window._shareTipTimer);
-                            window._shareTipTimer = setTimeout(() => {
-                                notification.style.opacity = '0';
-                                setTimeout(() => {
-                                    if (notification.parentNode) notification.parentNode.removeChild(notification);
-                                }, 300);
-                            }, 3000);
+                            alert('图片分享功能未加载');
                         }
                     };
-                    if (navigator.clipboard) {
-                        navigator.clipboard.writeText(shareText).then(showShareTip, showShareTip);
-                    } else {
-                        // 兼容旧浏览器
-                        const textarea = document.createElement('textarea');
-                        textarea.value = shareText;
-                        document.body.appendChild(textarea);
-                        textarea.select();
-                        try {
-                            document.execCommand('copy');
-                            showShareTip();
-                        } catch (err) {
-                            alert('复制失败，请手动复制');
+                    // 文字分享
+                    modal.querySelector('#countdown-text-share-btn').onclick = () => {
+                        modal.remove();
+                        let shareText = `⏳【倒数日】${countdown.icon} ${countdown.name}\n`;
+                        shareText += `-----------------------------\n`;
+                        shareText += `📅 日期：${CountdownManager.formatDate(countdown.date)}`;
+                        if (countdown.type !== 'once') {
+                            shareText += `（${CountdownManager.formatTypeShort(countdown.type)}）`;
                         }
-                        document.body.removeChild(textarea);
-                    }
+                        shareText += `\n`;
+                        const days = CountdownManager.calculateDays(countdown);
+                        shareText += `🕒 剩余：${CountdownManager.formatDays(days)}\n`;
+                        if (countdown.notes) {
+                            shareText += `📝 备注：${countdown.notes}\n`;
+                        }
+                        if (countdown.participants) {
+                            shareText += `👥 参与者：${countdown.participants}\n`;
+                        }
+                        shareText += `-----------------------------\n`;
+                        shareText += `🎉 来自有数`;
+                        if (navigator.clipboard) {
+                            navigator.clipboard.writeText(shareText).then(() => {
+                                if (window.UIManager && typeof UIManager.showNotification === 'function') {
+                                    UIManager.showNotification('倒数日信息已复制，可粘贴到微信/QQ等', 3000);
+                                }
+                            });
+                        } else {
+                            // 兼容旧浏览器
+                            const textarea = document.createElement('textarea');
+                            textarea.value = shareText;
+                            document.body.appendChild(textarea);
+                            textarea.select();
+                            try {
+                                document.execCommand('copy');
+                                if (window.UIManager && typeof UIManager.showNotification === 'function') {
+                                    UIManager.showNotification('倒数日信息已复制，可粘贴到微信/QQ等', 3000);
+                                }
+                            } catch (err) {
+                                alert('复制失败，请手动复制');
+                            }
+                            document.body.removeChild(textarea);
+                        }
+                    };
                 });
             }
         } else {
@@ -1909,8 +1921,8 @@ const CountdownManager = {
                 const notes = parts[5] || '';
 
                 // 验证类型
-                if (!['once', 'yearly'].includes(type)) {
-                    throw new Error('类型必须是"once"或"yearly"');
+                if (!['once', 'monthly', 'yearly'].includes(type)) {
+                    throw new Error('类型必须是"once"、"monthly"或"yearly"');
                 }
 
                 countdowns.push({
@@ -2059,8 +2071,8 @@ const CountdownManager = {
                 const notes = parts[5] || '';
 
                 // 验证类型
-                if (!['once', 'yearly'].includes(type)) {
-                    throw new Error('类型必须是"once"或"yearly"');
+                if (!['once', 'monthly', 'yearly'].includes(type)) {
+                    throw new Error('类型必须是"once"、"monthly"或"yearly"');
                 }
 
                 countdowns.push({
