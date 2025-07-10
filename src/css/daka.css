@@ -1,0 +1,427 @@
+/* 打卡功能样式，参考笔记功能 */
+
+/* 打卡搜索框 */
+.daka-search-fixed {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background-color: var(--bg-color, #ffffff);
+    padding: 10px 15px;
+    border-bottom: 1px solid var(--border-color, #e0e0e0);
+}
+
+.daka-search {
+    display: flex;
+    align-items: center;
+    background-color: var(--card-bg-color, #f8f9fa);
+    border-radius: 20px;
+    padding: 8px 15px;
+    border: 1px solid var(--border-color, #e0e0e0);
+}
+
+.daka-search i {
+    color: var(--text-secondary-color, #666666);
+    margin-right: 8px;
+}
+
+.daka-search input {
+    flex: 1;
+    border: none;
+    background: none;
+    outline: none;
+    font-size: 14px;
+    color: var(--text-color, #333333);
+}
+
+.daka-search input::placeholder {
+    color: var(--text-secondary-color, #999999);
+}
+
+/* 打卡容器 */
+.daka-container {
+    padding: 15px;
+}
+
+/* 打卡列表 */
+.daka-list {
+    display: grid;
+    gap: 15px;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+}
+
+/* 打卡卡片 */
+.daka-card {
+    background-color: var(--card-bg-color, #ffffff);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--border-color, #e0e0e0);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.daka-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.daka-checkbox-input {
+    width: 18px;
+    height: 18px;
+    margin: 0 8px 0 0;
+    accent-color: var(--primary-color, #4285f4);
+    vertical-align: middle;
+    cursor: pointer;
+}
+.daka-card.selected {
+    border-color: var(--primary-color, #4285f4);
+    background: rgba(66,133,244,0.08);
+    box-shadow: 0 0 0 2px #4285f433;
+}
+
+.daka-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-color, #333333);
+    margin-bottom: 10px;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.daka-content-preview {
+    color: var(--text-secondary-color, #666666);
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 15px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.daka-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    color: var(--text-secondary-color, #999999);
+    margin-bottom: 15px;
+}
+
+.daka-date {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.daka-tags {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+}
+
+.daka-tag {
+    background-color: var(--primary-color-light, rgba(66, 133, 244, 0.1));
+    color: var(--primary-color, #4285f4);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 10px;
+}
+
+.daka-actions {
+    display: flex;
+    gap: 8px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.daka-card:hover .daka-actions {
+    opacity: 1;
+}
+
+.daka-action-btn {
+    background: none;
+    border: none;
+    padding: 6px;
+    border-radius: 6px;
+    cursor: pointer;
+    color: var(--text-secondary-color, #666666);
+    transition: all 0.2s ease;
+}
+
+.daka-action-btn:hover {
+    background-color: var(--hover-bg, rgba(0, 0, 0, 0.05));
+    color: var(--text-color, #333333);
+}
+
+.daka-action-btn.edit:hover {
+    color: var(--primary-color, #4285f4);
+}
+
+.daka-action-btn.delete:hover {
+    color: var(--danger-color, #ea4335);
+}
+
+.daka-action-btn.share:hover {
+    color: var(--success-color, #34a853);
+}
+
+.daka-stats {
+    margin: 10px 0 8px 0;
+    font-size: 13px;
+    color: var(--text-secondary-color, #666666);
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+.daka-action-btn.punch {
+    background: var(--primary-color, #4285f4);
+    color: #fff;
+    font-weight: 500;
+    border: none;
+    padding: 7px 18px;
+    border-radius: 6px;
+    margin-right: 8px;
+    transition: background 0.2s;
+}
+.daka-action-btn.punch:disabled,
+.daka-action-btn.punch[disabled] {
+    background: #b0b0b0;
+    color: #fff;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+.daka-action-btn.punch:not(:disabled):hover {
+    background: #3367d6;
+}
+
+.empty-daka-message {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-secondary-color, #999999);
+}
+
+.empty-daka-message .empty-icon {
+    font-size: 48px;
+    margin-bottom: 20px;
+}
+
+.empty-daka-message p {
+    margin: 10px 0;
+    font-size: 16px;
+}
+
+.empty-daka-message .sub-text {
+    font-size: 14px;
+    opacity: 0.7;
+}
+
+/* 响应式和深色模式等可继续参考notes.css补充 */ 
+
+/* 打卡编辑模态框 */
+.daka-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+.daka-modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: var(--bg-color, #ffffff);
+    border-radius: 12px;
+    padding: 0;
+    width: 90%;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+}
+.daka-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border-color, #e0e0e0);
+    background-color: var(--card-bg-color, #f8f9fa);
+}
+.daka-modal-header h3 {
+    margin: 0;
+    color: var(--text-color, #333333);
+    font-size: 18px;
+}
+.daka-modal-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--text-secondary-color, #666666);
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+.daka-modal-close:hover {
+    background-color: var(--hover-bg, rgba(0, 0, 0, 0.05));
+}
+.daka-modal-body {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 24px;
+    background: var(--bg-color, #fff);
+    min-height: 0;
+}
+.daka-form-group {
+    margin-bottom: 18px;
+}
+.daka-form-group label {
+    display: block;
+    font-size: 14px;
+    color: var(--text-secondary-color, #666666);
+    margin-bottom: 6px;
+}
+.daka-form-input {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid var(--border-color, #e0e0e0);
+    border-radius: 6px;
+    font-size: 15px;
+    color: var(--text-color, #333333);
+    background: none;
+    outline: none;
+    transition: border-color 0.2s;
+}
+.daka-form-input:focus {
+    border-color: var(--primary-color, #4285f4);
+}
+.daka-form-textarea {
+    width: 100%;
+    min-height: 100px;
+    padding: 10px 12px;
+    border: 1px solid var(--border-color, #e0e0e0);
+    border-radius: 6px;
+    font-size: 15px;
+    color: var(--text-color, #333333);
+    background: none;
+    outline: none;
+    resize: vertical;
+    transition: border-color 0.2s;
+}
+.daka-form-textarea:focus {
+    border-color: var(--primary-color, #4285f4);
+}
+.daka-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding: 18px 24px 18px 24px;
+    border-top: 1px solid var(--border-color, #e0e0e0);
+    background: var(--card-bg-color, #f8f9fa);
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+}
+.daka-modal-btn {
+    padding: 8px 22px;
+    border-radius: 6px;
+    border: none;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.daka-modal-btn.primary {
+    background: var(--primary-color, #4285f4);
+    color: #fff;
+}
+.daka-modal-btn.primary:hover {
+    background: #3367d6;
+}
+.daka-modal-btn.secondary {
+    background: #f5f5f5;
+    color: var(--text-color, #333333);
+}
+.daka-modal-btn.secondary:hover {
+    background: #e0e0e0;
+}
+.daka-modal-btn.danger {
+    background: var(--danger-color, #ea4335);
+    color: #fff;
+}
+.daka-modal-btn.danger:hover {
+    background: #c62828;
+} 
+
+.daka-detail-punch-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.daka-detail-punch-item {
+    background: #f8faff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(66,133,244,0.06);
+    margin-bottom: 14px;
+    padding: 14px 16px 10px 16px;
+    border: 1px solid #e3eafc;
+    position: relative;
+    transition: box-shadow 0.2s;
+}
+.daka-detail-punch-item:hover {
+    box-shadow: 0 4px 16px rgba(66,133,244,0.13);
+}
+.daka-detail-punch-date {
+    font-size: 13px;
+    color: #4285f4;
+    font-weight: 600;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.daka-detail-punch-text {
+    font-size: 15px;
+    color: #333;
+    margin: 6px 0 0 0;
+    line-height: 1.7;
+    word-break: break-all;
+}
+.daka-detail-punch-attachments {
+    margin-top: 6px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+}
+.daka-detail-punch-attachment {
+    display: inline-flex;
+    align-items: center;
+    background: #e3f0ff;
+    color: #4285f4;
+    border-radius: 5px;
+    padding: 2px 8px 2px 6px;
+    font-size: 13px;
+    margin-right: 0;
+    gap: 4px;
+}
+.daka-detail-punch-attachment i {
+    font-size: 13px;
+    margin-right: 2px;
+} 
