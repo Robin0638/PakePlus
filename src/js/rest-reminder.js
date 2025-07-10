@@ -103,7 +103,7 @@
         notification.querySelector('.complete-btn').onclick = () => {
             markAsCompleted(name);
             if (window.StorageManager) {
-                StorageManager.addPoints(5);
+                StorageManager.addPoints(5, '休息提醒', `完成健康提醒：${name}`);
                  if (window.UIManager) {
                     UIManager.showNotification('已完成，获得5积分', 'success');
                 }
