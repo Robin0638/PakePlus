@@ -43,12 +43,14 @@ const RelaxManager = {
         this.updatePoints();
         this.initWheel();
         this.bindEvents();
-        this.checkMedals();
         
         // 初始化喝水提醒功能
         if (window.WaterReminderManager) {
-            WaterReminderManager.reinit();
+            WaterReminderManager.init();
         }
+        
+        // 确保喝水提醒面板在健康卡片分组中显示
+        this.showRelaxCardsByPoints();
     },
     
     /**
@@ -443,23 +445,25 @@ const RelaxManager = {
 window.RelaxManager = RelaxManager;
 
 function showRelaxCardsByPoints() {
-    // 获取积分
-    let points = 0;
-    const pointsEl = document.getElementById('user-points') || document.getElementById('header-points');
-    if (pointsEl) {
-        points = parseInt(pointsEl.textContent, 10) || 0;
-    }
     // 当前分组
     const group = window.currentRelaxGroup || 'all';
     // 需要控制显示的卡片
     const hotCard = document.querySelector('.hot-section');
     const historyCard = document.querySelector('.history-section');
-    // 只在全部卡片或见闻卡片分组，且积分大于50时显示
-    const shouldShow = (group === 'all' || group === 'news') && points > 50;
+    const waterReminderCard = document.querySelector('#water-reminder-panel');
+    
+    // 只在全部卡片或见闻卡片分组时显示
+    const shouldShow = (group === 'all' || group === 'news');
     [hotCard, historyCard].forEach(card => {
         if (!card) return;
         card.style.display = shouldShow ? '' : 'none';
     });
+    
+    // 喝水提醒卡片只在全部卡片或健康卡片分组时显示
+    if (waterReminderCard) {
+        const shouldShowWater = (group === 'all' || group === 'health');
+        waterReminderCard.style.display = shouldShowWater ? '' : 'none';
+    }
 }
 // 页面加载和积分变化时调用
 if (document.readyState === 'loading') {
