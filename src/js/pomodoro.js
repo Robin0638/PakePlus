@@ -407,7 +407,7 @@ function completePomodoro() {
     // 添加积分奖励 - 完成番茄时钟获得15积分
     try {
         if (window.StorageManager) {
-            StorageManager.addPoints(15);
+            StorageManager.addPoints(15, '番茄钟', '完成一个番茄钟');
             showNotification('专注完成！+15积分', 'success');
         } else {
             showNotification('专注完成！');
