@@ -735,7 +735,7 @@ const WaterReminderManager = {
         this.saveTodayRecord();
         // 添加积分
         const points = this.getDrinkPoints(drinkType);
-        StorageManager.addPoints(points);
+        StorageManager.addPoints(points, '喝水奖励', `饮品类型：${drinkType}`);
         // 显示积分奖励动画
         this.showPointsReward(points, drinkType);
         // 更新进度显示
@@ -813,7 +813,7 @@ const WaterReminderManager = {
         UIManager.showNotification(`🎉 恭喜！今日喝水目标已达成！\n共喝了${this.todayRecord.count}杯水`, 'success');
         
         // 目标达成奖励积分
-        StorageManager.addPoints(50);
+        StorageManager.addPoints(50, '喝水奖励', '达成每日喝水目标');
     },
     
     /**
