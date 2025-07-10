@@ -456,24 +456,34 @@ const NotesManager = {
      * 分享笔记
      */
     shareNote(note) {
-        let shareText = `📝【笔记】${note.title}\n`;
-        shareText += `-----------------------------\n`;
-        shareText += `${note.content}\n`;
-        if (note.tags && note.tags.length > 0) {
-            shareText += `\n标签：${note.tags.join(', ')}\n`;
-        }
-        shareText += `-----------------------------\n`;
-        shareText += `🎉 来自有数`;
-        
-        if (navigator.share) {
-            navigator.share({
-                title: note.title,
-                text: shareText
-            });
+        // 整理数据结构，兼容图片分享
+        const noteData = {
+            title: note.title,
+            content: note.content,
+            tags: note.tags
+        };
+        if (window.showShareNoteImageModal) {
+            window.showShareNoteImageModal(noteData);
         } else {
-            navigator.clipboard.writeText(shareText).then(() => {
-                UIManager.showNotification('笔记内容已复制到剪贴板', 'success');
-            });
+            // 兼容未加载图片分享脚本时的降级
+            let shareText = `📝【笔记】${note.title}\n`;
+            shareText += `-----------------------------\n`;
+            shareText += `${note.content}\n`;
+            if (note.tags && note.tags.length > 0) {
+                shareText += `\n标签：${note.tags.join(', ')}\n`;
+            }
+            shareText += `-----------------------------\n`;
+            shareText += `🎉 来自有数`;
+            if (navigator.share) {
+                navigator.share({
+                    title: note.title,
+                    text: shareText
+                });
+            } else {
+                navigator.clipboard.writeText(shareText).then(() => {
+                    UIManager.showNotification('笔记内容已复制到剪贴板', 'success');
+                });
+            }
         }
     },
 
