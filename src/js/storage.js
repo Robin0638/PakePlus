@@ -37,6 +37,7 @@ const DEFAULT_DATA = {
         { id: 'streak-30', name: '习惯养成', icon: '🏆', description: '连续使用30天', unlocked: false }
     ],
     points: 0,
+    pointsHistory: [], // 新增：积分变动明细
     wheelItems: [
         { text: '听听歌', color: '#4285f4' },
         { text: '歇会儿', color: '#34a853' },
@@ -586,20 +587,25 @@ const StorageManager = {
     },
 
     /**
-     * 添加积分
+     * 增加/减少积分，并记录明细
      * @param {Number} points 积分数量
+     * @param {String} type 积分类型（如：完成任务、喝水奖励、专注、勋章、清单、休息、登录、消耗等）
+     * @param {String} desc 详细描述
      */
-    addPoints(points) {
+    addPoints(points, type = '其他', desc = '') {
         const data = this.getData();
         data.points += points;
         if (data.points < 0) data.points = 0;
+        // 记录明细
+        if (!data.pointsHistory) data.pointsHistory = [];
+        data.pointsHistory.push({
+            type,
+            desc,
+            points,
+            time: new Date().toISOString()
+        });
         this.saveData(data);
-        
-        // 更新顶部积分显示
-        if (window.UIManager) {
-            UIManager.updateHeaderPoints();
-        }
-        
+        UIManager.updateHeaderPoints();
         return data.points;
     },
 
