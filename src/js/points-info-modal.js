@@ -22,9 +22,17 @@
     let earnDetail = [];
     if (window.StorageManager && typeof StorageManager.getPoints === 'function') {
       total = StorageManager.getPoints();
-      // 明细：尝试从StorageManager获取专注、任务、勋章等积分来源
+      // 优先读取积分明细
       const data = StorageManager.getData && StorageManager.getData();
-      if (data) {
+      if (data && Array.isArray(data.pointsHistory) && data.pointsHistory.length > 0) {
+        // 按时间倒序
+        earnDetail = data.pointsHistory.slice().sort((a, b) => new Date(b.time) - new Date(a.time)).map(item => {
+          const dateStr = new Date(item.time).toLocaleString();
+          const sign = item.points > 0 ? '+' : '';
+          return `${item.type}：${item.desc} <span style='color:${item.points>0?'#4caf50':'#f44336'};'>${sign}${item.points}分</span>（${dateStr}）`;
+        });
+      } else if (data) {
+        // 兼容老逻辑
         // 任务完成
         if (data.events && Array.isArray(data.events)) {
           data.events.forEach(e => {
