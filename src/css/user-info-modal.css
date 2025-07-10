@@ -302,6 +302,76 @@ body.dark-theme #user-projects-completed {
   background: #4a3a23;
   color: #ffe082;
 }
+/* ====== 成就展示美化 ====== */
+.user-medals-list-title {
+  margin-top: 22px;
+  font-size: 1.13rem;
+  font-weight: bold;
+  color: var(--primary-color, #4285f4);
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+.user-medals-list-panel {
+  background: linear-gradient(90deg, #f3e8ff 60%, #e0f7fa 100%);
+  border-radius: 10px;
+  border: 1.5px solid #b39ddb;
+  padding: 14px 18px 10px 18px;
+  box-shadow: 0 2px 8px rgba(66,133,244,0.06);
+  min-height: 40px;
+  margin-bottom: 8px;
+}
+.user-medals-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 22px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.user-medal-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(66,133,244,0.04);
+  padding: 7px 16px 7px 10px;
+  font-size: 1.04rem;
+  font-weight: 500;
+  color: #6c3fc5;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+.user-medal-item:hover {
+  box-shadow: 0 4px 16px rgba(66,133,244,0.13);
+  transform: translateY(-2px) scale(1.04);
+}
+.user-medal-icon {
+  font-size: 1.7em;
+  margin-right: 2px;
+  filter: drop-shadow(0 2px 6px #e1bee7);
+}
+.user-medal-name {
+  font-size: 1.01em;
+  color: #6c3fc5;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+.user-medals-list-empty {
+  color: #aaa;
+  font-size: 1.01rem;
+  padding: 8px 0 4px 0;
+}
+body.dark-theme .user-medals-list-panel {
+  background: linear-gradient(90deg, #2a2340 60%, #1a2a2a 100%);
+  border: 1.5px solid #6a5acd;
+}
+body.dark-theme .user-medal-item {
+  background: #23223a;
+  color: #b39ddb;
+}
+body.dark-theme .user-medal-name {
+  color: #b39ddb;
+}
 @media (max-width: 480px) {
   .user-info-modal-content {
     min-width: 90vw;
