@@ -42,6 +42,13 @@ const QuickNavManager = {
             icon: 'fas fa-sticky-note',
             view: 'notes',
             countType: 'notes'
+        },
+        {
+            id: 'daka-btn',
+            text: '打卡',
+            icon: 'fas fa-check-circle',
+            view: 'daka',
+            countType: 'daka'
         }
     ],
 
@@ -183,8 +190,8 @@ const QuickNavManager = {
         const section = document.getElementById(currentView);
         const nav = document.querySelector('.quick-nav-container');
         if (section && nav) {
-            // 只插入到指定的五个视图顶部
-            if (["recent-tasks", "projects", "todolist", "countdown", "notes"].includes(currentView)) {
+            // 只插入到指定的六个视图顶部（含daka）
+            if (["recent-tasks", "projects", "todolist", "countdown", "notes", "daka"].includes(currentView)) {
                 // 避免重复插入
                 if (section.firstChild !== nav) {
                     section.insertBefore(nav, section.firstChild);
@@ -341,6 +348,8 @@ const QuickNavManager = {
                     return data.countdowns ? data.countdowns.length : 0;
                 case 'notes':
                     return data.notes ? data.notes.length : 0;
+                case 'daka':
+                    return data.dakas ? data.dakas.length : 0;
                 default:
                     return 0;
             }
