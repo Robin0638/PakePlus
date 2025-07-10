@@ -39,6 +39,9 @@
     <link rel="stylesheet" href="css/lottery-card.css">
     <link rel="stylesheet" href="css/weather-detail.css">
     <link rel="stylesheet" href="css/diet-calorie.css">
+    <link rel="stylesheet" href="css/daka.css">
+    <link rel="stylesheet" href="css/share-daka-image.css">
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
     <script src="js/dayPilot/daypilot-all.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.3.0/marked.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
@@ -575,6 +578,42 @@
                 </div>
             </section>
 
+            <!-- 打卡视图 -->
+            <section id="daka" class="view-section">
+                <div class="view-header">
+                    <h2>我的打卡</h2>
+                    <div class="view-controls">
+                        <button id="add-daka-btn" class="add-btn"><i class="fas fa-plus"></i>新建打卡</button>
+                        <button id="toggle-daka-batch-mode-btn" class="select-btn"><i class="fas fa-check-square"></i>批量选择</button>
+                        <button id="daka-batch-delete-btn" class="danger-btn" style="display: none;"><i class="fas fa-trash"></i>批量删除</button>
+                        <div class="dropdown">
+                            <button class="dropdown-btn"><i class="fas fa-ellipsis-v"></i></button>
+                            <div class="dropdown-content">
+                                <button id="import-daka-text-btn"><i class="fas fa-file-alt"></i>文本导入</button>
+                                <button id="edit-daka-text-btn"><i class="fas fa-edit"></i>文本编辑</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 固定搜索框 -->
+                <div class="daka-search-fixed">
+                    <div class="daka-search">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="daka-search-input" placeholder="搜索打卡...">
+                    </div>
+                </div>
+                <div class="daka-container">
+                    <div class="daka-list" id="daka-list">
+                        <!-- 打卡列表将通过JS动态生成 -->
+                    </div>
+                    <div class="empty-daka-message" id="empty-daka-message">
+                        <div class="empty-icon">✅</div>
+                        <p>目前还没有添加任何打卡</p>
+                        <p class="sub-text">点击右上角的"新建打卡"按钮开始记录</p>
+                    </div>
+                </div>
+            </section>
+
             <!-- 轻松一刻视图 -->
             <section id="relax" class="view-section">
                 <div class="view-header">
@@ -582,80 +621,19 @@
                     <div class="relax-group-sidebar">
                         <div class="relax-group-tabs">
                             <button class="relax-group-tab active" data-group="all"><i class="fas fa-th-large"></i> 全部卡片</button>
-                            <button class="relax-group-tab" data-group="score"><i class="fas fa-medal"></i> 积分与成就</button>
                             <button class="relax-group-tab" data-group="travel"><i class="fas fa-mountain"></i> 出行卡片</button>
                             <button class="relax-group-tab" data-group="news"><i class="fas fa-newspaper"></i> 见闻卡片</button>
                             <button class="relax-group-tab" data-group="health"><i class="fas fa-heartbeat"></i> 健康卡片</button>
                             <button class="relax-group-tab" data-group="tools"><i class="fas fa-toolbox"></i> 便利卡片</button>
                         </div>
                     </div>
+                    <!-- 移除积分模块（.points-display） -->
+                    <!-- <div class="points-display">
+                        <h3>积分</h3>
+                        <div class="points-value" id="user-points">0</div>
+                    </div> -->
                     <div class="relax-main-content">
-                        <div class="medals-wall">
-                            <h3>成就与勋章</h3>
-                            <div class="medals-container" id="medals-container">
-                                <!-- 初始勋章 -->
-                                <div class="medal-item" data-medal-id="newcomer">
-                                    <div class="medal-icon">🎯</div>
-                                    <div class="medal-info">
-                                        <h4>初来乍到</h4>
-                                        <p>欢迎使用有数！</p>
-                                    </div>
-                                </div>
-                                <!-- 积分相关勋章 -->
-                                <div class="medal-item locked" data-medal-id="points-100">
-                                    <div class="medal-icon">🌟</div>
-                                    <div class="medal-info">
-                                        <h4>积分达人</h4>
-                                        <p>累计获得100积分</p>
-                                    </div>
-                                </div>
-                                <div class="medal-item locked" data-medal-id="points-500">
-                                    <div class="medal-icon">💫</div>
-                                    <div class="medal-info">
-                                        <h4>积分大师</h4>
-                                        <p>累计获得500积分</p>
-                                    </div>
-                                </div>
-                                <div class="medal-item locked" data-medal-id="points-1000">
-                                    <div class="medal-icon">✨</div>
-                                    <div class="medal-info">
-                                        <h4>积分王者</h4>
-                                        <p>累计获得1000积分</p>
-                                    </div>
-                                </div>
-                                <!-- 使用时长相关勋章 -->
-                                <div class="medal-item locked" data-medal-id="time-1h">
-                                    <div class="medal-icon">⏱️</div>
-                                    <div class="medal-info">
-                                        <h4>时间探索者</h4>
-                                        <p>累计使用1小时</p>
-                                    </div>
-                                </div>
-                                <div class="medal-item locked" data-medal-id="time-5h">
-                                    <div class="medal-icon">⌛</div>
-                                    <div class="medal-info">
-                                        <h4>时间管理者</h4>
-                                        <p>累计使用5小时</p>
-                                    </div>
-                                </div>
-                                <div class="medal-item locked" data-medal-id="time-24h">
-                                    <div class="medal-icon">⏳</div>
-                                    <div class="medal-info">
-                                        <h4>时间大师</h4>
-                                        <p>累计使用24小时</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="points-display">
-                            <h3>积分</h3>
-                            <div class="points-value" id="user-points">0</div>
-                        </div>
-
-                        <!-- 喝水提醒面板 -->
-                        <div class="water-reminder-panel" id="water-reminder-panel"></div>
-
+                        <!-- 移除成就与勋章模块（.medals-wall） -->
                         <div class="lucky-wheel">
                             <h3>小工具</h3>
                             <div class="tools-container">
@@ -689,6 +667,11 @@
                                 </div>
                             </div>
                         </section>
+
+                        <!-- 喝水提醒模块 -->
+                        <div id="water-reminder-panel" class="water-reminder-panel">
+                            <!-- 喝水提醒内容将通过JS动态生成 -->
+                        </div>
                     </div>
                 </div>
             </section>
@@ -1119,33 +1102,6 @@
         </nav>
     </div>
 
-    <!-- 勋章解锁弹窗 -->
-    <div id="medal-unlock-modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>🎉 恭喜解锁新勋章！</h3>
-                <button id="close-medal-unlock" class="close-btn">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="medal-info">
-                    <div class="medal-icon" id="unlocked-medal-icon"></div>
-                    <h4 id="unlocked-medal-name"></h4>
-                    <p id="unlocked-medal-description"></p>
-                </div>
-            </div>
-            <div class="modal-actions">
-                <button id="confirm-medal-unlock">确认</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- 专注模式悬浮指示器 -->
-    <div class="focus-floating-indicator" id="focus-floating-indicator" onclick="openPomodoroTracker()">
-        <i class="fas fa-hourglass-half"></i>
-        <span class="focus-floating-text">专注进行中</span>
-        <span class="timer-mini" id="floating-timer">25:00</span>
-    </div>
-
     <!-- 用户信息模态框 -->
     <div id="user-info-modal" class="modal">
       <div class="modal-content user-info-modal-content">
@@ -1314,5 +1270,7 @@
         if (bottomNav) bottomNav.style.display = '';
     });
     </script>
+    <script src="js/daka.js"></script>
+    <script src="js/share-daka-image.js"></script>
 </body>
 </html> 
