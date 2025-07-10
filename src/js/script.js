@@ -107,63 +107,13 @@ function addToRecent(card) {
     updateLocalStorage();
 }
 
-// 切换收藏状态
-function toggleFavorite(card, button) {
-    const cardData = {
-        title: card.querySelector('.card-title').textContent,
-        description: card.querySelector('.card-description').textContent,
-        category: card.getAttribute('data-category'),
-        link: card.querySelector('.card-link').href
-    };
-
-    const isFavorite = favorites.some(item => item.link === cardData.link);
-    
-    if (isFavorite) {
-        favorites = favorites.filter(item => item.link !== cardData.link);
-        button.classList.remove('active');
-        button.querySelector('i').classList.remove('fas');
-        button.querySelector('i').classList.add('far');
-    } else {
-        if (favorites.length >= MAX_FAVORITES) {
-            alert('收藏数量已达到上限！');
-            return;
-        }
-        favorites.push(cardData);
-        button.classList.add('active');
-        button.querySelector('i').classList.remove('far');
-        button.querySelector('i').classList.add('fas');
-    }
-    
-    updateLocalStorage();
-}
-
-// 初始化收藏按钮状态
-function initializeFavoriteButtons() {
-    document.querySelectorAll('.resource-card').forEach(card => {
-        const button = card.querySelector('.favorite-btn');
-        const link = card.querySelector('.card-link').href;
-        
-        if (favorites.some(item => item.link === link)) {
-            button.classList.add('active');
-            button.querySelector('i').classList.remove('far');
-            button.querySelector('i').classList.add('fas');
-        }
-    });
-}
-
 // 为所有资源卡片添加事件监听
 document.querySelectorAll('.resource-card').forEach(card => {
     const link = card.querySelector('.card-link');
-    const favoriteBtn = card.querySelector('.favorite-btn');
     
     // 点击链接时添加到最近使用
     link.addEventListener('click', () => {
         addToRecent(card);
-    });
-    
-    // 点击收藏按钮时切换收藏状态
-    favoriteBtn.addEventListener('click', () => {
-        toggleFavorite(card, favoriteBtn);
     });
 });
 
@@ -178,14 +128,6 @@ categoryButtons.forEach(button => {
         resourceCards.forEach(card => {
             if (category === '全部') {
                 card.style.display = 'block';
-            } else if (category === '最近使用') {
-                const link = card.querySelector('.card-link').href;
-                const isRecent = recentItems.some(item => item.link === link);
-                card.style.display = isRecent ? 'block' : 'none';
-            } else if (category === '我的收藏') {
-                const link = card.querySelector('.card-link').href;
-                const isFavorite = favorites.some(item => item.link === link);
-                card.style.display = isFavorite ? 'block' : 'none';
             } else {
                 card.style.display = card.getAttribute('data-category') === category ? 'block' : 'none';
             }
@@ -224,7 +166,6 @@ function initializeCards() {
 // 页面加载完成后初始化卡片动画
 document.addEventListener('DOMContentLoaded', () => {
     initializeCards();
-    initializeFavoriteButtons();
 });
 
 // 添加页面可见性变化监听
