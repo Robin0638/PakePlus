@@ -199,7 +199,7 @@ const TodoListManager = {
         // 如果删除包含已完成项目，扣除积分
         if (completedCount > 0) {
             const pointsDeduction = completedCount * -10;
-            StorageManager.addPoints(pointsDeduction);
+            StorageManager.addPoints(pointsDeduction, '清单', '删除已完成事项');
             UIManager.showNotification(`删除了${completedCount}个已完成项目 ${pointsDeduction}积分`, 'info');
         }
         
@@ -1075,7 +1075,7 @@ const TodoListManager = {
         
         // 如果删除的是已完成项目，扣除积分
         if (wasCompleted) {
-            StorageManager.addPoints(-10);
+            StorageManager.addPoints(-10, '清单', '删除已完成事项');
             UIManager.showNotification('删除已完成项目 -10积分', 'info');
         }
         
@@ -1107,12 +1107,10 @@ const TodoListManager = {
         
         // 积分奖励
         if (!wasCompleted && item.completed) {
-            // 完成任务，增加10积分
-            StorageManager.addPoints(10);
+            StorageManager.addPoints(10, '清单', `完成事项：${item.title}`);
             UIManager.showNotification('🎉 任务完成 +10积分', 'success');
         } else if (wasCompleted && !item.completed) {
-            // 取消完成，减少10积分
-            StorageManager.addPoints(-10);
+            StorageManager.addPoints(-10, '清单', `撤销完成事项：${item.title}`);
             UIManager.showNotification('任务标记为未完成 -10积分', 'info');
         }
         
