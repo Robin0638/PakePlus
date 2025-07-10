@@ -819,3 +819,72 @@
     vertical-align: middle;
     margin-left: 8px;
 } 
+
+/* 移动端优化 */
+@media (max-width: 768px) {
+    .note-modal-content {
+        width: 95%;
+        max-width: none;
+        max-height: 90vh;
+        margin: 20px 10px;
+    }
+    
+    .note-modal-header {
+        padding: 16px 20px;
+    }
+    
+    .note-modal-header h3 {
+        font-size: 16px;
+    }
+    
+    .note-modal-body {
+        padding: 16px 20px;
+        max-height: 50vh;
+    }
+    
+    .note-form-textarea {
+        min-height: 150px;
+        font-size: 16px; /* 防止iOS缩放 */
+    }
+    
+    .note-modal-actions {
+        padding: 16px 20px;
+        gap: 8px;
+    }
+    
+    .note-modal-btn {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .note-modal-content {
+        width: 98%;
+        max-height: 95vh;
+        margin: 10px 5px;
+    }
+    
+    .note-modal-header {
+        padding: 12px 16px;
+    }
+    
+    .note-modal-body {
+        padding: 12px 16px;
+        max-height: 45vh;
+    }
+    
+    .note-form-textarea {
+        min-height: 120px;
+    }
+    
+    .note-modal-actions {
+        padding: 12px 16px;
+        flex-wrap: wrap;
+    }
+    
+    .note-modal-btn {
+        flex: 1;
+        min-width: 80px;
+    }
+} 
