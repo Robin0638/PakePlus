@@ -187,6 +187,29 @@
         fillUserInfo(); // 重新渲染
       };
     }
+    // 展示获得的成就（勋章）
+    let medalsHtml = '';
+    if (window.StorageManager && typeof StorageManager.getMedals === 'function') {
+      const medals = (StorageManager.getMedals() || []).filter(m => m.unlocked);
+      if (medals.length > 0) {
+        medalsHtml = '<ul class="user-medals-list">' +
+          medals.map(m => `<li class="user-medal-item"><span class="user-medal-icon">${m.icon}</span> <span class="user-medal-name">${m.name}</span></li>`).join('') +
+          '</ul>';
+      } else {
+        medalsHtml = '<div class="user-medals-list-empty">暂无获得成就</div>';
+      }
+    }
+    let medalsContainer = document.getElementById('user-medals-list');
+    if (!medalsContainer) {
+      const statsDiv = document.querySelector('.user-info-stats');
+      medalsContainer = document.createElement('div');
+      medalsContainer.id = 'user-medals-list';
+      statsDiv && statsDiv.parentNode.insertBefore(medalsContainer, statsDiv.nextSibling);
+    }
+    medalsContainer.innerHTML = `
+      <div class="user-medals-list-title">已获得成就</div>
+      <div class="user-medals-list-panel">${medalsHtml}</div>
+    `;
   }
   if(btn && modal && closeBtn) {
     btn.addEventListener('click', function() {
