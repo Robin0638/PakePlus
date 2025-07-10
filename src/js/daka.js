@@ -646,6 +646,7 @@ const DakaManager = {
             this.loadDakas();
             if (window.UIManager) UIManager.showNotification('打卡成功', 'success');
         }
+        StorageManager.addPoints(20, '打卡', '每日打卡成功');
     },
     clearPunchRecords(dakaId) {
         const data = StorageManager.getData();
