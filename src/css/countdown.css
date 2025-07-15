@@ -1,0 +1,323 @@
+/* 浅色模式变量 */
+:root {
+    --countdown-bg: #ffffff;
+    --countdown-card-bg: #f8f9fa;
+    --countdown-text: #2c3e50;
+    --countdown-text-secondary: #6c757d;
+    --countdown-border: #dee2e6;
+    --countdown-primary: #007bff;
+    --countdown-primary-hover: #0056b3;
+    --countdown-danger: #dc3545;
+    --countdown-danger-hover: #c82333;
+    --countdown-shadow: rgba(0, 0, 0, 0.08);
+}
+
+/* 深色模式 - 基于body类 */
+body.dark-theme {
+    --countdown-bg: #1a1a1a;
+    --countdown-card-bg: #2d2d2d;
+    --countdown-text: #e0e0e0;
+    --countdown-text-secondary: #a0a0a0;
+    --countdown-border: #404040;
+    --countdown-primary: #5c9ce6;
+    --countdown-primary-hover: #4a8ad4;
+    --countdown-danger: #ff6b6b;
+    --countdown-danger-hover: #ff5252;
+    --countdown-shadow: rgba(0, 0, 0, 0.3);
+}
+
+/* 浅色模式 - 基于body类 */
+body.light-theme {
+    --countdown-bg: #ffffff;
+    --countdown-card-bg: #f8f9fa;
+    --countdown-text: #2c3e50;
+    --countdown-text-secondary: #6c757d;
+    --countdown-border: #dee2e6;
+    --countdown-primary: #007bff;
+    --countdown-primary-hover: #0056b3;
+    --countdown-danger: #dc3545;
+    --countdown-danger-hover: #c82333;
+    --countdown-shadow: rgba(0, 0, 0, 0.08);
+}
+
+.countdown-container {
+    padding: 20px;
+    background: var(--countdown-bg);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px var(--countdown-shadow);
+    transition: background-color 0.3s ease;
+    border: 1px solid var(--countdown-border);
+}
+
+.countdown-search {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.countdown-search input {
+    width: 100%;
+    padding: 14px 20px;
+    padding-left: 45px;
+    border: 2px solid var(--countdown-border);
+    border-radius: 10px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    background: var(--countdown-card-bg);
+    color: var(--countdown-text);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.countdown-search input:focus {
+    border-color: var(--countdown-primary);
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15);
+    outline: none;
+    background: var(--countdown-bg);
+}
+
+.countdown-search i {
+    position: absolute;
+    left: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--countdown-text-secondary);
+    font-size: 16px;
+}
+
+.countdown-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.countdown-card {
+    background: var(--countdown-card-bg);
+    border-radius: 12px;
+    padding: 20px;
+    transition: all 0.3s ease;
+    border: 1px solid var(--countdown-border);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.countdown-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+    border-color: var(--countdown-primary);
+}
+
+.countdown-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: var(--countdown-text);
+}
+
+.countdown-date {
+    font-size: 14px;
+    color: var(--countdown-text-secondary);
+    margin-bottom: 15px;
+}
+
+.countdown-days {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--countdown-primary);
+}
+
+.countdown-days.overdue {
+    color: var(--countdown-danger);
+}
+
+/* 按钮样式美化 */
+.add-countdown-btn {
+    background: linear-gradient(135deg, var(--countdown-primary), var(--countdown-primary-hover));
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    box-shadow: 0 2px 8px rgba(0, 123, 255, 0.25);
+    font-size: 14px;
+}
+
+.add-countdown-btn:hover {
+    background: linear-gradient(135deg, var(--countdown-primary-hover), var(--countdown-primary));
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.35);
+}
+
+.add-countdown-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 123, 255, 0.25);
+}
+
+.countdown-controls {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.countdown-controls button {
+    padding: 10px 18px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.edit-btn {
+    background: var(--countdown-card-bg);
+    color: var(--countdown-text);
+    border: 1px solid var(--countdown-border);
+}
+
+.edit-btn:hover {
+    background: var(--countdown-primary);
+    color: white;
+    border-color: var(--countdown-primary);
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(0, 123, 255, 0.25);
+}
+
+.delete-btn {
+    background: var(--countdown-card-bg);
+    color: var(--countdown-danger);
+    border: 1px solid var(--countdown-danger);
+}
+
+.delete-btn:hover {
+    background: var(--countdown-danger);
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(220, 53, 69, 0.25);
+}
+
+.dropdown-btn {
+    background: var(--countdown-card-bg);
+    color: var(--countdown-text);
+    border: 1px solid var(--countdown-border);
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown-btn:hover {
+    background: var(--countdown-primary);
+    color: white;
+    border-color: var(--countdown-primary);
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(0, 123, 255, 0.25);
+}
+
+.dropdown-content {
+    background: var(--countdown-bg);
+    border: 1px solid var(--countdown-border);
+    border-radius: 10px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    min-width: 120px;
+    backdrop-filter: blur(10px);
+    z-index: 20;
+}
+
+.dropdown-content button {
+    width: 100%;
+    text-align: left;
+    padding: 10px 16px;
+    border: none;
+    background: none;
+    color: var(--countdown-text);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+}
+
+.dropdown-content button:hover {
+    background: var(--countdown-primary);
+    color: white;
+}
+
+.dropdown-content button i {
+    width: 16px;
+    text-align: center;
+}
+
+.dropdown-item {
+    color: var(--countdown-text);
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.dropdown-item:hover {
+    background: var(--countdown-primary);
+    color: white;
+}
+
+.empty-countdown-message {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--countdown-text-secondary);
+    background: var(--countdown-card-bg);
+    border-radius: 12px;
+    border: 2px dashed var(--countdown-border);
+    margin: 20px 0;
+}
+
+.empty-icon {
+    font-size: 64px;
+    margin-bottom: 20px;
+    color: var(--countdown-text-secondary);
+    opacity: 0.6;
+}
+
+.sub-text {
+    font-size: 16px;
+    color: var(--countdown-text-secondary);
+    margin-top: 12px;
+    line-height: 1.5;
+}
+
+.countdown-action.share-btn {
+    background: var(--countdown-card-bg);
+    color: var(--countdown-primary);
+    border: 1px solid var(--countdown-primary);
+    margin-left: 4px;
+}
+
+.countdown-action.share-btn:hover {
+    background: var(--countdown-primary);
+    color: #fff;
+    border-color: var(--countdown-primary);
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(0, 123, 255, 0.18);
+}
+
+.countdown-participants {
+    font-size: 14px;
+    color: var(--countdown-text-secondary);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.countdown-participants i {
+    color: var(--countdown-primary);
+} 
