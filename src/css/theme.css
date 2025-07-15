@@ -1,0 +1,184 @@
+/* 主题切换样式 */
+:root {
+    --transition-time: 0.3s;
+    
+    /* 基础颜色 */
+    --primary-color: #4285f4;
+    --primary-color-light: rgba(66, 133, 244, 0.1);
+    --primary-color-rgb: 66, 133, 244;
+    --primary-dark: #3367d6;
+    --secondary-color: #34a853;
+    --accent-color: #fbbc05;
+    --success-color: #34a853;
+    --warning-color: #fbbc05;
+    --danger-color: #ea4335;
+    
+    /* 背景颜色 */
+    --background-color: #ffffff;
+    --card-bg-color: #f8f9fa;
+    --card-bg: #f8f9fa;
+    --card-bg-color-hover: #f0f2f5;
+    --modal-bg: #ffffff;
+    --nav-bg: rgba(255, 255, 255, 0.95);
+    --nav-border: rgba(0, 0, 0, 0.1);
+    
+    /* 交互状态背景 */
+    --hover-bg: rgba(66, 133, 244, 0.08);
+    --active-bg: rgba(66, 133, 244, 0.12);
+    
+    /* 文字颜色 */
+    --text-primary-color: #212121;
+    --text-secondary-color: #666666;
+    --nav-text-color: #444444;
+    --light-text: #ffffff;
+    --dark-text: #212121;
+    
+    /* 边框和阴影 */
+    --border-color: #e0e0e0;
+    --box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --card-shadow-hover: 0 6px 12px rgba(0, 0, 0, 0.15);
+    --card-shadow-soft: 0 2px 4px rgba(0, 0, 0, 0.05);
+    --nav-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    
+    /* 渐变 */
+    --primary-gradient: linear-gradient(135deg, #4285f4, #34a853);
+    --success-gradient: linear-gradient(135deg, #34a853, #4285f4);
+    --warning-gradient: linear-gradient(135deg, #fbbc05, #ea4335);
+}
+
+body {
+    transition: background-color var(--transition-time), color var(--transition-time);
+}
+
+/* 明亮主题 (默认) */
+body.light-theme {
+    --primary-color: #4285f4;
+    --primary-color-light: rgba(66, 133, 244, 0.1);
+    --primary-color-rgb: 66, 133, 244;
+    --secondary-color: #34a853;
+    --accent-color: #fbbc05;
+    --success-color: #34a853;
+    --warning-color: #fbbc05;
+    --danger-color: #ea4335;
+    
+    --background-color: #ffffff; /* 纯白色背景 */
+    --card-bg-color: #f8f9fa;
+    --card-bg: #f8f9fa;
+    --card-bg-color-hover: #f0f2f5;
+    --modal-bg: #ffffff;
+    --nav-bg: rgba(255, 255, 255, 0.95);
+    --nav-border: rgba(0, 0, 0, 0.1);
+    
+    --hover-bg: rgba(66, 133, 244, 0.08);
+    --active-bg: rgba(66, 133, 244, 0.12);
+    
+    --text-primary-color: #212121;
+    --text-secondary-color: #666666;
+    --nav-text-color: #444444;
+    --light-text: #ffffff;
+    --dark-text: #212121;
+    
+    --border-color: #e0e0e0;
+    --box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --card-shadow-hover: 0 6px 12px rgba(0, 0, 0, 0.15);
+    --card-shadow-soft: 0 2px 4px rgba(0, 0, 0, 0.05);
+    --nav-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    
+    background-color: var(--background-color);
+    color: var(--text-primary-color);
+}
+
+/* 暗黑主题 */
+body.dark-theme {
+    --primary-color: #5c9aff;
+    --primary-color-light: rgba(92, 154, 255, 0.15);
+    --primary-color-rgb: 92, 154, 255;
+    --primary-dark: #4080ff;
+    --secondary-color: #4ebb73;
+    --accent-color: #ffd14a;
+    --success-color: #4ebb73;
+    --warning-color: #ffd14a;
+    --danger-color: #ff6c60;
+    
+    --background-color: #000000; /* 纯黑色背景 */
+    --card-bg-color: #1a1a1a;
+    --card-bg: #1a1a1a;
+    --card-bg-color-hover: #2a2a2a;
+    --modal-bg: #1a1a1a;
+    --nav-bg: rgba(30, 30, 30, 0.95);
+    --nav-border: rgba(255, 255, 255, 0.1);
+    
+    --hover-bg: rgba(92, 154, 255, 0.15);
+    --active-bg: rgba(92, 154, 255, 0.2);
+    
+    --text-primary-color: #f8f9fa;
+    --text-secondary-color: #aaaaaa;
+    --nav-text-color: #eeeeee;
+    --light-text: #f8f9fa;
+    --dark-text: #212121;
+    
+    --border-color: #333333;
+    --box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    --card-shadow-hover: 0 6px 12px rgba(0, 0, 0, 0.4);
+    --card-shadow-soft: 0 2px 4px rgba(0, 0, 0, 0.2);
+    --nav-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    
+    background-color: var(--background-color);
+    color: var(--text-primary-color);
+}
+
+/* 元素过渡动画 */
+.task-item,
+.project-card,
+button,
+input,
+textarea,
+.modal-content,
+.clock-face,
+.focus-timer,
+.medals-wall,
+.points-display,
+.lucky-wheel,
+.bottom-nav,
+.calendar_default_cell,
+.calendar_default_event {
+    transition: 
+        background-color var(--transition-time),
+        color var(--transition-time),
+        box-shadow var(--transition-time),
+        border-color var(--transition-time),
+        transform var(--transition-time);
+}
+
+/* 主题切换按钮样式 */
+.theme-toggle {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    transition: all 0.3s ease;
+}
+
+/* 主题指示器 */
+.theme-indicator::before {
+    content: "☀️";
+    font-size: 1rem;
+}
+
+body.dark-theme .theme-indicator::before {
+    content: "🌙";
+}
+
+/* 切换动画 */
+.theme-transition {
+    animation: theme-fade 0.3s ease;
+}
+
+@keyframes theme-fade {
+    0% { opacity: 0.8; }
+    100% { opacity: 1; }
+} 
