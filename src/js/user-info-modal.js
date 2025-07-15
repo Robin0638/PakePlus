@@ -1,0 +1,373 @@
+// 用户信息模态框逻辑
+(function() {
+  const btn = document.getElementById('user-profile-btn');
+  const modal = document.getElementById('user-info-modal');
+  const closeBtn = document.getElementById('close-user-info-modal');
+  // 数据填充
+  function fillUserInfo() {
+    // 头像和昵称
+    const avatar = localStorage.getItem('userAvatar') || 'img/1.png';
+    const nickname = localStorage.getItem('userNickname') || '未登录';
+    document.getElementById('user-info-avatar').src = avatar;
+    document.getElementById('user-info-nickname').textContent = nickname;
+    // 用户更多信息
+    let regDate = '', focusTotal = 0, points = 0, loginDays = 0;
+    if (window.StorageManager) {
+      // 注册时间
+      const data = StorageManager.getData && StorageManager.getData();
+      if (data && data.user && data.user.createTime) {
+        regDate = new Date(data.user.createTime).toLocaleDateString();
+      } else if (data && data.loginDates && data.loginDates.length > 0) {
+        regDate = data.loginDates[0];
+      }
+      // 累计专注时长
+      focusTotal = (data && data.focusTime && data.focusTime.total) ? data.focusTime.total : 0;
+      // 积分
+      points = (data && typeof data.points === 'number') ? data.points : 0;
+      // 连续登录天数
+      loginDays = (data && data.loginDates) ? data.loginDates.length : 0;
+    }
+    let moreInfoHtml = `<div class="user-more-info">
+      <div><span class="user-more-label"><i class="fas fa-calendar-alt"></i> 注册时间：</span>${regDate || '—'}</div>
+      <div><span class="user-more-label"><i class="fas fa-stopwatch"></i> 累计专注时长：</span>${focusTotal} 分钟</div>
+      <div><span class="user-more-label"><i class="fas fa-star"></i> 累计积分：</span>${points}</div>
+      <div><span class="user-more-label"><i class="fas fa-calendar-check"></i> 连续登录天数：</span>${loginDays}</div>
+    </div>`;
+    let moreInfoContainer = document.getElementById('user-more-info');
+    if (!moreInfoContainer) {
+      const avatarNickDiv = document.querySelector('.user-info-avatar-nick');
+      moreInfoContainer = document.createElement('div');
+      moreInfoContainer.id = 'user-more-info';
+      avatarNickDiv && avatarNickDiv.parentNode.insertBefore(moreInfoContainer, avatarNickDiv.nextSibling);
+    }
+    moreInfoContainer.innerHTML = moreInfoHtml;
+    // 项目量数据来自StorageManager
+    let created = 0, completed = 0;
+    if (window.StorageManager && typeof StorageManager.getProjects === 'function') {
+      const projects = StorageManager.getProjects() || [];
+      created = projects.length;
+      completed = projects.filter(p => (p.totalTasks > 0 && p.completedTasks === p.totalTasks)).length;
+    }
+    document.getElementById('user-projects-created').textContent = created;
+    document.getElementById('user-projects-completed').textContent = completed;
+    // 1. 已创建清单
+    let listListHtml = '';
+    if (window.StorageManager && typeof StorageManager.getData === 'function') {
+      const data = StorageManager.getData();
+      const lists = data.lists || [];
+      if (lists.length > 0) {
+        listListHtml = '<ul class="user-list-list">' +
+          lists.map(l => `<li><span class="list-name">${l.name || '(未命名清单)'}</span> <span class="list-tasks">(${l.items ? l.items.length : 0}项)</span></li>`).join('') +
+          '</ul>';
+      } else {
+        listListHtml = '<div class="user-list-list-empty">暂无清单</div>';
+      }
+    }
+    let listListContainer = document.getElementById('user-lists-list');
+    if (!listListContainer) {
+      const statsDiv = document.querySelector('.user-info-stats');
+      listListContainer = document.createElement('div');
+      listListContainer.id = 'user-lists-list';
+      statsDiv && statsDiv.parentNode.insertBefore(listListContainer, statsDiv.nextSibling);
+    }
+    listListContainer.innerHTML = `
+      <div class="user-list-list-title">
+        <button id="toggle-list-list" class="toggle-list-list-btn">${listListContainer.classList.contains('open') ? '收起' : '展开'}</button>
+        已创建清单
+      </div>
+      <div class="user-list-list-panel" style="display:${listListContainer.classList.contains('open') ? 'block' : 'none'};">${listListHtml}</div>
+    `;
+    const toggleListBtn = document.getElementById('toggle-list-list');
+    if (toggleListBtn) {
+      toggleListBtn.onclick = function() {
+        listListContainer.classList.toggle('open');
+        fillUserInfo();
+      };
+    }
+    // 2. 已创建倒数日
+    let countdownListHtml = '';
+    if (window.StorageManager && typeof StorageManager.getData === 'function') {
+      const data = StorageManager.getData();
+      const countdowns = data.countdowns || [];
+      if (countdowns.length > 0) {
+        countdownListHtml = '<ul class="user-countdown-list">' +
+          countdowns.map(c => `<li><span class="countdown-name">${c.name || '(未命名倒数日)'}</span> <span class="countdown-date">(${c.date || ''})</span></li>`).join('') +
+          '</ul>';
+      } else {
+        countdownListHtml = '<div class="user-countdown-list-empty">暂无倒数日</div>';
+      }
+    }
+    let countdownListContainer = document.getElementById('user-countdowns-list');
+    if (!countdownListContainer) {
+      const statsDiv = document.querySelector('.user-info-stats');
+      countdownListContainer = document.createElement('div');
+      countdownListContainer.id = 'user-countdowns-list';
+      statsDiv && statsDiv.parentNode.insertBefore(countdownListContainer, statsDiv.nextSibling);
+    }
+    countdownListContainer.innerHTML = `
+      <div class="user-countdown-list-title">
+        <button id="toggle-countdown-list" class="toggle-countdown-list-btn">${countdownListContainer.classList.contains('open') ? '收起' : '展开'}</button>
+        已创建倒数日
+      </div>
+      <div class="user-countdown-list-panel" style="display:${countdownListContainer.classList.contains('open') ? 'block' : 'none'};">${countdownListHtml}</div>
+    `;
+    const toggleCountdownBtn = document.getElementById('toggle-countdown-list');
+    if (toggleCountdownBtn) {
+      toggleCountdownBtn.onclick = function() {
+        countdownListContainer.classList.toggle('open');
+        fillUserInfo();
+      };
+    }
+    // 3. 已创建和已完成的专注时钟
+    let focusListHtml = '';
+    if (window.StorageManager && typeof StorageManager.getData === 'function') {
+      const data = StorageManager.getData();
+      const focusHistory = (data.focusTime && data.focusTime.history) ? data.focusTime.history : [];
+      if (focusHistory.length > 0) {
+        focusListHtml = '<ul class="user-focus-list">' +
+          focusHistory.map(f => `<li><span class="focus-date">${f.date}</span> <span class="focus-minutes">(${f.minutes}分钟)</span></li>`).join('') +
+          '</ul>';
+      } else {
+        focusListHtml = '<div class="user-focus-list-empty">暂无专注记录</div>';
+      }
+    }
+    let focusListContainer = document.getElementById('user-focus-list');
+    if (!focusListContainer) {
+      const statsDiv = document.querySelector('.user-info-stats');
+      focusListContainer = document.createElement('div');
+      focusListContainer.id = 'user-focus-list';
+      statsDiv && statsDiv.parentNode.insertBefore(focusListContainer, statsDiv.nextSibling);
+    }
+    focusListContainer.innerHTML = `
+      <div class="user-focus-list-title">
+        <button id="toggle-focus-list" class="toggle-focus-list-btn">${focusListContainer.classList.contains('open') ? '收起' : '展开'}</button>
+        已创建/完成专注时钟
+      </div>
+      <div class="user-focus-list-panel" style="display:${focusListContainer.classList.contains('open') ? 'block' : 'none'};">${focusListHtml}</div>
+    `;
+    const toggleFocusBtn = document.getElementById('toggle-focus-list');
+    if (toggleFocusBtn) {
+      toggleFocusBtn.onclick = function() {
+        focusListContainer.classList.toggle('open');
+        fillUserInfo();
+      };
+    }
+    // 折叠模块化项目列表
+    let projectListHtml = '';
+    if (window.StorageManager && typeof StorageManager.getProjects === 'function') {
+      const projects = StorageManager.getProjects() || [];
+      if (projects.length > 0) {
+        projectListHtml = '<ul class="user-project-list">' +
+          projects.map(p => `<li><span class="project-name">${p.name || '(未命名项目)'}</span> <span class="project-tasks">(${p.completedTasks||0}/${p.totalTasks||0})</span></li>`).join('') +
+          '</ul>';
+      } else {
+        projectListHtml = '<div class="user-project-list-empty">暂无项目</div>';
+      }
+    }
+    let listContainer = document.getElementById('user-projects-list');
+    if (!listContainer) {
+      // 动态插入容器
+      const statsDiv = document.querySelector('.user-info-stats');
+      listContainer = document.createElement('div');
+      listContainer.id = 'user-projects-list';
+      statsDiv && statsDiv.parentNode.insertBefore(listContainer, statsDiv.nextSibling);
+    }
+    listContainer.innerHTML = `
+      <div class="user-project-list-title">
+        <button id="toggle-project-list" class="toggle-project-list-btn">${listContainer.classList.contains('open') ? '收起' : '展开'}</button>
+        已创建项目
+      </div>
+      <div class="user-project-list-panel" style="display:${listContainer.classList.contains('open') ? 'block' : 'none'};">${projectListHtml}</div>
+    `;
+    // 绑定折叠按钮事件
+    const toggleBtn = document.getElementById('toggle-project-list');
+    if (toggleBtn) {
+      toggleBtn.onclick = function() {
+        listContainer.classList.toggle('open');
+        fillUserInfo(); // 重新渲染
+      };
+    }
+    // 展示获得的成就（勋章）
+    let medalsHtml = '';
+    if (window.StorageManager && typeof StorageManager.getMedals === 'function') {
+      const medals = (StorageManager.getMedals() || []).filter(m => m.unlocked);
+      if (medals.length > 0) {
+        medalsHtml = '<ul class="user-medals-list">' +
+          medals.map(m => `<li class="user-medal-item"><span class="user-medal-icon">${m.icon}</span> <span class="user-medal-name">${m.name}</span></li>`).join('') +
+          '</ul>';
+      } else {
+        medalsHtml = '<div class="user-medals-list-empty">暂无获得成就</div>';
+      }
+    }
+    let medalsContainer = document.getElementById('user-medals-list');
+    if (!medalsContainer) {
+      const statsDiv = document.querySelector('.user-info-stats');
+      medalsContainer = document.createElement('div');
+      medalsContainer.id = 'user-medals-list';
+      statsDiv && statsDiv.parentNode.insertBefore(medalsContainer, statsDiv.nextSibling);
+    }
+    medalsContainer.innerHTML = `
+      <div class="user-medals-list-title">已获得成就</div>
+      <div class="user-medals-list-panel">${medalsHtml}</div>
+    `;
+  }
+  // 用户数据管理
+  const UserDataManager = {
+    // 保存用户数据
+    saveUserData(nickname) {
+      if (!window.StorageManager) return;
+      
+      const data = StorageManager.getData();
+      const userData = {
+        nickname: nickname,
+        avatar: localStorage.getItem('userAvatar') || 'img/1.png',
+        projects: data.projects || [],
+        tasks: data.tasks || [],
+        lists: data.lists || [],
+        countdowns: data.countdowns || [],
+        focusTime: data.focusTime || {},
+        points: data.points || 0,
+        loginDates: data.loginDates || [],
+        medals: data.medals || [],
+        createTime: data.user ? data.user.createTime : new Date().toISOString(),
+        lastLoginTime: new Date().toISOString()
+      };
+      
+      // 保存到本地存储，使用昵称作为key
+      localStorage.setItem(`userData_${nickname}`, JSON.stringify(userData));
+      console.log(`用户数据已保存: ${nickname}`);
+    },
+    
+    // 恢复用户数据
+    restoreUserData(nickname) {
+      if (!window.StorageManager) return false;
+      
+      const userDataStr = localStorage.getItem(`userData_${nickname}`);
+      if (!userDataStr) return false;
+      
+      try {
+        const userData = JSON.parse(userDataStr);
+        
+        // 恢复所有数据
+        const data = StorageManager.getData();
+        data.projects = userData.projects || [];
+        data.tasks = userData.tasks || [];
+        data.lists = userData.lists || [];
+        data.countdowns = userData.countdowns || [];
+        data.focusTime = userData.focusTime || {};
+        data.points = userData.points || 0;
+        data.medals = userData.medals || [];
+        data.user = {
+          createTime: userData.createTime,
+          lastLoginTime: new Date().toISOString()
+        };
+        
+        // 更新登录日期
+        const today = new Date().toLocaleDateString();
+        if (!data.loginDates) data.loginDates = [];
+        if (!data.loginDates.includes(today)) {
+          data.loginDates.push(today);
+        }
+        
+        // 保存恢复的数据
+        StorageManager.saveData(data);
+        
+        // 恢复用户头像和昵称
+        localStorage.setItem('userAvatar', userData.avatar);
+        localStorage.setItem('userNickname', nickname);
+        
+        console.log(`用户数据已恢复: ${nickname}`);
+        return true;
+      } catch (error) {
+        console.error('恢复用户数据失败:', error);
+        return false;
+      }
+    },
+    
+    // 获取所有已保存的用户
+    getAllUsers() {
+      const users = [];
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith('userData_')) {
+          const nickname = key.replace('userData_', '');
+          users.push(nickname);
+        }
+      }
+      return users;
+    }
+  };
+
+  // 退出登录功能
+  function logout() {
+    const currentNickname = localStorage.getItem('userNickname');
+    if (currentNickname) {
+      // 保存当前用户数据
+      UserDataManager.saveUserData(currentNickname);
+      
+      // 清除当前登录状态
+      localStorage.removeItem('userNickname');
+      localStorage.removeItem('userAvatar');
+      
+      // 触发登录状态变化事件
+      window.dispatchEvent(new CustomEvent('userLoginStateChanged', { detail: { loggedIn: false, nickname: currentNickname } }));
+      
+      // 清除当前数据
+      if (window.StorageManager) {
+        const data = StorageManager.getData();
+        data.projects = [];
+        data.tasks = [];
+        data.lists = [];
+        data.countdowns = [];
+        data.focusTime = {};
+        data.points = 0;
+        data.medals = [];
+        data.user = null;
+        data.loginDates = [];
+        StorageManager.saveData(data);
+      }
+      
+      // 关闭模态框
+      modal.classList.remove('open');
+      
+      // 显示登录界面
+      if (window.UIManager) {
+        UIManager.showLoginIfNeeded();
+      }
+      
+      // 隐藏底部导航栏和侧边栏
+      if (window.BottomNavNewManager) {
+        BottomNavNewManager.destroy();
+      }
+      if (window.SidebarNavManager) {
+        SidebarNavManager.destroy();
+      }
+      
+      console.log('用户已退出登录');
+    }
+  }
+
+  if(btn && modal && closeBtn) {
+    btn.addEventListener('click', function() {
+      fillUserInfo();
+      modal.classList.add('open');
+    });
+    closeBtn.addEventListener('click', function() {
+      modal.classList.remove('open');
+    });
+    
+    // 绑定退出登录按钮
+    const logoutBtn = document.getElementById('logout-btn');
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', logout);
+    }
+    
+    // 点击模态框外部关闭
+    modal.addEventListener('click', function(e) {
+      if(e.target === modal) modal.classList.remove('open');
+    });
+  }
+
+  // 暴露UserDataManager到全局
+  window.UserDataManager = UserDataManager;
+})(); 
