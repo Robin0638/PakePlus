@@ -1,0 +1,105 @@
+/* 打卡图片分享预览弹窗样式 */
+.share-daka-image-modal {
+    position: fixed;
+    left: 0; top: 0; width: 100vw; height: 100vh;
+    background: rgba(0,0,0,0.45);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.2s;
+}
+.share-daka-image-popup {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.18);
+    padding: 32px 28px 24px 28px;
+    min-width: 340px;
+    max-width: 96vw;
+    min-height: 240px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.share-daka-image-close {
+    position: absolute;
+    right: 18px; top: 16px;
+    background: none;
+    border: none;
+    font-size: 26px;
+    color: #bbb;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: background 0.18s, color 0.18s;
+}
+.share-daka-image-close:hover {
+    background: #f2f2f2;
+    color: #e53935;
+}
+.share-daka-image-preview {
+    max-width: 90vw;
+    max-height: 60vh;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+    margin-bottom: 24px;
+    background: #f8f9fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.share-daka-image-actions {
+    display: flex;
+    gap: 18px;
+    justify-content: center;
+    margin-top: 8px;
+}
+.share-daka-image-btn {
+    background: linear-gradient(90deg, #4285f4, #7b1fa2);
+    color: #fff;
+    border: none;
+    border-radius: 7px;
+    padding: 8px 24px;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s, box-shadow 0.2s;
+    box-shadow: 0 1px 4px rgba(66,133,244,0.08);
+    letter-spacing: 0.5px;
+}
+.share-daka-image-btn:hover {
+    background: linear-gradient(90deg, #7b1fa2, #4285f4);
+    box-shadow: 0 2px 8px rgba(123,31,162,0.08);
+}
+@media (max-width: 600px) {
+    .share-daka-image-popup {
+        padding: 12px 4vw 12px 4vw;
+        min-width: 0;
+    }
+    .share-daka-image-preview {
+        max-width: 98vw;
+        max-height: 40vh;
+    }
+}
+/* 深色模式 */
+body.dark-theme .share-daka-image-popup {
+    background: #1a1a1a;
+    color: #f8f9fa;
+}
+body.dark-theme .share-daka-image-preview {
+    background: #232323;
+}
+body.dark-theme .share-daka-image-close {
+    color: #888;
+}
+body.dark-theme .share-daka-image-close:hover {
+    background: #232323;
+    color: #ff6c60;
+}
+body.dark-theme .share-daka-image-btn {
+    background: linear-gradient(90deg, #5c9aff, #7b1fa2);
+    color: #fff;
+}
+body.dark-theme .share-daka-image-btn:hover {
+    background: linear-gradient(90deg, #7b1fa2, #5c9aff);
+} 
