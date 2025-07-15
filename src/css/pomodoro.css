@@ -1,0 +1,732 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #ffffff;
+    color: #333;
+    overflow-x: hidden;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* 头部用户信息样式 */
+.user-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(15px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 15px 20px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 20px;
+    z-index: 1000;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-right: auto;
+}
+
+.user-avatar-container {
+    position: relative;
+}
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(102, 126, 234, 0.2);
+    transition: border-color 0.3s ease;
+}
+
+.user-details {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.user-nickname {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333333;
+    transition: color 0.3s ease;
+}
+
+.points-info {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    color: #666666;
+    transition: color 0.3s ease;
+}
+
+.points-icon {
+    color: #ffd700;
+    font-size: 12px;
+}
+
+/* 深色模式适配 */
+body.dark-mode .user-header {
+    background: rgba(45, 45, 45, 0.95);
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .user-nickname {
+    color: #ffffff;
+}
+
+body.dark-mode .points-info {
+    color: #cccccc;
+}
+
+body.dark-mode .user-avatar {
+    border-color: rgba(102, 126, 234, 0.3);
+}
+
+/* 深色模式侧边栏 */
+body.dark-mode .sidebar {
+    background: rgba(45, 45, 45, 0.95);
+    border-right-color: rgba(255, 255, 255, 0.1);
+}
+
+/* 深色模式返回按钮 */
+body.dark-mode .back-btn {
+    background: rgba(102, 126, 234, 0.2);
+    color: #a78bfa;
+    border-color: rgba(102, 126, 234, 0.3);
+}
+
+body.dark-mode .back-btn:hover {
+    background: rgba(102, 126, 234, 0.3);
+    border-color: rgba(102, 126, 234, 0.5);
+}
+
+/* 调整主容器位置，为头部留出空间 */
+.container {
+    margin-top: 80px;
+    display: flex;
+    min-height: calc(100vh - 80px);
+    transition: all 0.3s ease;
+}
+
+/* 侧边栏样式 */
+.sidebar {
+    width: 320px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 20px;
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+    z-index: 1000;
+}
+
+.sidebar h2 {
+    color: #667eea;
+    margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+/* 主内容区 */
+.main-content {
+    flex: 1;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+/* 桌面端固定布局 */
+@media (min-width: 769px) {
+    .container {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .sidebar {
+        height: calc(100vh - 80px);
+        overflow-y: auto;
+        position: fixed;
+        left: 0;
+        top: 80px;
+        width: 320px;
+    }
+
+    .sidebar h2 {
+        display: none;
+    }
+
+    .main-content {
+        position: fixed;
+        right: 0;
+        top: 80px;
+        width: calc(100% - 320px);
+        overflow: hidden;
+        padding: 20px;
+    }
+}
+
+/* 番茄钟界面 */
+.timer-container {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(15px);
+    border-radius: 20px;
+    padding: 30px;
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    max-width: 320px;
+    width: 100%;
+}
+
+.timer-display {
+    font-size: 3.5rem;
+    font-weight: 300;
+    color: #333333;
+    margin: 15px 0;
+    font-family: 'Courier New', monospace;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.timer-label {
+    font-size: 1.1rem;
+    color: #333333;
+    margin-bottom: 20px;
+    font-weight: 500;
+}
+
+.current-event {
+    background: rgba(102, 126, 234, 0.1);
+    padding: 12px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    font-size: 1rem;
+    color: #333333;
+    font-weight: 500;
+    border: 1px solid rgba(102, 126, 234, 0.2);
+}
+
+/* 按钮样式 */
+.btn {
+    background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 25px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin: 0 10px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+.btn.secondary {
+    background: linear-gradient(45deg, #74b9ff, #0984e3);
+}
+
+.btn.success {
+    background: linear-gradient(45deg, #00b894, #00a085);
+}
+
+.disabled-btn {
+    background: #ccc !important;
+    color: #888 !important;
+    border: none !important;
+    cursor: not-allowed !important;
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+/* 返回按钮样式 */
+.back-btn {
+    background: rgba(102, 126, 234, 0.1);
+    color: #667eea;
+    border: 1px solid rgba(102, 126, 234, 0.2);
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+}
+
+.back-btn:hover {
+    background: rgba(102, 126, 234, 0.2);
+    border-color: rgba(102, 126, 234, 0.4);
+    transform: translateY(-1px);
+}
+
+.back-btn i {
+    font-size: 16px;
+}
+
+/* 事件管理 */
+.event-form {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    color: #333;
+}
+
+.form-group input, .form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus, .form-group select:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+/* 事件列表 */
+.event-list {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.event-item {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.event-item:hover {
+    transform: translateX(5px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.event-item.active {
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    color: white;
+}
+
+.event-name {
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.event-time {
+    font-size: 0.9rem;
+    opacity: 0.7;
+}
+
+.event-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.btn-small {
+    padding: 6px 12px;
+    font-size: 12px;
+    border-radius: 15px;
+}
+
+/* 事件进度条样式 */
+.event-progress {
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.progress-bar {
+    flex: 1;
+    height: 6px;
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(45deg, #00b894, #00a085);
+    border-radius: 3px;
+    transition: width 0.3s ease;
+}
+
+.progress-text {
+    font-size: 12px;
+    font-weight: 600;
+    color: #667eea;
+    min-width: 35px;
+    text-align: right;
+}
+
+/* 统计信息 */
+.stats {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 15px;
+    margin-top: 20px;
+}
+
+.stats h3 {
+    color: #667eea;
+    margin-bottom: 15px;
+}
+
+.stat-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.stat-item:last-child {
+    border-bottom: none;
+}
+
+/* 移动端导航栏 */
+.mobile-nav {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    z-index: 999;
+}
+
+/* 深色模式移动端导航栏 */
+body.dark-mode .mobile-nav {
+    background: rgba(45, 45, 45, 0.95);
+    border-top-color: rgba(255, 255, 255, 0.1);
+}
+
+.nav-buttons {
+    display: flex;
+    justify-content: space-around;
+}
+
+.nav-btn {
+    background: none;
+    border: none;
+    padding: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.nav-btn.active {
+    background: #667eea;
+    color: white;
+}
+
+/* 移动端模态框 */
+.mobile-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 2000;
+}
+
+.modal-content {
+    background: white;
+    margin: 20px;
+    border-radius: 15px;
+    padding: 20px;
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
+    text-align: center;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #666;
+}
+
+/* 数据管理样式 */
+.data-management {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 15px;
+    margin-top: 20px;
+}
+
+.data-management h3 {
+    color: #667eea;
+    margin-bottom: 15px;
+}
+
+/* 通知样式 */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #00b894;
+    color: white;
+    padding: 15px 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    z-index: 3000;
+    opacity: 0;
+    transform: translateX(100%);
+    transition: all 0.3s ease;
+}
+
+.notification.show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.notification.error {
+    background: #e74c3c;
+}
+
+.notification.warning {
+    background: #f39c12;
+}
+
+@media (max-width: 768px) {
+    .container {
+        margin-top: 60px;
+        min-height: calc(100vh - 60px - 20px); /* 减小min-height，预留底部导航 */
+    }
+    
+    .user-header {
+        padding: 10px 15px;
+        justify-content: space-between;
+        gap: 10px;
+    }
+    
+    .user-info {
+        gap: 8px;
+    }
+    
+    .user-avatar {
+        width: 32px;
+        height: 32px;
+    }
+    
+    .user-nickname {
+        font-size: 14px;
+    }
+    
+    .points-info {
+        font-size: 12px;
+    }
+    
+    .back-btn {
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+    
+    .sidebar {
+        display: none;
+    }
+    
+    .main-content {
+        width: 100%;
+        padding: 5px 15px;
+        justify-content: flex-start;
+        padding-top: 5px;
+        min-height: unset;
+        overflow-y: hidden;
+    }
+    
+    .timer-container {
+        max-width: 100%;
+        margin-top: 0;
+        padding: 24px 8px 32px 8px;
+        min-height: 320px;
+    }
+    
+    .timer-display {
+        font-size: 2.5rem;
+    }
+    
+    .mobile-nav {
+        display: block;
+    }
+    
+    .mobile-modal.show {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .modal-content {
+        text-align: center;
+        width: 90%;
+        max-width: 400px;
+    }
+    
+    .event-form, .stats, .data-management {
+        text-align: left;
+        margin: 0 auto;
+    }
+}
+
+/* 进度环 */
+.progress-ring {
+    transform: rotate(-90deg);
+    margin: 20px 0;
+}
+
+.progress-ring-circle {
+    transition: stroke-dashoffset 0.3s ease;
+    fill: transparent;
+    stroke: rgba(102, 126, 234, 0.3);
+    stroke-width: 4;
+}
+
+.progress-ring-circle.active {
+    stroke: #ff6b6b;
+}
+
+/* 专注模式悬浮指示器 */
+.focus-floating-indicator {
+    display: none;
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    background-color: #ffffff;
+    color: #333333;
+    padding: 10px 16px;
+    border-radius: 30px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    align-items: center;
+    cursor: pointer;
+    animation: fadeIn 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid #e0e0e0;
+}
+
+.focus-floating-indicator:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.focus-floating-indicator i {
+    color: #667eea;
+    margin-right: 8px;
+    font-size: 1.1em;
+}
+
+.focus-floating-text {
+    color: #333333;
+    font-weight: 500;
+    margin-right: 8px;
+}
+
+.timer-mini {
+    background: #667eea;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    font-family: 'Courier New', monospace;
+}
+
+@media (min-width: 1024px) {
+  .sidebar .timer-container {
+    max-width: 540px;
+    padding: 50px 30px;
+  }
+  .sidebar .progress-ring {
+    width: 340px !important;
+    height: 340px !important;
+    margin: 40px auto;
+  }
+  .sidebar .progress-ring-circle {
+    r: 160 !important;
+    stroke-width: 8 !important;
+  }
+  .sidebar .timer-display {
+    font-size: 5.5rem;
+    margin: 35px 0;
+  }
+} 
+
+.sidebar-resizer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 8px;
+  height: 100%;
+  cursor: ew-resize;
+  background: linear-gradient(to right, rgba(102,126,234,0.08), rgba(102,126,234,0.18));
+  z-index: 10;
+  border-radius: 0 6px 6px 0;
+  transition: background 0.2s;
+}
+.sidebar-resizer:hover {
+  background: linear-gradient(to right, #667eea 40%, #764ba2 100%);
+}
+@media (max-width: 1023px) {
+  .sidebar-resizer {
+    display: none;
+  }
+} 
