@@ -1,0 +1,15 @@
+/* 深色模式下笔记输入内容可见性修复 */
+body.dark-theme textarea,
+body.dark-theme input,
+body.dark-theme .note-content,
+body.dark-theme .note-input {
+    color: #fff !important;
+    background: #222 !important;
+    caret-color: #fff;
+}
+
+body.dark-theme textarea::placeholder,
+body.dark-theme input::placeholder {
+    color: #aaa !important;
+    opacity: 1;
+} 
