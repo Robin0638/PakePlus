@@ -1,0 +1,266 @@
+/* 深色模式样式 */
+body.dark-mode {
+    background-color: #000000;
+    color: #ffffff;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body.dark-mode .container {
+    background-color: #2d2d2d;
+    transition: background-color 0.3s ease;
+}
+
+body.dark-mode .sidebar {
+    background-color: #2d2d2d;
+    border-right: 1px solid #404040;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+body.dark-mode .timer-container {
+    background-color: rgba(45, 45, 45, 0.95);
+    border: 1px solid #404040;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+body.dark-mode .btn {
+    background-color: #404040;
+    color: #ffffff;
+}
+
+body.dark-mode .btn:hover {
+    background-color: #505050;
+}
+
+body.dark-mode .btn.secondary {
+    background-color: #404040;
+    color: #ffffff;
+}
+
+body.dark-mode .btn.secondary:hover {
+    background-color: #505050;
+}
+
+body.dark-mode .btn.success {
+    background-color: #2e7d32;
+    color: #ffffff;
+}
+
+body.dark-mode .btn.success:hover {
+    background-color: #388e3c;
+}
+
+body.dark-mode input,
+body.dark-mode select {
+    background-color: #404040;
+    color: #ffffff;
+    border: 1px solid #505050;
+}
+
+body.dark-mode .event-list {
+    background-color: #2d2d2d;
+}
+
+body.dark-mode .mobile-nav {
+    background-color: #2d2d2d;
+    border-top: 1px solid #404040;
+}
+
+body.dark-mode .nav-btn {
+    color: #ffffff;
+}
+
+body.dark-mode .nav-btn.active {
+    background-color: #404040;
+}
+
+body.dark-mode .mobile-modal {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+body.dark-mode .modal-content {
+    background-color: #2d2d2d;
+}
+
+body.dark-mode .close-btn {
+    color: #ffffff;
+}
+
+body.dark-mode .focus-floating-indicator {
+    background-color: #2d2d2d;
+    color: #ffffff;
+    border: 1px solid #404040;
+}
+
+body.dark-mode .focus-floating-indicator i {
+    color: #667eea;
+}
+
+body.dark-mode .focus-floating-indicator .focus-floating-text {
+    color: #ffffff;
+}
+
+/* 右侧卡片深色模式优化 */
+body.dark-mode .stats {
+    background-color: #2d2d2d;
+    border: 1px solid #404040;
+}
+
+body.dark-mode .stats h3 {
+    color: #667eea;
+    border-bottom: 1px solid #404040;
+}
+
+body.dark-mode .stat-item {
+    border-bottom: 1px solid #404040;
+    color: #e0e0e0;
+}
+
+body.dark-mode .stat-item span {
+    color: #e0e0e0;
+}
+
+body.dark-mode .btn-small {
+    background-color: #404040;
+    color: #ffffff;
+    border: 1px solid #505050;
+}
+
+body.dark-mode .btn-small:hover {
+    background-color: #505050;
+}
+
+body.dark-mode .data-management {
+    background-color: #2d2d2d;
+    border: 1px solid #404040;
+}
+
+body.dark-mode .data-management h3 {
+    color: #667eea;
+    border-bottom: 1px solid #404040;
+}
+
+body.dark-mode .event-form {
+    background-color: #2d2d2d;
+    border: 1px solid #404040;
+}
+
+body.dark-mode .event-form h3 {
+    color: #667eea;
+}
+
+body.dark-mode .form-group label {
+    color: #e0e0e0;
+}
+
+body.dark-mode .event-list {
+    border: 1px solid #404040;
+}
+
+body.dark-mode .event-item {
+    background-color: #2d2d2d;
+    border-bottom: 1px solid #404040;
+    color: #e0e0e0;
+}
+
+body.dark-mode .event-item:hover {
+    background-color: #363636;
+}
+
+body.dark-mode .event-item .event-name {
+    color: #e0e0e0;
+}
+
+body.dark-mode .event-item .event-duration {
+    color: #a0a0a0;
+}
+
+body.dark-mode .event-actions button {
+    color: #e0e0e0;
+}
+
+body.dark-mode .event-actions button:hover {
+    background-color: #404040;
+}
+
+body.dark-mode .timer-label {
+    color: #e0e0e0;
+}
+
+body.dark-mode .timer-label i {
+    color: #ff6347;
+}
+
+body.dark-mode .current-event {
+    color: #e0e0e0;
+    background-color: rgba(102, 126, 234, 0.2);
+    border: 1px solid rgba(102, 126, 234, 0.3);
+}
+
+body.dark-mode .current-event i {
+    color: #667eea;
+}
+
+body.dark-mode .progress-ring-circle {
+    stroke: #404040;
+}
+
+body.dark-mode .progress-ring-circle.active {
+    stroke: #ff6b6b;
+}
+
+body.dark-mode .timer-display {
+    color: #e0e0e0;
+}
+
+/* 浅色模式适配 - 专注卡片倒计时文字颜色 */
+body:not(.dark-mode) .timer-display {
+    color: #333333;
+    transition: color 0.3s ease;
+}
+
+body:not(.dark-mode) .timer-label {
+    color: #333333;
+    transition: color 0.3s ease;
+}
+
+body:not(.dark-mode) .current-event {
+    color: #333333;
+    background-color: rgba(102, 126, 234, 0.1);
+    border: 1px solid rgba(102, 126, 234, 0.2);
+    transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+}
+
+body:not(.dark-mode) .current-event i {
+    color: #667eea;
+}
+
+body:not(.dark-mode) .timer-label i {
+    color: #ff6347;
+}
+
+body:not(.dark-mode) .focus-floating-indicator {
+    background-color: #ffffff;
+    color: #333333;
+    border: 1px solid #e0e0e0;
+}
+
+body:not(.dark-mode) .focus-floating-indicator .focus-floating-text {
+    color: #333333;
+}
+
+body:not(.dark-mode) .timer-mini {
+    background-color: #667eea;
+    color: #ffffff;
+}
+
+body:not(.dark-mode) .timer-mini i {
+    color: #ffffff;
+}
+
+body:not(.dark-mode) .progress-ring-circle {
+    stroke: rgba(102, 126, 234, 0.3);
+}
+
+body:not(.dark-mode) .progress-ring-circle.active {
+    stroke: #ff6b6b;
+} 
