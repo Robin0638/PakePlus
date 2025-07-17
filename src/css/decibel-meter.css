@@ -1,0 +1,571 @@
+/* 分贝仪卡片样式 */
+.decibel-meter-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(5px);
+}
+
+.decibel-meter-modal.show {
+    display: flex;
+    animation: fadeIn 0.3s ease;
+}
+
+.decibel-meter-content {
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    width: 90%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    animation: slideIn 0.3s ease;
+}
+
+.decibel-meter-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 25px;
+    border-bottom: 1px solid #e5e7eb;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border-radius: 20px 20px 0 0;
+}
+
+.decibel-meter-header h3 {
+    margin: 0;
+    font-size: 1.4rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+}
+
+.decibel-meter-header .close-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 50%;
+    transition: background-color 0.3s ease;
+}
+
+.decibel-meter-header .close-btn:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.decibel-meter-body {
+    padding: 25px;
+}
+
+/* 分贝显示区域 */
+.decibel-display {
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 20px;
+    background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+    border-radius: 15px;
+    border: 2px solid #e2e8f0;
+}
+
+.decibel-value {
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: #2d3748;
+    margin-bottom: 5px;
+    font-family: 'Courier New', monospace;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.decibel-unit {
+    font-size: 1.2rem;
+    color: #64748b;
+    font-weight: 500;
+}
+
+/* 分贝计可视化 */
+.decibel-meter-visual {
+    margin-bottom: 25px;
+}
+
+.meter-bar {
+    height: 20px;
+    background: #e2e8f0;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 10px;
+    position: relative;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.meter-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #10b981, #3b82f6, #f59e0b, #ef4444);
+    width: 0%;
+    transition: width 0.3s ease;
+    border-radius: 10px;
+    position: relative;
+}
+
+.meter-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, 
+        rgba(16, 185, 129, 0.3) 0%, 
+        rgba(59, 130, 246, 0.3) 25%, 
+        rgba(245, 158, 11, 0.3) 50%, 
+        rgba(239, 68, 68, 0.3) 75%, 
+        rgba(239, 68, 68, 0.5) 100%);
+    border-radius: 10px;
+}
+
+.meter-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: #64748b;
+    font-weight: 500;
+}
+
+/* 状态显示 */
+.decibel-status {
+    text-align: center;
+    font-size: 1.1rem;
+    color: #374151;
+    margin-bottom: 20px;
+    padding: 10px;
+    background: #f9fafb;
+    border-radius: 8px;
+    border-left: 4px solid #3b82f6;
+}
+
+/* 控制按钮 */
+.decibel-controls {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-bottom: 25px;
+}
+
+.decibel-btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 120px;
+}
+
+.decibel-btn.primary {
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    color: white;
+}
+
+.decibel-btn.primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+}
+
+.decibel-btn.secondary {
+    background: #6b7280;
+    color: white;
+}
+
+.decibel-btn.secondary:hover {
+    background: #4b5563;
+    transform: translateY(-2px);
+}
+
+/* 分贝等级说明 */
+.decibel-info {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid #e2e8f0;
+}
+
+.decibel-info h4 {
+    margin: 0 0 15px 0;
+    color: #374151;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.decibel-info ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.decibel-info li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+    color: #4b5563;
+}
+
+.decibel-info .level {
+    font-weight: 600;
+    margin-right: 8px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    min-width: 60px;
+    text-align: center;
+}
+
+.level.quiet {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.level.normal {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.level.moderate {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.level.loud {
+    background: #fed7d7;
+    color: #991b1b;
+}
+
+.level.dangerous {
+    background: #fecaca;
+    color: #7f1d1d;
+}
+
+/* 动画效果 */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-50px) scale(0.9);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .decibel-meter-content {
+        width: 95%;
+        margin: 10px;
+    }
+    
+    .decibel-meter-header {
+        padding: 15px 20px;
+    }
+    
+    .decibel-meter-header h3 {
+        font-size: 1.2rem;
+    }
+    
+    .decibel-meter-body {
+        padding: 20px;
+    }
+    
+    .decibel-value {
+        font-size: 2.8rem;
+    }
+    
+    .decibel-controls {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .decibel-btn {
+        width: 100%;
+        max-width: 200px;
+    }
+}
+
+@media (max-width: 480px) {
+    .decibel-meter-content {
+        width: 98%;
+        margin: 5px;
+    }
+    
+    .decibel-meter-body {
+        padding: 15px;
+    }
+    
+    .decibel-value {
+        font-size: 2.5rem;
+    }
+    
+    .decibel-info li {
+        font-size: 0.9rem;
+    }
+    
+    .decibel-info .level {
+        font-size: 0.8rem;
+        min-width: 50px;
+    }
+}
+
+/* 深色模式适配 */
+body.dark-theme .decibel-meter-content {
+    background: #1f2937;
+    color: #e5e7eb;
+}
+
+body.dark-theme .decibel-meter-header {
+    background: linear-gradient(135deg, #374151, #4b5563);
+}
+
+body.dark-theme .decibel-display {
+    background: linear-gradient(135deg, #374151, #4b5563);
+    border-color: #4b5563;
+}
+
+body.dark-theme .decibel-value {
+    color: #e5e7eb;
+}
+
+body.dark-theme .decibel-unit {
+    color: #9ca3af;
+}
+
+body.dark-theme .decibel-status {
+    background: #374151;
+    color: #e5e7eb;
+    border-left-color: #3b82f6;
+}
+
+body.dark-theme .decibel-info {
+    background: #374151;
+    border-color: #4b5563;
+}
+
+body.dark-theme .decibel-info h4 {
+    color: #e5e7eb;
+}
+
+body.dark-theme .decibel-info li {
+    color: #d1d5db;
+}
+
+body.dark-theme .decibel-info p {
+    color: #9ca3af;
+}
+
+body.dark-theme .meter-bar {
+    background: #4b5563;
+}
+
+body.dark-theme .meter-labels {
+    color: #9ca3af;
+}
+
+/* 分贝仪按钮样式 */
+.decibel-meter-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.decibel-meter-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+}
+
+.decibel-meter-btn:active {
+    transform: translateY(1px);
+}
+
+.decibel-meter-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        120deg,
+        transparent,
+        rgba(255, 255, 255, 0.2),
+        transparent
+    );
+    transition: 0.5s;
+}
+
+.decibel-meter-btn:hover::before {
+    left: 100%;
+}
+
+/* 深色模式下的按钮样式 */
+body.dark-theme .decibel-meter-btn {
+    background: linear-gradient(135deg, #4c51bf 0%, #6b46c1 100%);
+    box-shadow: 0 4px 15px rgba(76, 81, 191, 0.3);
+}
+
+body.dark-theme .decibel-meter-btn:hover {
+    box-shadow: 0 6px 20px rgba(76, 81, 191, 0.4);
+} 
+
+/* 分贝标准专业样式（更小字体+色彩更鲜明） */
+.decibel-standards {
+    margin-top: 10px;
+    padding: 10px 7px 6px 7px;
+    background: #f7f8fa;
+    border-radius: 10px;
+    font-size: 11.2px;
+    line-height: 1.65;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+}
+.decibel-standards-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.db-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 2px;
+    font-size: 11px;
+    font-weight: 400;
+}
+.db-row:last-child { margin-bottom: 0; }
+.db-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 2px;
+    flex-shrink: 0;
+}
+.db-quiet .db-dot { background: #10b981; }
+.db-normal .db-dot { background: #3b82f6; }
+.db-moderate .db-dot { background: #6366f1; }
+.db-loud .db-dot { background: #eab308; }
+.db-veryloud .db-dot { background: #f97316; }
+.db-dangerous .db-dot { background: #ef4444; }
+.db-deadly .db-dot { background: #b91c1c; }
+.db-range {
+    min-width: 62px;
+    font-weight: 700;
+    color: #2563eb;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+}
+.db-title {
+    flex: 1;
+    color: #0f172a;
+    font-weight: 500;
+    font-size: 11.5px;
+}
+.db-harm {
+    margin-left: 7px;
+    font-size: 10.5px;
+    font-weight: 500;
+    border-radius: 4px;
+    padding: 1px 7px;
+    display: inline-block;
+    min-width: 60px;
+    text-align: center;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+}
+.db-harm-none { color: #388e3c; background: #e8f5e9; border: 1px solid #b2dfdb; }
+.db-harm-mild { color: #b45309; background: #fffbe6; border: 1px solid #ffe082; }
+.db-harm-warning { color: #c2410c; background: #fff3e0; border: 1px solid #ffb74d; }
+.db-harm-danger { color: #b91c1c; background: #ffebee; border: 1px solid #ef9a9a; }
+.db-harm-deadly { color: #fff; background: linear-gradient(90deg,#b91c1c 60%,#ef4444 100%); border: 1px solid #b91c1c; }
+
+/* 深色模式适配 */
+body.dark-theme .decibel-standards {
+    background: #23272f;
+    color: #d1d5db;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.12);
+}
+body.dark-theme .db-range { color: #60a5fa; }
+body.dark-theme .db-title { color: #e0e7ef; }
+body.dark-theme .db-harm { background: #2d3748; }
+body.dark-theme .db-harm-none { color: #4ade80; background: #134e4a; border: 1px solid #22d3ee; }
+body.dark-theme .db-harm-mild { color: #fde68a; background: #78350f; border: 1px solid #fbbf24; }
+body.dark-theme .db-harm-warning { color: #fdba74; background: #7c2d12; border: 1px solid #fb923c; }
+body.dark-theme .db-harm-danger { color: #f87171; background: #7f1d1d; border: 1px solid #f87171; }
+body.dark-theme .db-harm-deadly { color: #fff; background: linear-gradient(90deg,#991b1b 60%,#ef4444 100%); border: 1px solid #991b1b; } 
+
+/* 触摸屏优化 */
+@media (pointer: coarse), (max-width: 600px) {
+    .decibel-btn {
+        min-height: 44px;
+        min-width: 44px;
+        font-size: 1.08em;
+        padding: 14px 0;
+        border-radius: 12px;
+    }
+    .decibel-controls {
+        gap: 18px;
+    }
+    .decibel-meter-header .close-btn {
+        min-width: 44px;
+        min-height: 44px;
+        font-size: 1.5em;
+        border-radius: 50%;
+        background: rgba(0,0,0,0.06);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: -10px;
+        margin-top: -10px;
+        transition: background 0.2s;
+    }
+    .decibel-meter-header .close-btn:active {
+        background: rgba(0,0,0,0.18);
+    }
+    .decibel-meter-content {
+        touch-action: manipulation;
+        -webkit-overflow-scrolling: touch;
+    }
+    .decibel-info {
+        -webkit-overflow-scrolling: touch;
+    }
+} 
