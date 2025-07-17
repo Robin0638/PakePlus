@@ -1,0 +1,662 @@
+/* 统一筛选卡片样式 */
+
+/* 统一筛选容器 */
+.unified-filter-container {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin: 4px 0;
+    padding: 8px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 8px;
+    border: 1px solid rgba(66, 133, 244, 0.15);
+    backdrop-filter: blur(12px);
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+/* 统一筛选标题 */
+.unified-filter-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 6px;
+}
+
+.unified-filter-title {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-color);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.unified-filter-title i {
+    color: var(--primary-color);
+    font-size: 11px;
+}
+
+.unified-filter-actions {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
+/* 清除所有筛选按钮 */
+.clear-all-filters-btn {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 3px 6px;
+    font-size: 9px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    box-shadow: 0 1px 2px rgba(255, 107, 107, 0.3);
+}
+
+.clear-all-filters-btn:hover {
+    background: linear-gradient(135deg, #ee5a52 0%, #ff6b6b 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 3px 6px rgba(255, 107, 107, 0.4);
+}
+
+/* 快速清除动画 */
+.clear-all-filters-btn.clearing {
+    transform: scale(0.95);
+    opacity: 0.8;
+    transition: all 0.1s ease;
+}
+
+.clear-all-filters-btn.clearing:hover {
+    transform: scale(0.95);
+    opacity: 0.8;
+}
+
+/* 清除操作时的视觉反馈 */
+.unified-filter-container.clearing {
+    opacity: 0.9;
+    transition: opacity 0.2s ease;
+}
+
+/* 清除完成后的恢复动画 */
+.unified-filter-container.clearing-complete {
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+/* 优化清除按钮的点击反馈 */
+.clear-all-filters-btn:active {
+    transform: scale(0.9);
+    transition: transform 0.1s ease;
+}
+
+/* 深色模式下的清除按钮优化 */
+body.dark-theme .clear-all-filters-btn.clearing {
+    background: linear-gradient(135deg, #ff5252 0%, #d32f2f 100%);
+    box-shadow: 0 2px 4px rgba(255, 82, 82, 0.4);
+}
+
+body.dark-theme .clear-all-filters-btn.clearing:hover {
+    background: linear-gradient(135deg, #d32f2f 0%, #ff5252 100%);
+    box-shadow: 0 3px 6px rgba(255, 82, 82, 0.5);
+}
+
+/* 筛选选项卡 */
+.filter-tabs {
+    display: flex;
+    gap: 2px;
+    margin-bottom: 8px;
+    border-bottom: 1px solid rgba(66, 133, 244, 0.1);
+    padding-bottom: 6px;
+}
+
+.filter-tab {
+    background: transparent;
+    color: var(--text-secondary);
+    border: none;
+    border-radius: 6px;
+    padding: 4px 8px;
+    font-size: 10px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    position: relative;
+}
+
+.filter-tab:hover {
+    background: rgba(66, 133, 244, 0.1);
+    color: var(--primary-color);
+}
+
+.filter-tab.active {
+    background: var(--primary-color);
+    color: white;
+    box-shadow: 0 2px 4px rgba(66, 133, 244, 0.3);
+}
+
+.filter-tab i {
+    font-size: 10px;
+}
+
+.tab-count {
+    background: rgba(255, 255, 255, 0.2);
+    color: inherit;
+    border-radius: 4px;
+    padding: 1px 3px;
+    font-size: 8px;
+    font-weight: 600;
+    margin-left: 2px;
+}
+
+/* 筛选面板 */
+.filter-panel {
+    display: none;
+    animation: fadeIn 0.3s ease;
+}
+
+.filter-panel.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 统一筛选内容 */
+.unified-filter-content {
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    max-height: 500px;
+}
+
+.unified-filter-content.collapsed {
+    max-height: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+/* 继承原有筛选样式 */
+.unified-filter-container .tag-filter-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    width: 100%;
+}
+
+.unified-filter-container .tag-filter-btn {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    color: var(--text-color);
+    border: 1px solid transparent;
+    border-radius: 12px;
+    padding: 3px 8px;
+    font-size: 10px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    outline: none;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    user-select: none;
+}
+
+.unified-filter-container .tag-filter-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(66, 133, 244, 0.2);
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.unified-filter-container .tag-filter-btn.selected {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-color-dark) 100%);
+    color: white;
+    border-color: var(--primary-color);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(66, 133, 244, 0.3);
+}
+
+.unified-filter-container .project-select {
+    width: 100%;
+    padding: 4px 8px;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    font-size: 10px;
+    background: #fff;
+    color: #495057;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.unified-filter-container .project-select:hover {
+    border-color: var(--primary-color);
+}
+
+.unified-filter-container .project-select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.2);
+}
+
+.unified-filter-container .date-range-selector {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-wrap: wrap;
+    margin-bottom: 6px;
+}
+
+.unified-filter-container .date-input-group {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
+.unified-filter-container .date-input-group label {
+    font-size: 9px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    white-space: nowrap;
+}
+
+.unified-filter-container .date-input {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border: 1px solid transparent;
+    border-radius: 6px;
+    padding: 4px 8px;
+    font-size: 10px;
+    color: var(--text-color);
+    transition: all 0.3s ease;
+    outline: none;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    min-width: 100px;
+}
+
+.unified-filter-container .date-input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 4px 12px rgba(66, 133, 244, 0.2);
+    transform: translateY(-1px);
+}
+
+.unified-filter-container .quick-date-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    align-items: center;
+}
+
+.unified-filter-container .quick-date-btn {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    color: var(--text-color);
+    border: 1px solid transparent;
+    border-radius: 12px;
+    padding: 3px 8px;
+    font-size: 9px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    outline: none;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+    user-select: none;
+    white-space: nowrap;
+}
+
+.unified-filter-container .quick-date-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(66, 133, 244, 0.2);
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.unified-filter-container .quick-date-btn.active {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-color-dark) 100%);
+    color: white;
+    border-color: var(--primary-color);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(66, 133, 244, 0.3);
+}
+
+.unified-filter-container .filter-status {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 9px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+    padding: 2px 4px;
+    background: rgba(66, 133, 244, 0.1);
+    border-radius: 4px;
+    border-left: 2px solid var(--primary-color);
+}
+
+.unified-filter-container .filter-status.active {
+    background: rgba(52, 168, 83, 0.1);
+    border-left-color: var(--success-color);
+    color: var(--success-color);
+}
+
+/* 暗色主题适配 */
+body.dark-theme .unified-filter-container {
+    background: rgba(45, 45, 45, 0.9);
+    border-color: rgba(66, 133, 244, 0.2);
+}
+
+body.dark-theme .unified-filter-title {
+    color: var(--text-color-dark);
+}
+
+body.dark-theme .filter-tab {
+    color: var(--text-secondary-dark);
+}
+
+body.dark-theme .filter-tab:hover {
+    background: rgba(66, 133, 244, 0.2);
+    color: var(--primary-color);
+}
+
+body.dark-theme .filter-tab.active {
+    background: var(--primary-color);
+    color: white;
+}
+
+body.dark-theme .tag-filter-btn {
+    background: linear-gradient(135deg, #3c3c3c 0%, #2d2d2d 100%);
+    color: var(--text-color-dark);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-theme .tag-filter-btn:hover {
+    background: linear-gradient(135deg, #4a4a4a 0%, #3c3c3c 100%);
+    box-shadow: 0 4px 12px rgba(66, 133, 244, 0.3);
+}
+
+body.dark-theme .tag-filter-btn.selected {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-color-dark) 100%);
+    color: white;
+}
+
+body.dark-theme .project-select {
+    background: linear-gradient(135deg, #3c3c3c 0%, #2d2d2d 100%);
+    border-color: #555;
+    color: var(--text-color-dark);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-theme .project-select:hover {
+    border-color: var(--primary-color);
+    background: linear-gradient(135deg, #4a4a4a 0%, #3c3c3c 100%);
+    box-shadow: 0 4px 12px rgba(66, 133, 244, 0.2);
+}
+
+body.dark-theme .project-select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.3);
+    background: linear-gradient(135deg, #4a4a4a 0%, #3c3c3c 100%);
+}
+
+/* 深色模式下的下拉选项样式 */
+body.dark-theme .project-select option {
+    background: #2d2d2d;
+    color: var(--text-color-dark);
+    border: none;
+}
+
+body.dark-theme .project-select option:hover {
+    background: #3c3c3c;
+}
+
+body.dark-theme .project-select option:checked {
+    background: var(--primary-color);
+    color: white;
+}
+
+body.dark-theme .date-input {
+    background: linear-gradient(135deg, #3c3c3c 0%, #2d2d2d 100%);
+    color: var(--text-color-dark);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-theme .quick-date-btn {
+    background: linear-gradient(135deg, #3c3c3c 0%, #2d2d2d 100%);
+    color: var(--text-color-dark);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-theme .quick-date-btn:hover {
+    background: linear-gradient(135deg, #4a4a4a 0%, #3c3c3c 100%);
+    box-shadow: 0 4px 12px rgba(66, 133, 244, 0.3);
+}
+
+body.dark-theme .filter-status {
+    background: rgba(66, 133, 244, 0.15);
+    color: var(--text-secondary-dark);
+}
+
+body.dark-theme .filter-status.active {
+    background: rgba(52, 168, 83, 0.15);
+    color: var(--success-color);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .unified-filter-container {
+        padding: 6px;
+        gap: 3px;
+    }
+    
+    .unified-filter-header {
+        margin-bottom: 4px;
+    }
+    
+    .filter-tabs {
+        gap: 1px;
+        margin-bottom: 6px;
+        padding-bottom: 4px;
+    }
+    
+    .filter-tab {
+        padding: 3px 6px;
+        font-size: 9px;
+    }
+    
+    .filter-tab i {
+        font-size: 9px;
+    }
+    
+    .tab-count {
+        font-size: 7px;
+        padding: 1px 2px;
+    }
+    
+    .clear-all-filters-btn {
+        padding: 2px 5px;
+        font-size: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .unified-filter-container {
+        padding: 4px;
+        gap: 2px;
+    }
+    
+    .filter-tabs {
+        flex-wrap: wrap;
+        gap: 2px;
+    }
+    
+    .filter-tab {
+        padding: 2px 4px;
+        font-size: 8px;
+        flex: 1;
+        min-width: 0;
+    }
+    
+    .filter-tab i {
+        font-size: 8px;
+    }
+    
+    .tab-count {
+        font-size: 6px;
+        padding: 1px 2px;
+    }
+    
+    .clear-all-filters-btn {
+        padding: 2px 4px;
+        font-size: 7px;
+    }
+    
+    .unified-filter-title {
+        font-size: 10px;
+    }
+    
+    .unified-filter-title i {
+        font-size: 10px;
+    }
+}
+
+/* 深色模式下的项目筛选容器样式 */
+body.dark-theme .project-filter-select {
+    background: transparent;
+}
+
+body.dark-theme .project-filter-select select {
+    background: linear-gradient(135deg, #3c3c3c 0%, #2d2d2d 100%);
+    border-color: #555;
+    color: var(--text-color-dark);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-theme .project-filter-select select:hover {
+    border-color: var(--primary-color);
+    background: linear-gradient(135deg, #4a4a4a 0%, #3c3c3c 100%);
+    box-shadow: 0 4px 12px rgba(66, 133, 244, 0.2);
+}
+
+body.dark-theme .project-filter-select select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.3);
+    background: linear-gradient(135deg, #4a4a4a 0%, #3c3c3c 100%);
+}
+
+/* 深色模式下的下拉选项样式 */
+body.dark-theme .project-select option {
+    background: #2d2d2d;
+    color: var(--text-color-dark);
+    border: none;
+}
+
+body.dark-theme .project-select option:hover {
+    background: #3c3c3c;
+}
+
+body.dark-theme .project-select option:checked {
+    background: var(--primary-color);
+    color: white;
+}
+
+/* 深色模式下的项目筛选交互效果 */
+body.dark-theme .project-filter-select select:disabled {
+    background: linear-gradient(135deg, #2a2a2a 0%, #1f1f1f 100%);
+    color: #666;
+    border-color: #444;
+    cursor: not-allowed;
+}
+
+body.dark-theme .project-filter-select select:disabled:hover {
+    border-color: #444;
+    background: linear-gradient(135deg, #2a2a2a 0%, #1f1f1f 100%);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* 深色模式下的项目筛选面板样式 */
+body.dark-theme #project-filter-panel {
+    background: transparent;
+}
+
+/* 深色模式下的项目筛选状态指示器特殊样式 */
+body.dark-theme #project-filter-status {
+    background: rgba(66, 133, 244, 0.15);
+    border-left-color: var(--primary-color);
+}
+
+body.dark-theme #project-filter-status.active {
+    background: rgba(52, 168, 83, 0.15);
+    border-left-color: var(--success-color);
+    color: var(--success-color);
+}
+
+/* 响应式设计中的深色模式适配 */
+@media (max-width: 768px) {
+    body.dark-theme .project-select {
+        font-size: 9px;
+        padding: 3px 6px;
+    }
+    
+    body.dark-theme .project-select option {
+        font-size: 9px;
+        padding: 2px 4px;
+    }
+}
+
+@media (max-width: 480px) {
+    body.dark-theme .project-select {
+        font-size: 8px;
+        padding: 2px 4px;
+        min-width: 80px;
+    }
+    
+    body.dark-theme .project-select option {
+        font-size: 8px;
+        padding: 1px 3px;
+    }
+    
+    body.dark-theme #project-filter-status {
+        font-size: 8px;
+        padding: 1px 3px;
+    }
+}
+
+/* 深色模式切换时的过渡动画 */
+.project-select,
+.project-select option,
+#project-filter-status {
+    transition: all 0.3s ease;
+}
+
+body.dark-theme .project-select,
+body.dark-theme .project-select option,
+body.dark-theme #project-filter-status {
+    transition: all 0.3s ease;
+}
+
+/* 深色模式下的项目筛选悬停效果增强 */
+body.dark-theme .project-filter-select:hover .project-select {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(66, 133, 244, 0.25);
+}
+
+/* 深色模式下的项目筛选焦点效果增强 */
+body.dark-theme .project-filter-select .project-select:focus {
+    transform: translateY(-1px);
+    box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.4), 0 4px 12px rgba(66, 133, 244, 0.3);
+} 
