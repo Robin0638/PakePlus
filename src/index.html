@@ -1,32 +1,677 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <link rel="stylesheet" href="styles.css" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>PakePlus App</title>
-        <script type="module" src="/main.js" defer></script>
-    </head>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1, minimum-scale=1">
+    <title>题答答-简洁的自主练题系统</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/ai-assist.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <!-- 桌面版顶部导航 -->
+    <header class="desktop-header">
+        <nav class="desktop-nav">
+            <div class="logo">题答答</div>
+            <div class="nav-items">
+                <div class="nav-item active" data-page="home">首页</div>
+                <div class="nav-item" data-page="chapters">章节练习</div>
+                <div class="nav-item" data-page="wrong-questions">错题本</div>
+                <div class="nav-item" data-page="records">练习记录</div>
+                <div class="nav-item" data-page="import">题库管理</div>
+                <div class="nav-item" data-page="more">更多功能</div>
+            </div>
+            <div class="theme-switcher" style="margin-left:20px;">
+                <button id="theme-toggle-btn" class="btn btn-secondary" style="font-size:15px;padding:4px 14px;">
+                    <i class="fas fa-adjust"></i> <span id="theme-toggle-label">自动</span>
+                </button>
+            </div>
+        </nav>
+    </header>
 
-    <body>
-        <main class="container">
-            <h1>Welcome to PakePlus</h1>
-            <form class="row" id="greet-form">
-                <input id="inputValue" placeholder="Enter a something..." />
-            </form>
-            <div class="resultBox">
-                <span>result: </span>
-                <span id="result"></span>
+    <div class="container">
+        <!-- 首页 -->
+        <div class="page active" id="home-page">
+            <div class="welcome-section">
+                <h1 class="welcome-title">一款简洁的自主练题系统</h1>
+                <p class="welcome-subtitle">随时随地想刷就刷，轻松掌握知识点</p>
             </div>
-            <div class="invokeBox">
-                <button id="openUrl">open_url_browser</button>
-                <button id="openUrlNew">open_url_new</button>
-                <button id="runCommand">run_command</button>
-                <button id="downloadFile">download_file</button>
-                <button id="getExeDir">get_exe_dir</button>
-                <button id="getEnvVar">get_env_var</button>
-                <button id="findPort">find_port</button>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="total-questions">0</div>
+                    <div class="stat-label">题库总数</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="completed-questions">0</div>
+                    <div class="stat-label">已学会完成</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="accuracy-rate">0%</div>
+                    <div class="stat-label">正确率</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="study-days">0</div>
+                    <div class="stat-label">学习天数</div>
+                </div>
             </div>
-        </main>
-    </body>
-</html>
+
+            <div style="text-align: center;">
+                <button class="btn btn-primary" onclick="showPage('chapters')">开始练习</button>
+            </div>
+        </div>
+
+        <!-- 章节选择页面 -->
+        <div class="page" id="chapters-page">
+            <h2 style="margin-bottom: 20px; color: #667eea;">练习章节</h2>
+            
+            <!-- 搜索和筛选区域 -->
+            <div class="filter-section" style="margin-bottom: 20px;">
+                <div class="search-box" style="margin-bottom: 15px;">
+                    <input type="text" id="chapters-search" placeholder="搜索章节或搜索标签..." class="search-input">
+                </div>
+                <div class="filter-options" style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <select id="tag-filter" class="filter-select">
+                        <option value="">全部标签</option>
+                    </select>
+                    <button class="btn btn-secondary" id="favorite-filter-btn" style="display:flex;align-items:center;gap:4px;">
+                        <i class="fas fa-star"></i> 只看收藏
+                    </button>
+                    <button class="btn btn-secondary" onclick="resetChapterFilters()">
+                        <i class="fas fa-redo"></i> 重置筛选
+                    </button>
+                </div>
+            </div>
+            
+            <div id="chapters-grid" class="chapters-grid"></div>
+        </div>
+
+        <!-- 答题页面 -->
+        <div class="page" id="quiz-page">
+            <div class="quiz-header">
+                <button class="quiz-back-btn" onclick="returnToChapters()">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>返回章节</span>
+                </button>
+                <div class="quiz-progress" id="quiz-progress">第 1 题 / 共 10 题</div>
+                <div class="quiz-timer" id="quiz-timer">00:00</div>
+            </div>
+            
+            <div class="question-card">
+                <div class="question-text" id="question-text">题目将在这里显示...</div>
+                <ul class="options-list" id="options-list">
+                    <!-- 选项将通过JavaScript动态生成 -->
+                </ul>
+            </div>
+            
+            <div class="quiz-controls">
+                <button id="prev-btn" class="btn btn-secondary" onclick="previousQuestion()">上一题</button>
+                <button id="skip-btn" class="btn btn-warning" onclick="skipQuestion()" style="display: none;">跳过</button>
+                <button id="check-btn" class="btn btn-check" onclick="checkAnswer()" style="display: none;">检查答案</button>
+                <button id="next-btn" class="btn btn-primary" onclick="nextQuestion()" style="display: none;">下一题</button>
+                <button id="submit-btn" class="btn btn-success" onclick="submitAnswer()" style="display: none;">提交答案</button>
+            </div>
+        </div>
+
+        <!-- 错题本页面 -->
+        <div class="page" id="wrong-questions-page">
+            <h2 style="margin-bottom: 20px; color: #667eea;">错题本</h2>
+            
+            <!-- 搜索和筛选区域 -->
+            <div class="filter-section" style="margin-bottom: 20px;">
+                <div class="search-box" style="margin-bottom: 15px;">
+                    <input type="text" id="wrong-questions-search" placeholder="搜索题目..." class="search-input">
+                </div>
+                <div class="filter-options" style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <select id="chapter-filter" class="filter-select" onchange="filterWrongQuestions()">
+                        <option value="">所有章节</option>
+                    </select>
+                    <select id="wrong-tag-filter" class="filter-select">
+                        <option value="">全部标签</option>
+                    </select>
+                    <select id="time-filter" class="filter-select" onchange="filterWrongQuestions()">
+                        <option value="">所有时间</option>
+                        <option value="today">今天</option>
+                        <option value="week">本周</option>
+                        <option value="month">本月</option>
+                    </select>
+                    <button class="btn btn-secondary" onclick="resetWrongFilters()">
+                        <i class="fas fa-redo"></i> 重置筛选
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 统计信息 -->
+            <div class="stats-info" style="margin-bottom: 20px; padding: 10px; background: #f8f9fa; border-radius: 8px;">
+                <span id="filtered-count">0</span> 道错题
+                <span style="margin-left: 15px;">共 <span id="total-wrong-count">0</span> 道</span>
+            </div>
+            
+            <!-- 练习按钮 -->
+            <div class="practice-buttons" style="margin-bottom: 20px; display: flex; gap: 10px;">
+                <button class="btn btn-primary" onclick="practiceAllWrongQuestions()">
+                    <i class="fas fa-play"></i> 练习所有错题
+                </button>
+                <button class="btn btn-primary" onclick="practiceFrequentWrongQuestions()">
+                    <i class="fas fa-fire"></i> 练习高频错题
+                </button>
+            </div>
+            
+            <div id="wrong-questions-list">
+                <p style="text-align: center; color: #666; padding: 40px;">暂无错题记录</p>
+            </div>
+        </div>
+
+        <!-- 练习记录页面 -->
+        <div class="page" id="records-page">
+            <h2 style="margin-bottom: 20px; color: #667eea;">练习记录</h2>
+            
+            <!-- 搜索和筛选区域 -->
+            <div class="filter-section" style="margin-bottom: 20px;">
+                <div class="search-box" style="margin-bottom: 15px;">
+                    <input type="text" id="records-search" placeholder="搜索章节..." class="search-input">
+                </div>
+                <div class="filter-options" style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <select id="records-time-filter" class="filter-select" onchange="filterRecords()">
+                        <option value="">所有时间</option>
+                        <option value="today">今天</option>
+                        <option value="week">本周</option>
+                        <option value="month">本月</option>
+                    </select>
+                    <button class="btn btn-secondary" onclick="resetRecordsFilters()">
+                        <i class="fas fa-redo"></i> 重置筛选
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 统计信息 -->
+            <div class="stats-info" style="margin-bottom: 20px; padding: 10px; background: #f8f9fa; border-radius: 8px;">
+                <span id="filtered-records-count">0</span> 条记录
+                <span style="margin-left: 15px;">共 <span id="total-records-count">0</span> 条</span>
+            </div>
+            
+            <div id="records-list">
+                <p style="text-align: center; color: #666; padding: 40px;">暂无练习记录</p>
+            </div>
+        </div>
+
+        <!-- 记录详情页面 -->
+        <div class="page" id="record-detail-page">
+            <div class="record-detail-header">
+                <button class="btn btn-secondary" onclick="showPage('records')" style="margin-right: 15px;">
+                    <i class="fas fa-arrow-left"></i> 返回
+                </button>
+                <h2 style="margin: 0; color: #667eea;">练习详情</h2>
+            </div>
+            
+            <div class="record-detail-info" style="margin: 20px 0; padding: 20px; background: #f8f9fa; border-radius: 10px;">
+                <div class="record-detail-title" style="font-size: 18px; font-weight: bold; margin-bottom: 15px;"></div>
+                <div class="record-detail-stats" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px;">
+                    <div class="stat-item">
+                        <div class="stat-label">题目数量</div>
+                        <div class="stat-value" id="detail-total-questions">0</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">正确数量</div>
+                        <div class="stat-value" id="detail-correct-count">0</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">正确率</div>
+                        <div class="stat-value" id="detail-accuracy">0%</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">用时</div>
+                        <div class="stat-value" id="detail-duration">0分0秒</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="record-detail-questions" style="margin-top: 20px;">
+                <!-- 题目详情将通过JavaScript动态生成 -->
+            </div>
+        </div>
+
+        <!-- 题库导入页面 -->
+        <div class="page" id="import-page">
+            <h2 style="margin-bottom: 20px; color: #667eea;">题库管理</h2>
+            
+            <div class="import-section" id="import-section">
+                <div style="margin-bottom: 20px;">
+                    <h3>导入题库文件</h3>
+                    <p style="color: #666; margin: 10px 0;">支持 .txt .roi 格式，请按照指定格式编写题目</p>
+                </div>
+                
+                <input type="file" id="file-input" class="file-input" accept=".txt,.roi" onchange="handleFileSelect(event)">
+                <label for="file-input" class="file-label">选择文件</label>
+                
+                <div style="margin-top: 20px;">
+                    <p style="font-size: 14px; color: #666;">或拖拽文件到此区域</p>
+                </div>
+                
+                <!-- AI创建按钮 -->
+                <div style="margin-top: 25px; text-align: center; padding-top: 20px; border-top: 1px solid #eee;">
+                    <button class="btn btn-ai" onclick="openAICreator()">
+                        <i class="fas fa-robot"></i>
+                        AI智能创建题目
+                    </button>
+                    <p style="font-size: 12px; color: #888; margin-top: 8px;">使用AI助手快速生成题目</p>
+                </div>
+            </div>
+
+            <!-- 文本框输入区域 -->
+            <div class="text-input-section" style="margin-top: 30px;">
+                <h3 style="margin-bottom: 15px;">直接输入题目</h3>
+                <textarea id="questions-text" class="questions-textarea" placeholder="请按照以下格式输入题目：
+章节：第一章 基础知识
+题目：以下哪个是正确的？
+A. 选项1
+B. 选项2
+C. 选项3
+D. 选项4
+答案：A
+解析：这里是解析内容
+
+章节：第二章 进阶知识
+题目：另一个题目...
+..."></textarea>
+                <div style="margin-top: 15px; text-align: center;">
+                    <button class="btn btn-primary" onclick="handleTextInput()">
+                        <i class="fas fa-plus"></i> 添加题目
+                    </button>
+                </div>
+            </div>
+            
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-top: 30px;">
+                <div class="format-desc-header" style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;" onclick="toggleFormatDesc()">
+                <h4 style="margin-bottom: 15px;">题目格式说明：</h4>
+                    <button id="format-desc-toggle-btn" style="background:none;border:none;font-size:18px;color:#667eea;cursor:pointer;outline:none;">展开 ▼</button>
+                </div>
+                <div id="format-desc-content" style="transition:max-height 0.3s;overflow:hidden;max-height:0px;">
+                    <div style="background: white; padding: 18px 18px 18px 22px; border-radius: 8px; font-size: 14px; line-height: 1.8; color: #333; box-shadow:0 2px 8px rgba(102,126,234,0.06);">
+<pre style="background: none; padding: 0; border-radius: 0; font-size: 13px; overflow-x: auto; margin:0; color:#444;">
+章节：第一章 基础知识
+题目：以下哪个是正确的？
+A. 选项1
+B. 选项2
+C. 选项3
+D. 选项4
+答案：A
+解析：这里是解析内容
+标签：易错,基础
+
+# 多选题示例
+章节：第二章 多选题示例
+题目：以下哪些属于水果？
+A. 苹果
+B. 香蕉
+C. 土豆
+D. 西瓜
+答案：ABD
+解析：土豆不是水果
+标签：常识,多选
+
+# 阅读题示例（支持一段材料下多题）
+章节：第三章 阅读理解
+阅读：
+这是阅读材料的内容，可以有多行。
+可以继续写第二行。
+题目：根据上文，哪项说法正确？
+A. 选项1
+B. 选项2
+C. 选项3
+D. 选项4
+答案：B
+解析：根据材料内容选择B
+题目：材料主要讲了什么？
+A. 选项A
+B. 选项B
+C. 选项C
+D. 选项D
+答案：C
+解析：主旨理解
+标签：阅读,理解
+
+（说明：一段“阅读”材料下可连续写多道题，每道题用“题目：”开头）
+
+# 填空题示例
+章节：第四章 填空题
+题目：太阳从___升起。
+答案：东方
+解析：常识题
+标签：填空</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 更多功能页面 -->
+        <div class="page" id="more-page">
+            <h2 style="margin-bottom: 20px; color: #667eea;">更多功能</h2>
+            
+            <div class="chapter-grid">
+                <div class="chapter-card" onclick="backupData()">
+                    <div class="chapter-title"><i class="fas fa-database" style="color: #667eea; font-size: 1.3em; font-weight: bold;"></i> 备份数据</div>
+                    <div class="chapter-info">导出所有学习数据</div>
+                </div>
+                
+                <div class="chapter-card">
+                    <div class="chapter-title"><i class="fas fa-file-import" style="color: #20c997; font-size: 1.3em; font-weight: bold;"></i> 导入数据</div>
+                    <div class="chapter-info">从备份文件恢复数据</div>
+                    <input type="file" accept=".json,application/json" style="display: none;" onchange="importBackupData(event)" id="backup-file-input">
+                    <label for="backup-file-input" class="file-label" style="margin-top: 10px; display: inline-block;">选择备份文件</label>
+                    <div style="margin-top: 10px;">
+                      <label>
+                        <input type="radio" name="import-mode" value="merge" checked> 合并
+                      </label>
+                      <label style="margin-left: 16px;">
+                        <input type="radio" name="import-mode" value="overwrite"> 覆盖
+                      </label>
+                    </div>
+                </div>
+                
+                <div class="chapter-card" onclick="clearData()">
+                    <div class="chapter-title"><i class="fas fa-trash" style="color: #dc3545; font-size: 1.3em; font-weight: bold;"></i> 清除数据</div>
+                    <div class="chapter-info">清除所有学习记录</div>
+                </div>
+
+                <div class="chapter-card">
+                    <div class="chapter-title"><i class="fas fa-forward" style="color: #ff9800; font-size: 1.3em; font-weight: bold;"></i> 跳过功能</div>
+                    <div class="chapter-info">开启/关闭跳过题目功能</div>
+                    <div class="toggle-switch" style="margin-top: 10px;">
+                        <input type="checkbox" id="skip-toggle" onchange="toggleSkipFeature(this)">
+                        <label for="skip-toggle"></label>
+                    </div>
+                </div>
+                
+                <div class="chapter-card feedback-card" onclick="openFeedbackForm()">
+                    <div class="chapter-title"><i class="fas fa-comment-dots" style="color: #e91e63; font-size: 1.3em; font-weight: bold;"></i> 意见反馈</div>
+                    <div class="chapter-info">告诉我们您的建议和意见</div>
+                </div>
+            </div>
+            <!-- 版本信息模块 -->
+            <div class="chapter-card version-info-card" style="margin-top: 30px;">
+                <div class="chapter-title"><i class="fas fa-info-circle" style="color: white; font-size: 1.3em; font-weight: bold;"></i> 版本信息</div>
+                <div class="chapter-info">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <span>当前版本：</span>
+                        <span style="font-weight: bold; font-size: 16px;">v2.1.0</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <span>构建时间：</span>
+                        <span>2025年7月</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <span>更新日期：</span>
+                        <span id="last-update-date">2024-12-19</span>
+                    </div>
+                    <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.2);">
+                        <div style="font-size: 14px; margin-bottom: 8px;">最新功能：</div>
+                        <ul style="font-size: 13px; margin: 0; padding-left: 20px; line-height: 1.6;">
+                            <li>优化分享功能界面</li>
+                            <li>改进深色模式适配</li>
+                            <li>增强导入功能稳定性</li>
+                            <li>修复已知问题</li>
+                        </ul>
+                    </div>
+                    <div style="margin-top: 15px; text-align: center;">
+                        <button class="check-update-btn" onclick="checkForUpdates()">
+                            <i class="fas fa-sync-alt"></i> 检查更新
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- 关于作者模块 -->
+            <div class="chapter-card" style="margin-top: 30px; background: #f4f8fb;">
+                <div class="chapter-title"><i class="fas fa-user" style="color: #764ba2; font-size: 1.3em; font-weight: bold;"></i> 关于作者</div>
+                <div class="chapter-info">
+                    <p>作者：Robin1</p>
+                    <p>邮箱：<span id="author-email">youshurobin2025@163.com</span>
+                        <button id="copy-email-btn" onclick="copyAuthorEmail()" style="margin-left:8px; border:none; background:transparent; cursor:pointer; vertical-align:middle;">
+                            <i class="fas fa-copy" style="color:#667eea; font-size:1em;"></i>
+                        </button>
+                    </p>
+                    <p style="color: #888; font-size: 14px; margin-top: 8px;">热爱前端开发，致力于打造简洁高效的学习工具。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 章节完成祝贺页面 -->
+        <div class="page" id="chapter-complete-page">
+            <div class="complete-container">
+                <div class="complete-icon">
+                    <i class="fas fa-trophy" style="color: #ffd700; font-size: 80px; font-weight: bold;"></i>
+                </div>
+                <h1 class="complete-title">恭喜完成！</h1>
+                <div class="complete-chapter" id="complete-chapter-name"></div>
+                <div class="complete-stats">
+                    <div class="complete-stat-item">
+                        <div class="stat-value" id="complete-total">0</div>
+                        <div class="stat-label">总题数</div>
+                    </div>
+                    <div class="complete-stat-item">
+                        <div class="stat-value" id="complete-correct">0</div>
+                        <div class="stat-label">正确题数</div>
+                    </div>
+                    <div class="complete-stat-item">
+                        <div class="stat-value" id="complete-accuracy">0%</div>
+                        <div class="stat-label">正确率</div>
+                    </div>
+                    <div class="complete-stat-item">
+                        <div class="stat-value" id="complete-time">0分0秒</div>
+                        <div class="stat-label">用时</div>
+                    </div>
+                </div>
+                <div class="complete-message" id="complete-message"></div>
+                <div class="complete-countdown">3秒后返回首页...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 移动端底部导航 -->
+    <div class="mobile-theme-fab" id="mobile-theme-fab">
+        <button id="mobile-theme-toggle-btn" class="btn btn-secondary" style="font-size:15px;padding:4px 14px;">
+            <i class="fas fa-adjust"></i> <span id="mobile-theme-toggle-label">自动</span>
+        </button>
+    </div>
+    <div class="mobile-bottom-nav">
+        <div class="mobile-nav-items">
+            <div class="mobile-nav-item active" data-page="home">
+                <div class="mobile-nav-icon"><i class="fas fa-home"></i></div>
+                <div class="mobile-nav-label">首页</div>
+            </div>
+            <div class="mobile-nav-item" data-page="chapters">
+                <div class="mobile-nav-icon"><i class="fas fa-book"></i></div>
+                <div class="mobile-nav-label">章节练习</div>
+            </div>
+            <div class="mobile-nav-item" data-page="wrong-questions">
+                <div class="mobile-nav-icon"><i class="fas fa-times-circle"></i></div>
+                <div class="mobile-nav-label">错题本</div>
+            </div>
+            <div class="mobile-nav-item" data-page="records">
+                <div class="mobile-nav-icon"><i class="fas fa-clipboard-list"></i></div>
+                <div class="mobile-nav-label">练习记录</div>
+            </div>
+            <div class="mobile-nav-item" data-page="import">
+                <div class="mobile-nav-icon"><i class="fas fa-file-import"></i></div>
+                <div class="mobile-nav-label">题库管理</div>
+            </div>
+            <div class="mobile-nav-item" data-page="more">
+                <div class="mobile-nav-icon"><i class="fas fa-ellipsis-h"></i></div>
+                <div class="mobile-nav-label">更多功能</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script src="js/quiz.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/theme.js"></script>
+    <script src="js/ai-assist.js"></script>
+    <script>
+    // 设置更新日期
+    document.addEventListener('DOMContentLoaded', function() {
+        const updateDateElement = document.getElementById('last-update-date');
+        if (updateDateElement) {
+            const today = new Date();
+            const dateString = today.toISOString().split('T')[0]; // 格式：YYYY-MM-DD
+            updateDateElement.textContent = dateString;
+        }
+    });
+    
+    function copyAuthorEmail() {
+        var email = document.getElementById('author-email').innerText;
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(email).then(function() {
+                showCopyTip('邮箱已复制！');
+            }, function() {
+                showCopyTip('复制失败，请手动复制');
+            });
+        } else {
+            // 兼容旧浏览器
+            var input = document.createElement('input');
+            input.value = email;
+            document.body.appendChild(input);
+            input.select();
+            try {
+                document.execCommand('copy');
+                showCopyTip('邮箱已复制！');
+            } catch (err) {
+                showCopyTip('复制失败，请手动复制');
+            }
+            document.body.removeChild(input);
+        }
+    }
+    
+    function checkForUpdates() {
+        // 显示检查更新中的状态
+        const checkBtn = event.target;
+        const originalText = checkBtn.innerHTML;
+        checkBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 检查中...';
+        checkBtn.disabled = true;
+        
+        // 模拟检查更新过程
+        setTimeout(() => {
+            // 这里可以添加实际的更新检查逻辑
+            // 目前显示当前已是最新版本
+            showCopyTip('当前已是最新版本！');
+            
+            // 恢复按钮状态
+            checkBtn.innerHTML = originalText;
+            checkBtn.disabled = false;
+        }, 1500);
+    }
+    
+    function openFeedbackForm() {
+        // 创建确认弹窗
+        if (confirm('即将跳转到意见反馈页面，是否继续？\n\n您的反馈对我们很重要，感谢您的支持！')) {
+            // 在默认浏览器中打开反馈链接
+            const feedbackUrl = 'https://www.wjx.cn/vm/PKyfMAq.aspx#';
+            
+            // 尝试使用window.open在新窗口中打开
+            const newWindow = window.open(feedbackUrl, '_blank', 'noopener,noreferrer');
+            
+            // 如果window.open被阻止，提示用户手动打开
+            if (!newWindow || newWindow.closed || typeof newWindow.closed == 'undefined') {
+                // 创建提示弹窗，让用户手动复制链接
+                const manualOpen = confirm('浏览器阻止了自动跳转。\n\n请点击"确定"复制链接到剪贴板，然后手动在浏览器中打开。');
+                if (manualOpen) {
+                    // 复制链接到剪贴板
+                    if (navigator.clipboard) {
+                        navigator.clipboard.writeText(feedbackUrl).then(() => {
+                            showCopyTip('链接已复制到剪贴板！\n请在浏览器中粘贴并访问。');
+                        }).catch(() => {
+                            showCopyTip('复制失败，请手动复制链接：\n' + feedbackUrl);
+                        });
+                    } else {
+                        // 兼容旧浏览器
+                        const textArea = document.createElement('textarea');
+                        textArea.value = feedbackUrl;
+                        document.body.appendChild(textArea);
+                        textArea.select();
+                        try {
+                            document.execCommand('copy');
+                            showCopyTip('链接已复制到剪贴板！\n请在浏览器中粘贴并访问。');
+                        } catch (err) {
+                            showCopyTip('复制失败，请手动复制链接：\n' + feedbackUrl);
+                        }
+                        document.body.removeChild(textArea);
+                    }
+                }
+            } else {
+                // 成功打开新窗口
+                showCopyTip('正在打开反馈页面...');
+            }
+        }
+    }
+    
+    function openAICreator() {
+        // 创建确认弹窗
+        if (confirm('即将跳转到AI智能创建页面，是否继续？\n\nAI助手将帮助您快速生成题目！')) {
+            // 在默认浏览器中打开AI创建链接
+            const aiUrl = 'https://agent.xfyun.cn/chat?sharebotId=7b7995d2cacc26e721f33da860f8d00e';
+            
+            // 尝试使用window.open在新窗口中打开
+            const newWindow = window.open(aiUrl, '_blank', 'noopener,noreferrer');
+            
+            // 如果window.open被阻止，提示用户手动打开
+            if (!newWindow || newWindow.closed || typeof newWindow.closed == 'undefined') {
+                // 创建提示弹窗，让用户手动复制链接
+                const manualOpen = confirm('浏览器阻止了自动跳转。\n\n请点击"确定"复制链接到剪贴板，然后手动在浏览器中打开。');
+                if (manualOpen) {
+                    // 复制链接到剪贴板
+                    if (navigator.clipboard) {
+                        navigator.clipboard.writeText(aiUrl).then(() => {
+                            showCopyTip('AI创建链接已复制到剪贴板！\n请在浏览器中粘贴并访问。');
+                        }).catch(() => {
+                            showCopyTip('复制失败，请手动复制链接：\n' + aiUrl);
+                        });
+                    } else {
+                        // 兼容旧浏览器
+                        const textArea = document.createElement('textarea');
+                        textArea.value = aiUrl;
+                        document.body.appendChild(textArea);
+                        textArea.select();
+                        try {
+                            document.execCommand('copy');
+                            showCopyTip('AI创建链接已复制到剪贴板！\n请在浏览器中粘贴并访问。');
+                        } catch (err) {
+                            showCopyTip('复制失败，请手动复制链接：\n' + aiUrl);
+                        }
+                        document.body.removeChild(textArea);
+                    }
+                }
+            } else {
+                // 成功打开新窗口
+                showCopyTip('正在打开AI创建页面...');
+            }
+        }
+    }
+    
+    function showCopyTip(msg) {
+        var tip = document.createElement('div');
+        tip.innerHTML = msg.replace(/\n/g, '<br>'); // 支持换行
+        tip.style.position = 'fixed';
+        tip.style.top = '50%';
+        tip.style.left = '50%';
+        tip.style.transform = 'translate(-50%, -50%)';
+        tip.style.background = '#667eea';
+        tip.style.color = '#fff';
+        tip.style.padding = '16px 24px';
+        tip.style.borderRadius = '12px';
+        tip.style.fontSize = '16px';
+        tip.style.zIndex = 99999;
+        tip.style.boxShadow = '0 4px 16px rgba(102,126,234,0.18)';
+        tip.style.maxWidth = '80vw';
+        tip.style.textAlign = 'center';
+        tip.style.wordBreak = 'break-all';
+        tip.style.pointerEvents = 'none';
+        tip.style.lineHeight = '1.4';
+        document.body.appendChild(tip);
+        setTimeout(function() {
+            if (tip.parentNode) document.body.removeChild(tip);
+        }, 2000); // 增加显示时间到2秒
+    }
+    </script>
+</body>
+</html> 
