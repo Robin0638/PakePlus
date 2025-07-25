@@ -52,13 +52,35 @@ function handleFileSelect(event) {
             try {
                 const obj = JSON.parse(dec);
                 if (!obj.encrypted || !obj.questions) throw new Error('文件格式错误或密码不正确');
-                // 直接导入题目到章节
+                // 直接导入题目到章节，加入查重
                 if (!chapters[obj.chapter]) chapters[obj.chapter] = [];
-                obj.questions.forEach(q => chapters[obj.chapter].push(q));
+                let duplicateCount = 0;
+                let importCount = 0;
+                obj.questions.forEach(q => {
+                    if (chapters[obj.chapter].some(existing => existing.question === q.question)) {
+                        duplicateCount++;
+                    } else {
+                        chapters[obj.chapter].push(q);
+                        importCount++;
+                    }
+                });
+                // 恢复章节标签
+                if (obj.tags && typeof obj.tags === 'object') {
+                    Object.keys(obj.tags).forEach(ch => {
+                        if (!tags[ch]) tags[ch] = [];
+                        obj.tags[ch].forEach(tag => {
+                            if (!tags[ch].includes(tag)) tags[ch].push(tag);
+                        });
+                    });
+                }
                 saveData();
                 renderChapters();
                 updateStats();
-                alert('加密题目导入成功！');
+                let msg = `加密题目导入成功！共导入 ${importCount} 道题目`;
+                if (duplicateCount > 0) {
+                    msg += `\n发现 ${duplicateCount} 道重复题目，已自动跳过`;
+                }
+                alert(msg);
                 window.location.reload();
             } catch (err) {
                 alert('解密失败，密码错误或文件损坏！');
@@ -82,6 +104,9 @@ function readTextFile(file) {
             const text = e.target.result;
             if (!text || text.trim() === '') {
                 alert('文件内容为空，请检查文件');
+                // 清理文件输入框，允许继续导入
+                const fileInput = document.getElementById('file-input');
+                if (fileInput) fileInput.value = '';
                 return;
             }
             
@@ -94,7 +119,7 @@ function readTextFile(file) {
             }
         } catch (error) {
             alert('文件读取失败：' + error.message);
-            // 清理文件输入框
+            // 清理文件输入框，允许继续导入
             const fileInput = document.getElementById('file-input');
             if (fileInput) fileInput.value = '';
         }
@@ -312,25 +337,77 @@ function backupData() {
         lastUpdate: Date.now(),
         version: '1.0'
     };
-    
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const jsonText = JSON.stringify(data, null, 2);
+    // 直接下载json文件
+    const blob = new Blob([jsonText], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
     a.download = 'quiz_backup_' + new Date().toISOString().slice(0, 10) + '.json';
+    document.body.appendChild(a);
     a.click();
-    URL.revokeObjectURL(url);
+    setTimeout(() => {
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }, 100);
+    showCopyTip('备份数据已下载为json文件！');
+}
+
+// 分享备份数据
+function shareBackupData(jsonText) {
+    const shareData = {
+        title: '题答答备份数据',
+        text: '我的题答答学习数据备份',
+        url: window.location.href
+    };
+    
+    // 优先使用Web Share API
+    if (navigator.share) {
+        navigator.share(shareData).then(() => {
+            console.log('分享成功');
+        }).catch((error) => {
+            console.log('分享失败:', error);
+            // 如果Web Share API失败，尝试其他方式
+            fallbackShare(jsonText);
+        });
+    } else {
+        // 降级处理
+        fallbackShare(jsonText);
+    }
+}
+
+// 降级分享方式
+function fallbackShare(jsonText) {
+    // 在移动端，尝试使用uni-app的分享API
+    if (window.plus && plus.share) {
+        plus.share.sendWithSystem({
+            type: 'text',
+            content: jsonText,
+            title: '题答答备份数据',
+            // 排除图片分享方式
+            exclude: ['image', 'video', 'audio']
+        }, function(result) {
+            console.log('分享结果:', result);
+        }, function(error) {
+            console.log('分享失败:', error);
+            showCopyTip('分享功能不可用，数据已复制到剪贴板。');
+        });
+    } else {
+        // 最后的降级：显示分享提示
+        showCopyTip('分享功能不可用，数据已复制到剪贴板。\n\n您可以手动粘贴分享。');
+    }
 }
 
 // 导入备份数据
 function importBackupData(event) {
     const file = event.target.files[0];
     if (!file) return;
+    
     // 获取用户选择的导入模式
     let mode = 'merge';
     const modeInput = document.querySelector('input[name="import-mode"]:checked');
     if (modeInput) mode = modeInput.value;
-
+    
     const reader = new FileReader();
     reader.onload = function(e) {
         try {
@@ -339,15 +416,16 @@ function importBackupData(event) {
             if (!data.questions || !data.wrongQuestions || !data.practiceRecords) {
                 throw new Error('无效的备份文件格式');
             }
+            
             if (mode === 'overwrite') {
                 // 覆盖模式：直接用新数据替换
-                if (confirm('确定要导入备份数据吗？这将覆盖当前所有数据！')) {
-                    questions = data.questions || [];
-                    chapters = data.chapters || {};
-                    wrongQuestions = data.wrongQuestions || [];
-                    practiceRecords = data.practiceRecords || [];
-                    groups = data.groups || [];
-                    tags = data.tags || {};
+            if (confirm('确定要导入备份数据吗？这将覆盖当前所有数据！')) {
+                questions = data.questions || [];
+                chapters = data.chapters || {};
+                wrongQuestions = data.wrongQuestions || [];
+                practiceRecords = data.practiceRecords || [];
+                groups = data.groups || [];
+                tags = data.tags || {};
                     saveData();
                     renderChapters();
                     updateStats();
@@ -692,14 +770,16 @@ function addTag(chapterName, tagName) {
     }
 }
 
-function removeTag(chapterName, tagName) {
+function removeTag(chapterName, tagName, event) {
+    if (event) event.stopPropagation();
     if (tags[chapterName]) {
         tags[chapterName] = tags[chapterName].filter(tag => tag !== tagName);
         if (tags[chapterName].length === 0) {
             delete tags[chapterName];
         }
-        saveData();
     }
+    saveData();
+    if (typeof renderChapters === 'function') renderChapters();
 }
 
 function getTags(chapterName) {
