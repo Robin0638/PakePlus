@@ -14,12 +14,12 @@
         <nav class="desktop-nav">
             <div class="logo">题答答</div>
             <div class="nav-items">
-                <div class="nav-item active" data-page="home">首页</div>
-                <div class="nav-item" data-page="chapters">章节练习</div>
-                <div class="nav-item" data-page="wrong-questions">错题本</div>
-                <div class="nav-item" data-page="records">练习记录</div>
-                <div class="nav-item" data-page="import">题库管理</div>
-                <div class="nav-item" data-page="more">更多功能</div>
+                <div class="nav-item active" data-page="home"><i class="fas fa-home" style="margin-right:6px;"></i>首页</div>
+                <div class="nav-item" data-page="chapters"><i class="fas fa-list-alt" style="margin-right:6px;"></i>章节练习</div>
+                <div class="nav-item" data-page="wrong-questions"><i class="fas fa-book" style="margin-right:6px;"></i>错题本</div>
+                <div class="nav-item" data-page="records"><i class="fas fa-history" style="margin-right:6px;"></i>练习记录</div>
+                <div class="nav-item" data-page="import"><i class="fas fa-database" style="margin-right:6px;"></i>题库管理</div>
+                <div class="nav-item" data-page="more"><i class="fas fa-ellipsis-h" style="margin-right:6px;"></i>更多功能</div>
             </div>
             <div class="theme-switcher" style="margin-left:20px;">
                 <button id="theme-toggle-btn" class="btn btn-secondary" style="font-size:15px;padding:4px 14px;">
@@ -241,26 +241,42 @@
                     <p style="color: #666; margin: 10px 0;">支持 .txt .roi 格式，请按照指定格式编写题目</p>
                 </div>
                 
-                <input type="file" id="file-input" class="file-input" accept=".txt,.roi" onchange="handleFileSelect(event)">
+                <input type="file" id="file-input" class="file-input" onchange="handleFileSelect(event)">
                 <label for="file-input" class="file-label">选择文件</label>
                 
                 <div style="margin-top: 20px;">
                     <p style="font-size: 14px; color: #666;">或拖拽文件到此区域</p>
                 </div>
                 
-                <!-- AI创建按钮 -->
+                <!-- AI创建按钮优化区域 -->
                 <div style="margin-top: 25px; text-align: center; padding-top: 20px; border-top: 1px solid #eee;">
-                    <button class="btn btn-ai" onclick="openAICreator()">
+                    <div style="display: flex; flex-wrap: wrap; gap: 18px; justify-content: center;">
+                        <button class="ai-agent-btn" onclick="openAICreator()">
+                            <span class="ai-agent-icon" style="background: linear-gradient(135deg,#667eea,#764ba2);">
+                                <i class="fas fa-robot"></i>
+                            </span>
+                            <span>
+                                <div class="ai-agent-title">讯飞星辰AI智能体</div>
+                                <div class="ai-agent-desc">一键用AI生成题目</div>
+                            </span>
+                        </button>
+                        <button class="ai-agent-btn" onclick="openAICreator1()">
+                            <span class="ai-agent-icon" style="background: linear-gradient(135deg,#20c997,#00b894);">
                         <i class="fas fa-robot"></i>
-                        AI智能创建题目
+                            </span>
+                            <span>
+                                <div class="ai-agent-title">九天AI智能体</div>
+                                <div class="ai-agent-desc">一键用AI生成题目</div>
+                            </span>
                     </button>
-                    <p style="font-size: 12px; color: #888; margin-top: 8px;">使用AI助手快速生成题目</p>
+                    </div>
+                    <div style="font-size: 12px; color: #888; margin-top: 14px;">使用AI助手快速生成题目，支持多平台</div>
                 </div>
             </div>
 
             <!-- 文本框输入区域 -->
             <div class="text-input-section" style="margin-top: 30px;">
-                <h3 style="margin-bottom: 15px;">直接输入题目</h3>
+                <h3 style="margin-bottom: 15px;">直接输入题目（如果阅读题有空行，请在导入前手动删除空行）</h3>
                 <textarea id="questions-text" class="questions-textarea" placeholder="请按照以下格式输入题目：
 章节：第一章 基础知识
 题目：以下哪个是正确的？
@@ -283,9 +299,109 @@ D. 选项4
             
             <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-top: 30px;">
                 <div class="format-desc-header" style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;" onclick="toggleFormatDesc()">
+                    <div style="display:flex;align-items:center;gap:10px;">
                 <h4 style="margin-bottom: 15px;">题目格式说明：</h4>
+                        <button id="copy-ai-prompt-btn" class="btn btn-copy-ai-prompt" type="button">
+                            <i class="fas fa-copy"></i>
+                            复制智能体提示词
+                        </button>
+                    </div>
                     <button id="format-desc-toggle-btn" style="background:none;border:none;font-size:18px;color:#667eea;cursor:pointer;outline:none;">展开 ▼</button>
                 </div>
+                <!-- 隐藏的提示词内容 -->
+                <textarea id="ai-prompt-content" style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:1px;width:1px;">
+【题答答题库生成智能体——完整提示词】
+
+你是“题答答”题库生成助手，专为题答答软件生成题目。请严格按照指定格式输出题库内容，便于用户直接导入软件。
+
+【输出格式要求】
+1. 单选题/多选题格式
+章节：<章节名称>
+题目：<题干>
+A. <选项A>
+B. <选项B>
+C. <选项C>
+D. <选项D>
+答案：<正确答案字母，如A或AB（多选）>
+解析：<简要解析>
+标签：<标签1,标签2,可选>
+
+2. 填空题格式
+章节：<章节名称>
+题目：<题干，空白处用下划线“___”表示>
+答案：<标准答案>
+解析：<简要解析>
+标签：<标签1,标签2,可选>
+
+3. 阅读理解题格式
+章节：<章节名称>
+阅读：
+<阅读材料内容，可多行>
+题目：<问题1>
+A. <选项A>
+B. <选项B>
+C. <选项C>
+D. <选项D>
+答案：<正确答案字母，如A>
+解析：<简要解析>
+题目：<问题2>
+A. <选项A>
+B. <选项B>
+C. <选项C>
+D. <选项D>
+答案：<正确答案字母，如B>
+解析：<简要解析>
+标签：<标签1,标签2,可选>
+
+【注意事项】
+1. 所有字段必须完整且顺序一致，不可遗漏。
+2. 不要输出除题目内容以外的任何解释、说明、前后缀。
+3. 每道题/每组阅读理解之间必须空一行。
+4. 答案字段：单选为A/B/C/D，多选为AB/AC，填空为文本。
+5. 阅读理解题务必严格区分“阅读材料”和“题目”，不要混淆。
+6. 如无标签可省略“标签”行。
+7. 输出内容务必适合直接导入题答答软件。
+8. 【重要提醒】如发现阅读理解题内有空行，请在导入前手动删除空行，以保证软件能正确识别。
+
+【示例输出】
+章节：第一章 基础知识
+题目：太阳从哪里升起？
+A. 南方
+B. 北方
+C. 东方
+D. 西方
+答案：C
+解析：太阳每天从东方升起。
+标签：常识,地理
+
+章节：第三章 填空题
+题目：太阳从___升起。
+答案：东方
+解析：太阳每天从东方升起。
+标签：常识,填空
+
+章节：第四章 阅读理解
+阅读：
+小明每天早上六点起床，吃完早饭后去上学。他喜欢在路上观察花草树木。
+题目：小明每天几点起床？
+A. 五点
+B. 六点
+C. 七点
+D. 八点
+答案：B
+解析：文中提到小明六点起床。
+题目：小明在路上喜欢做什么？
+A. 跑步
+B. 看书
+C. 观察花草树木
+D. 听音乐
+答案：C
+解析：文中明确写到小明喜欢观察花草树木。
+标签：阅读,理解
+
+【用户操作提醒】
+如发现阅读理解题内有空行，请在导入前手动删除空行，以保证软件能正确识别。
+</textarea>
                 <div id="format-desc-content" style="transition:max-height 0.3s;overflow:hidden;max-height:0px;">
                     <div style="background: white; padding: 18px 18px 18px 22px; border-radius: 8px; font-size: 14px; line-height: 1.8; color: #333; box-shadow:0 2px 8px rgba(102,126,234,0.06);">
 <pre style="background: none; padding: 0; border-radius: 0; font-size: 13px; overflow-x: auto; margin:0; color:#444;">
@@ -517,6 +633,21 @@ D. 选项D
             const dateString = today.toISOString().split('T')[0]; // 格式：YYYY-MM-DD
             updateDateElement.textContent = dateString;
         }
+        
+        // 添加测试按钮（仅在开发环境）
+        if (window.location.hash.includes('debug')) {
+            const testBtn = document.createElement('button');
+            testBtn.textContent = '测试文字选择';
+            testBtn.style.cssText = 'position:fixed;top:10px;right:10px;z-index:10000;background:#667eea;color:white;border:none;padding:8px 12px;border-radius:4px;cursor:pointer;';
+            testBtn.onclick = function() {
+                if (typeof testTextSelection === 'function') {
+                    testTextSelection();
+                } else {
+                    alert('测试函数未加载');
+                }
+            };
+            document.body.appendChild(testBtn);
+        }
     });
     
     function copyAuthorEmail() {
@@ -565,42 +696,20 @@ D. 选项D
     function openFeedbackForm() {
         // 创建确认弹窗
         if (confirm('即将跳转到意见反馈页面，是否继续？\n\n您的反馈对我们很重要，感谢您的支持！')) {
-            // 在默认浏览器中打开反馈链接
+            // 反馈链接
             const feedbackUrl = 'https://www.wjx.cn/vm/PKyfMAq.aspx#';
             
-            // 尝试使用window.open在新窗口中打开
-            const newWindow = window.open(feedbackUrl, '_blank', 'noopener,noreferrer');
-            
-            // 如果window.open被阻止，提示用户手动打开
-            if (!newWindow || newWindow.closed || typeof newWindow.closed == 'undefined') {
-                // 创建提示弹窗，让用户手动复制链接
-                const manualOpen = confirm('浏览器阻止了自动跳转。\n\n请点击"确定"复制链接到剪贴板，然后手动在浏览器中打开。');
-                if (manualOpen) {
-                    // 复制链接到剪贴板
-                    if (navigator.clipboard) {
-                        navigator.clipboard.writeText(feedbackUrl).then(() => {
-                            showCopyTip('链接已复制到剪贴板！\n请在浏览器中粘贴并访问。');
-                        }).catch(() => {
-                            showCopyTip('复制失败，请手动复制链接：\n' + feedbackUrl);
-                        });
-                    } else {
-                        // 兼容旧浏览器
-                        const textArea = document.createElement('textarea');
-                        textArea.value = feedbackUrl;
-                        document.body.appendChild(textArea);
-                        textArea.select();
-                        try {
-                            document.execCommand('copy');
-                            showCopyTip('链接已复制到剪贴板！\n请在浏览器中粘贴并访问。');
-                        } catch (err) {
-                            showCopyTip('复制失败，请手动复制链接：\n' + feedbackUrl);
-                        }
-                        document.body.removeChild(textArea);
-                    }
-                }
+            // 使用通用外部链接打开函数
+            if (typeof openExternalUrl === 'function') {
+                openExternalUrl(feedbackUrl, '正在打开反馈页面...');
             } else {
-                // 成功打开新窗口
+                // 降级处理
+                if (window.plus && plus.runtime && plus.runtime.openURL) {
+                    plus.runtime.openURL(feedbackUrl);
                 showCopyTip('正在打开反馈页面...');
+                } else {
+                    window.open(feedbackUrl, '_blank');
+                }
             }
         }
     }
@@ -608,43 +717,38 @@ D. 选项D
     function openAICreator() {
         // 创建确认弹窗
         if (confirm('即将跳转到AI智能创建页面，是否继续？\n\nAI助手将帮助您快速生成题目！')) {
-            // 在默认浏览器中打开AI创建链接
-            const aiUrl = 'https://agent.xfyun.cn/chat?sharebotId=7b7995d2cacc26e721f33da860f8d00e';
-            
-            // 尝试使用window.open在新窗口中打开
-            const newWindow = window.open(aiUrl, '_blank', 'noopener,noreferrer');
-            
-            // 如果window.open被阻止，提示用户手动打开
-            if (!newWindow || newWindow.closed || typeof newWindow.closed == 'undefined') {
-                // 创建提示弹窗，让用户手动复制链接
-                const manualOpen = confirm('浏览器阻止了自动跳转。\n\n请点击"确定"复制链接到剪贴板，然后手动在浏览器中打开。');
-                if (manualOpen) {
-                    // 复制链接到剪贴板
-                    if (navigator.clipboard) {
-                        navigator.clipboard.writeText(aiUrl).then(() => {
-                            showCopyTip('AI创建链接已复制到剪贴板！\n请在浏览器中粘贴并访问。');
-                        }).catch(() => {
-                            showCopyTip('复制失败，请手动复制链接：\n' + aiUrl);
-                        });
-                    } else {
-                        // 兼容旧浏览器
-                        const textArea = document.createElement('textarea');
-                        textArea.value = aiUrl;
-                        document.body.appendChild(textArea);
-                        textArea.select();
-                        try {
-                            document.execCommand('copy');
-                            showCopyTip('AI创建链接已复制到剪贴板！\n请在浏览器中粘贴并访问。');
-                        } catch (err) {
-                            showCopyTip('复制失败，请手动复制链接：\n' + aiUrl);
-                        }
-                        document.body.removeChild(textArea);
-                    }
-                }
-            } else {
-                // 成功打开新窗口
-                showCopyTip('正在打开AI创建页面...');
-            }
+            // AI创建链接
+            const aiUrl = 'https://agent.xfyun.cn/chat?botId=3009831';
+            // 新窗口参数
+            const width = 900;
+            const height = 700;
+            const left = window.screenX + (window.outerWidth - width) / 2;
+            const top = window.screenY + (window.outerHeight - height) / 2;
+            window.open(
+                aiUrl,
+                '_blank',
+                `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes`
+            );
+            showCopyTip('正在打开AI创建页面...');
+        }
+    }
+    
+    function openAICreator1() {
+        // 创建确认弹窗
+        if (confirm('即将跳转到AI智能创建页面，是否继续？\n\nAI助手将帮助您快速生成题目！')) {
+            // AI创建链接
+            const aiUrl = 'https://jiutian.10086.cn/largemodel/cmstore/#/cmstore/createPage?fullScreen=1&appId=6880d0affe7a7f1477e5c6b0&chatMode=llm&isEditAgent=true';
+            // 新窗口参数
+            const width = 900;
+            const height = 700;
+            const left = window.screenX + (window.outerWidth - width) / 2;
+            const top = window.screenY + (window.outerHeight - height) / 2;
+            window.open(
+                aiUrl,
+                '_blank',
+                `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes`
+            );
+            showCopyTip('正在打开AI创建页面...');
         }
     }
     
@@ -672,6 +776,26 @@ D. 选项D
             if (tip.parentNode) document.body.removeChild(tip);
         }, 2000); // 增加显示时间到2秒
     }
+    
+    // 复制智能体提示词按钮逻辑
+    document.addEventListener('DOMContentLoaded', function() {
+        var copyBtn = document.getElementById('copy-ai-prompt-btn');
+        var promptContent = document.getElementById('ai-prompt-content');
+        if (copyBtn && promptContent) {
+            copyBtn.onclick = function(e) {
+                e.stopPropagation();
+                promptContent.select();
+                promptContent.setSelectionRange(0, 99999); // 兼容移动端
+                try {
+                    document.execCommand('copy');
+                    showCopyTip('智能体提示词已复制！');
+                } catch (err) {
+                    showCopyTip('复制失败，请手动复制');
+                }
+                window.getSelection().removeAllRanges();
+            };
+        }
+    });
     </script>
 </body>
 </html> 
