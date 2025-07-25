@@ -45,8 +45,8 @@ function renderChapters() {
                     <span class="favorite-btn" onclick="toggleFavoriteChapter(event, '${chapterName}')" style="margin-left:8px; cursor:pointer;">
                         <i class="fas fa-star" style="color:${isFavorite ? '#ffd700' : '#ccc'};"></i>
                     </span>
-                    <span class="rename-btn" onclick="renameChapter(event, '${chapterName}')" style="margin-left:8px; cursor:pointer;">
-                        <i class="fas fa-edit" style="color:#667eea;"></i>
+                    <span class="rename-btn" onclick="renameChapter('${chapterName}', event)" style="margin-left:8px; cursor:pointer;">
+                        <i class="fas fa-pen" style="color:#9c27b0;"></i>
                     </span>
                 </div>
                 <div class="chapter-info">共 ${totalCount} 题 • 已学会完成 ${completedCount} 题</div>
@@ -64,10 +64,6 @@ function renderChapters() {
                 <button class="tag-chapter-btn" onclick="addChapterTag('${chapterName}', event)" title="添加标签">
                     <i class="fas fa-tag"></i>
                     <span>标签</span>
-                </button>
-                <button class="edit-chapter-btn" onclick="editChapterTags('${chapterName}', event)" title="修改标签">
-                    <i class="fas fa-edit"></i>
-                    <span>编辑标签</span>
                 </button>
                 <button class="delete-chapter-btn" onclick="deleteChapter('${chapterName}', event)" title="删除章节">
                     <i class="fas fa-trash"></i>
@@ -539,11 +535,31 @@ function renderQuestion() {
     if (readingMaterial) {
         const readingDiv = document.getElementById('reading-material');
         if (readingDiv) {
-            readingDiv.onmouseup = function(e) {
+            // 启用文字选择
+            readingDiv.style.userSelect = 'text';
+            readingDiv.style.webkitUserSelect = 'text';
+            readingDiv.style.mozUserSelect = 'text';
+            readingDiv.style.msUserSelect = 'text';
+
+            // 自动弹出高亮菜单：监听 selectionchange
+            let lastSelectedText = '';
+            document.onselectionchange = function() {
                 const selection = window.getSelection();
-                const selectedText = selection.toString();
-                if (selectedText.length > 0) {
-                    showHighlightMenu(e, selectedText, readingDiv);
+                if (!selection.rangeCount) return;
+                const range = selection.getRangeAt(0);
+                // 判断选区是否在阅读材料内
+                if (!readingDiv.contains(range.commonAncestorContainer)) return;
+                const selectedText = selection.toString().trim();
+                if (selectedText.length > 0 && selectedText !== lastSelectedText) {
+                    lastSelectedText = selectedText;
+                    // 获取选区位置
+                    let rect = range.getBoundingClientRect();
+                    showHighlightMenu({clientX: rect.left, clientY: rect.top}, selectedText, readingDiv, rect);
+                } else if (selectedText.length === 0) {
+                    // 取消选择时自动关闭菜单
+                    const oldMenu = document.getElementById('highlight-menu');
+                    if (oldMenu) oldMenu.remove();
+                    lastSelectedText = '';
                 }
             };
             
@@ -573,6 +589,16 @@ function renderQuestion() {
             
             // 更新高亮的主题适配
             updateHighlightTheme();
+
+            // 移除原有mouseup/touch事件触发菜单的逻辑
+            readingDiv.onmouseup = null;
+            readingDiv.ontouchstart = null;
+            readingDiv.ontouchend = null;
+
+            // 禁止原生长按菜单（安卓/移动端）
+            readingDiv.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+            });
         }
     }
 }
@@ -1255,16 +1281,7 @@ function exportChapter(chapterName, event) {
                     <i class="fas fa-chevron-right" style="color:var(--text-tertiary, #ccc);font-size:14px;"></i>
                 </div>
                 
-                <div class="share-option" id="share-img" style="display:flex;align-items:center;gap:15px;padding:18px;border:2px solid #e8f0fe;border-radius:12px;cursor:pointer;transition:all 0.3s ease;margin-bottom:12px;">
-                    <div class="share-icon" style="width:50px;height:50px;background:linear-gradient(135deg,#ff6b6b,#ee5a24);border-radius:10px;display:flex;align-items:center;justify-content:center;color:white;font-size:20px;">
-                        <i class="fas fa-image"></i>
-                    </div>
-                    <div class="share-info" style="flex:1;">
-                        <div class="share-title" style="font-weight:bold;color:var(--text-primary, #333);margin-bottom:4px;">图片分享</div>
-                        <div class="share-desc" style="font-size:13px;color:var(--text-secondary, #666);">生成图片格式，适合社交媒体分享</div>
-                    </div>
-                    <i class="fas fa-chevron-right" style="color:var(--text-tertiary, #ccc);font-size:14px;"></i>
-                </div>
+
                 
                 <div class="share-option" id="share-encrypt" style="display:flex;align-items:center;gap:15px;padding:18px;border:2px solid #e8f0fe;border-radius:12px;cursor:pointer;transition:all 0.3s ease;">
                     <div class="share-icon" style="width:50px;height:50px;background:linear-gradient(135deg,#20c997,#00b894);border-radius:10px;display:flex;align-items:center;justify-content:center;color:white;font-size:20px;">
@@ -1302,7 +1319,7 @@ function exportChapter(chapterName, event) {
     
     // TXT分享
     modal.querySelector('#share-txt').onclick = function() {
-        showShareLoading(modal, '正在生成TXT文件...');
+        showShareLoading(modal, '正在生成TXT内容...');
         setTimeout(() => {
             let exportText = '';
             chapterQuestions.forEach((question, index) => {
@@ -1318,15 +1335,22 @@ function exportChapter(chapterName, event) {
                             });
                         }
                         if (Array.isArray(q.answer)) {
-                            exportText += `答案：${q.answer.map(idx => String.fromCharCode(65 + idx)).join('')}\n`;
+                            exportText += `答案：${q.answer.map(idx => String.fromCharCode(65 + idx)).join('')}
+`;
+                        } else if (typeof q.answer === 'number') {
+                            exportText += `答案：${String.fromCharCode(65 + q.answer)}\n`;
                         } else {
                             exportText += `答案：${q.answer}\n`;
                         }
                         if (q.explanation) {
                             exportText += `解析：${q.explanation}\n`;
                         }
-                        if (q.tags) {
-                            exportText += `标签：${q.tags.join(',')}\n`;
+                        if ((!q.tags || !Array.isArray(q.tags) || q.tags.length === 0) && typeof getTags === 'function') {
+                            const chapterTags = getTags(chapterName);
+                            if (chapterTags && chapterTags.length > 0) {
+                                exportText += `标签：${chapterTags.join(',')}
+`;
+                            }
                         }
                     });
                 } else {
@@ -1338,111 +1362,43 @@ function exportChapter(chapterName, event) {
                         });
                     }
                     if (Array.isArray(question.answer)) {
-                        exportText += `答案：${question.answer.map(idx => String.fromCharCode(65 + idx)).join('')}\n`;
+                        exportText += `答案：${question.answer.map(idx => String.fromCharCode(65 + idx)).join('')}
+`;
+                    } else if (typeof question.answer === 'number') {
+                        exportText += `答案：${String.fromCharCode(65 + question.answer)}\n`;
                     } else {
                         exportText += `答案：${question.answer}\n`;
                     }
                     if (question.explanation) {
                         exportText += `解析：${question.explanation}\n`;
                     }
-                    if (question.tags) {
-                        exportText += `标签：${question.tags.join(',')}\n`;
+                    if ((!question.tags || !Array.isArray(question.tags) || question.tags.length === 0) && typeof getTags === 'function') {
+                        const chapterTags = getTags(chapterName);
+                        if (chapterTags && chapterTags.length > 0) {
+                            exportText += `标签：${chapterTags.join(',')}
+`;
+                        }
                     }
                     exportText += '\n';
                 }
             });
-            const blob = new Blob([exportText], { type: 'text/plain;charset=utf-8' });
+            // 生成txt文件并下载
+            const blob = new Blob([exportText], { type: 'text/plain' });
             const url = URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = `${chapterName}_题目.txt`;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(url);
-            showShareSuccess(modal, 'TXT文件已生成并下载！');
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${chapterName}_题目导出_${new Date().toISOString().slice(0,10)}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            setTimeout(() => {
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }, 100);
+            showShareSuccess(modal, 'TXT文件已下载！');
         }, 800);
     };
     
-    // 图片分享
-    modal.querySelector('#share-img').onclick = function() {
-        showShareLoading(modal, '正在生成图片...');
-        setTimeout(() => {
-            let exportText = '';
-            chapterQuestions.forEach((question, index) => {
-                if (question.type === 'reading' && Array.isArray(question.questions)) {
-                    exportText += `章节：${chapterName}\n`;
-                    exportText += `题目：阅读下面文章，完成后面问题。\n`;
-                    exportText += `阅读：\n${question.reading}\n`;
-                    question.questions.forEach((q, idx) => {
-                        exportText += `题目：${q.question}\n`;
-                        if (q.options && q.options.length > 0) {
-                            q.options.forEach((option, optIndex) => {
-                                exportText += `${String.fromCharCode(65 + optIndex)}. ${option}\n`;
-                            });
-                        }
-                        if (Array.isArray(q.answer)) {
-                            exportText += `答案：${q.answer.map(idx => String.fromCharCode(65 + idx)).join('')}\n`;
-                        } else {
-                            exportText += `答案：${q.answer}\n`;
-                        }
-                        if (q.explanation) {
-                            exportText += `解析：${q.explanation}\n`;
-                        }
-                        if (q.tags) {
-                            exportText += `标签：${q.tags.join(',')}\n`;
-                        }
-                    });
-                } else {
-                    exportText += `章节：${chapterName}\n`;
-                    exportText += `题目：${question.question}\n`;
-                    if (question.options && question.options.length > 0) {
-                        question.options.forEach((option, optIndex) => {
-                            exportText += `${String.fromCharCode(65 + optIndex)}. ${option}\n`;
-                        });
-                    }
-                    if (Array.isArray(question.answer)) {
-                        exportText += `答案：${question.answer.map(idx => String.fromCharCode(65 + idx)).join('')}\n`;
-                    } else {
-                        exportText += `答案：${question.answer}\n`;
-                    }
-                    if (question.explanation) {
-                        exportText += `解析：${question.explanation}\n`;
-                    }
-                    if (question.tags) {
-                        exportText += `标签：${question.tags.join(',')}\n`;
-                    }
-                    exportText += '\n';
-                }
-            });
-            // 创建图片
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-            const lines = exportText.split('\n');
-            ctx.font = '16px sans-serif';
-            const lineHeight = 28;
-            const width = 800;
-            canvas.width = width;
-            canvas.height = lineHeight * (lines.length + 2);
-            ctx.fillStyle = '#fff';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = '#222';
-            lines.forEach((line, i) => {
-                ctx.fillText(line, 24, 36 + i * lineHeight);
-            });
-            canvas.toBlob(blob => {
-                const url = URL.createObjectURL(blob);
-                const link = document.createElement('a');
-                link.href = url;
-                link.download = `${chapterName}_题目.png`;
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                URL.revokeObjectURL(url);
-                showShareSuccess(modal, '图片已生成并下载！');
-            });
-        }, 1000);
-    };
+
     
     // 加密.roi文件分享
     modal.querySelector('#share-encrypt').onclick = function() {
@@ -1451,25 +1407,58 @@ function exportChapter(chapterName, event) {
             alert('密码太短！'); 
             return; 
         }
-        showShareLoading(modal, '正在生成加密文件...');
+        showShareLoading(modal, '正在生成加密内容...');
         setTimeout(() => {
-            let exportObj = { chapter: chapterName, questions: chapterQuestions, time: Date.now(), encrypted: true };
+            // 深拷贝并转换答案和标签
+            function convertAnswersAndTags(questions) {
+                return questions.map(q => {
+                    let nq = { ...q };
+                    if (Array.isArray(nq.questions)) {
+                        // 阅读题块
+                        nq.questions = convertAnswersAndTags(nq.questions);
+                    } else if (Array.isArray(nq.answer)) {
+                        nq.answer = nq.answer.map(idx => typeof idx === 'number' ? String.fromCharCode(65 + idx) : idx);
+                    } else if (typeof nq.answer === 'number') {
+                        nq.answer = String.fromCharCode(65 + nq.answer);
+                    }
+                    // 补充标签
+                    if ((!nq.tags || !Array.isArray(nq.tags) || nq.tags.length === 0) && typeof getTags === 'function') {
+                        const chapterTags = getTags(chapterName);
+                        if (chapterTags && chapterTags.length > 0) {
+                            nq.tags = [...chapterTags];
+                        }
+                    }
+                    return nq;
+                });
+            }
+            // 导出章节标签
+            let exportTags = {};
+            if (typeof getTags === 'function') {
+                const chapterTags = getTags(chapterName);
+                if (chapterTags && chapterTags.length > 0) {
+                    exportTags[chapterName] = [...chapterTags];
+                }
+            }
+            let exportObj = { chapter: chapterName, questions: convertAnswersAndTags(chapterQuestions), tags: exportTags, time: Date.now(), encrypted: true };
             let dataStr = JSON.stringify(exportObj);
             // 简单加密（异或）
             let enc = '';
             for (let i = 0; i < dataStr.length; i++) {
                 enc += String.fromCharCode(dataStr.charCodeAt(i) ^ pwd.charCodeAt(i % pwd.length));
             }
-            const blob = new Blob([enc], { type: 'application/octet-stream' });
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = `${chapterName}_题目.roi`;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(url);
-            showShareSuccess(modal, '加密文件已生成并下载！');
+            // 生成.roi文件并下载
+            const roiBlob = new Blob([enc], { type: 'text/plain' });
+            const roiUrl = URL.createObjectURL(roiBlob);
+            const roiA = document.createElement('a');
+            roiA.href = roiUrl;
+            roiA.download = `${chapterName}_加密题目_${new Date().toISOString().slice(0,10)}.roi`;
+            document.body.appendChild(roiA);
+            roiA.click();
+            setTimeout(() => {
+                document.body.removeChild(roiA);
+                URL.revokeObjectURL(roiUrl);
+            }, 100);
+            showShareSuccess(modal, '加密文件已下载！');
         }, 600);
     };
 }
@@ -1650,69 +1639,15 @@ function toggleFavoriteChapter(event, chapterName) {
     }
     localStorage.setItem('favoriteChapters', JSON.stringify(favoriteChapters));
     renderChapters();
-}
-
-// 重命名章节
-function renameChapter(event, chapterName) {
-    event.stopPropagation();
-    
-    const newName = prompt('请输入新的章节名称：', chapterName);
-    if (newName && newName.trim() && newName.trim() !== chapterName) {
-        const trimmedNewName = newName.trim();
-        
-        // 检查新名称是否已存在
-        if (chapters[trimmedNewName]) {
-            alert('章节名称已存在，请使用其他名称！');
-            return;
-        }
-        
-        // 更新章节名称
-        const chapterQuestions = chapters[chapterName];
-        delete chapters[chapterName];
-        chapters[trimmedNewName] = chapterQuestions;
-        
-        // 更新所有题目中的章节名称
-        chapterQuestions.forEach(question => {
-            question.chapter = trimmedNewName;
-        });
-        
-        // 更新练习记录中的章节名称
-        practiceRecords.forEach(record => {
-            if (record.chapter === chapterName) {
-                record.chapter = trimmedNewName;
-            }
-        });
-        
-        // 更新错题记录中的章节名称
-        wrongQuestions.forEach(question => {
-            if (question.chapter === chapterName) {
-                question.chapter = trimmedNewName;
-            }
-        });
-        
-        // 更新收藏章节
-        let favoriteChapters = JSON.parse(localStorage.getItem('favoriteChapters') || '[]');
-        if (favoriteChapters.includes(chapterName)) {
-            favoriteChapters = favoriteChapters.filter(c => c !== chapterName);
-            favoriteChapters.push(trimmedNewName);
-            localStorage.setItem('favoriteChapters', JSON.stringify(favoriteChapters));
-        }
-        
-        // 保存数据
-        saveData();
-        
-        // 重新渲染章节列表
-        renderChapters();
-        updateStats();
-        
-        alert('章节重命名成功！');
-    }
 } 
 
-function showHighlightMenu(e, selectedText, readingDiv) {
+function showHighlightMenu(e, selectedText, readingDiv, rect) {
     // 移除已有菜单
     const oldMenu = document.getElementById('highlight-menu');
     if (oldMenu) oldMenu.remove();
+    
+    // 调试输出
+    console.log('[高亮菜单] showHighlightMenu called', {selectedText, rect, e});
     
     // 检测当前主题
     const isDarkMode = document.body.classList.contains('theme-dark');
@@ -1721,8 +1656,6 @@ function showHighlightMenu(e, selectedText, readingDiv) {
     const menu = document.createElement('div');
     menu.id = 'highlight-menu';
     menu.style.position = 'fixed';
-    menu.style.left = e.clientX + 'px';
-    menu.style.top = e.clientY + 'px';
     menu.style.background = isDarkMode ? '#2d3748' : '#fff';
     menu.style.border = isDarkMode ? '1px solid #4a5568' : '1px solid #667eea';
     menu.style.borderRadius = '6px';
@@ -1731,18 +1664,51 @@ function showHighlightMenu(e, selectedText, readingDiv) {
     menu.style.zIndex = 99999;
     menu.style.fontSize = '14px';
     menu.style.color = isDarkMode ? '#e2e8f0' : '#333';
+    menu.style.display = 'block';
+    menu.style.minWidth = '100px';
+    menu.style.maxWidth = '90vw';
+    menu.style.userSelect = 'none';
     
     // 按钮样式
     const highlightBtnStyle = `margin-right:8px;color:#1a1a1a;background:${isDarkMode ? '#ffeb3b' : '#ffd700'};border:none;padding:4px 10px;border-radius:4px;cursor:pointer;font-weight:500;transition:all 0.2s ease;`;
-    const noteBtnStyle = `color:#fff;background:${isDarkMode ? '#667eea' : '#667eea'};border:none;padding:4px 10px;border-radius:4px;cursor:pointer;font-weight:500;transition:all 0.2s ease;`;
+    const noteBtnStyle = `margin-right:8px;color:#fff;background:${isDarkMode ? '#667eea' : '#667eea'};border:none;padding:4px 10px;border-radius:4px;cursor:pointer;font-weight:500;transition:all 0.2s ease;`;
+    const copyBtnStyle = `color:#fff;background:#20c997;border:none;padding:4px 10px;border-radius:4px;cursor:pointer;font-weight:500;transition:all 0.2s ease;`;
     
-    menu.innerHTML = `<button id='highlight-btn' style='${highlightBtnStyle}'>高亮</button><button id='note-btn' style='${noteBtnStyle}'>笔记</button>`;
+    menu.innerHTML = `<button id='highlight-btn' style='${highlightBtnStyle}'>高亮</button><button id='note-btn' style='${noteBtnStyle}'>笔记</button><button id='copy-btn' style='${copyBtnStyle}'>复制</button>`;
     document.body.appendChild(menu);
     
-    // 添加按钮悬停效果
-    const highlightBtn = document.getElementById('highlight-btn');
-    const noteBtn = document.getElementById('note-btn');
+    // 菜单定位逻辑
+    setTimeout(() => {
+        let left = 0, top = 0;
+        const menuWidth = menu.offsetWidth || 120;
+        const menuHeight = menu.offsetHeight || 40;
+        const screenWidth = window.innerWidth;
+        const screenHeight = window.innerHeight;
+        if (rect && rect.width > 0 && rect.height > 0) {
+            left = rect.left;
+            top = rect.top - menuHeight - 10;
+            if (top < 10) top = rect.bottom + 10;
+            if (left + menuWidth > screenWidth - 10) left = screenWidth - menuWidth - 10;
+            if (left < 10) left = 10;
+        } else {
+            // rect 无效时用事件坐标
+            left = (e && (e.clientX || (e.touches && e.touches[0]?.clientX))) || screenWidth/2 - menuWidth/2;
+            top = (e && (e.clientY || (e.touches && e.touches[0]?.clientY))) || screenHeight/2 - menuHeight/2;
+            top = top - menuHeight - 10;
+            if (top < 10) top = ((e && (e.clientY || (e.touches && e.touches[0]?.clientY))) || screenHeight/2) + 10;
+            if (left + menuWidth > screenWidth - 10) left = screenWidth - menuWidth - 10;
+            if (left < 10) left = 10;
+        }
+        menu.style.left = left + 'px';
+        menu.style.top = top + 'px';
+        menu.style.opacity = '1';
+        menu.style.pointerEvents = 'auto';
+    }, 0);
     
+    // 按钮事件和样式
+    const highlightBtn = menu.querySelector('#highlight-btn');
+    const noteBtn = menu.querySelector('#note-btn');
+    const copyBtn = menu.querySelector('#copy-btn');
     highlightBtn.onmouseenter = function() {
         this.style.background = isDarkMode ? '#fff59d' : '#ffeb3b';
         this.style.transform = 'scale(1.05)';
@@ -1751,7 +1717,6 @@ function showHighlightMenu(e, selectedText, readingDiv) {
         this.style.background = isDarkMode ? '#ffeb3b' : '#ffd700';
         this.style.transform = 'scale(1)';
     };
-    
     noteBtn.onmouseenter = function() {
         this.style.background = isDarkMode ? '#7c8db8' : '#5a6fd8';
         this.style.transform = 'scale(1.05)';
@@ -1760,10 +1725,17 @@ function showHighlightMenu(e, selectedText, readingDiv) {
         this.style.background = isDarkMode ? '#667eea' : '#667eea';
         this.style.transform = 'scale(1)';
     };
-    
+    copyBtn.onmouseenter = function() {
+        this.style.background = '#38e1ad';
+        this.style.transform = 'scale(1.05)';
+    };
+    copyBtn.onmouseleave = function() {
+        this.style.background = '#20c997';
+        this.style.transform = 'scale(1)';
+    };
     // 高亮
     highlightBtn.onclick = function() {
-        highlightSelectedText(readingDiv);
+        highlightSelectedText(readingDiv, selectedText);
         menu.remove();
         window.getSelection().removeAllRanges();
     };
@@ -1771,23 +1743,57 @@ function showHighlightMenu(e, selectedText, readingDiv) {
     noteBtn.onclick = function() {
         const note = prompt('请输入笔记内容：');
         if (note) {
-            highlightSelectedText(readingDiv, note);
+            highlightSelectedText(readingDiv, selectedText, note);
         }
         menu.remove();
         window.getSelection().removeAllRanges();
     };
+    // 复制
+    copyBtn.onclick = function() {
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(selectedText).then(function() {
+                showCopyTip('已复制');
+            }, function() {
+                showCopyTip('复制失败，请手动复制');
+            });
+        } else {
+            // 兼容旧浏览器
+            const input = document.createElement('input');
+            input.value = selectedText;
+            document.body.appendChild(input);
+            input.select();
+            try {
+                document.execCommand('copy');
+                showCopyTip('已复制');
+            } catch (err) {
+                showCopyTip('复制失败，请手动复制');
+            }
+            document.body.removeChild(input);
+        }
+        menu.remove();
+        window.getSelection().removeAllRanges();
+    };
+    // 菜单显示后 300ms 内不响应全局关闭事件
+    let canClose = false;
+    setTimeout(() => { canClose = true; }, 300);
     // 点击其他地方关闭菜单
     setTimeout(() => {
         document.addEventListener('mousedown', function hideMenu(ev) {
-            if (!menu.contains(ev.target)) {
+            if (canClose && !menu.contains(ev.target)) {
                 menu.remove();
                 document.removeEventListener('mousedown', hideMenu);
             }
         });
-    }, 10);
+        document.addEventListener('touchstart', function hideMenu(ev) {
+            if (canClose && !menu.contains(ev.target)) {
+                menu.remove();
+                document.removeEventListener('touchstart', hideMenu);
+            }
+        });
+    }, 200);
 }
 
-function highlightSelectedText(container, note) {
+function highlightSelectedText(container, selectedText, note) {
     const selection = window.getSelection();
     if (!selection.rangeCount) return;
     const range = selection.getRangeAt(0);
@@ -1841,7 +1847,9 @@ function highlightSelectedText(container, note) {
         };
     }
     
-    span.textContent = selection.toString();
+    // 使用传入的文本或当前选择的文本
+    const textToHighlight = selectedText || selection.toString();
+    span.textContent = textToHighlight;
     range.deleteContents();
     range.insertNode(span);
     
@@ -2090,4 +2098,251 @@ document.addEventListener('DOMContentLoaded', function() {
         attributeOldValue: true,
         attributeFilter: ['class']
     });
+});
+
+// 分享TXT内容的函数
+function shareTxtContent(text, chapterName) {
+    const shareData = {
+        title: `${chapterName} - 题目分享`,
+        text: text,
+        url: window.location.href
+    };
+    
+    // 优先使用Web Share API
+    if (navigator.share) {
+        navigator.share(shareData).then(() => {
+            console.log('分享成功');
+        }).catch((error) => {
+            console.log('分享失败:', error);
+            // 如果Web Share API失败，尝试其他方式
+            fallbackShareTxt(text, chapterName);
+        });
+    } else {
+        // 降级处理
+        fallbackShareTxt(text, chapterName);
+    }
+}
+
+// 降级分享方式
+function fallbackShareTxt(text, chapterName) {
+    // 在移动端，尝试使用uni-app的分享API
+    if (window.plus && plus.share) {
+        plus.share.sendWithSystem({
+            type: 'text',
+            content: text,
+            title: `${chapterName} - 题目分享`,
+            // 排除图片分享方式
+            exclude: ['image', 'video', 'audio']
+        }, function(result) {
+            console.log('分享结果:', result);
+        }, function(error) {
+            console.log('分享失败:', error);
+            showCopyTip('分享功能不可用，题目内容已复制到剪贴板。');
+        });
+    } else {
+        // 最后的降级：显示分享提示
+        showCopyTip('分享功能不可用，题目内容已复制到剪贴板。\n\n您可以手动粘贴分享。');
+    }
+}
+
+// 降级复制文本方式
+function fallbackCopyText(text) {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.style.position = 'fixed';
+    textarea.style.opacity = '0';
+    document.body.appendChild(textarea);
+    textarea.select();
+    try {
+        document.execCommand('copy');
+    } catch (err) {
+        console.error('复制失败:', err);
+    }
+    document.body.removeChild(textarea);
+}
+
+// 显示复制提示
+function showCopyTip(msg) {
+    var tip = document.createElement('div');
+    tip.innerHTML = msg.replace(/\n/g, '<br>'); // 支持换行
+    tip.style.position = 'fixed';
+    tip.style.top = '50%';
+    tip.style.left = '50%';
+    tip.style.transform = 'translate(-50%, -50%)';
+    tip.style.background = '#667eea';
+    tip.style.color = '#fff';
+    tip.style.padding = '16px 24px';
+    tip.style.borderRadius = '12px';
+    tip.style.fontSize = '16px';
+    tip.style.zIndex = 99999;
+    tip.style.boxShadow = '0 4px 16px rgba(102,126,234,0.18)';
+    tip.style.maxWidth = '80vw';
+    tip.style.textAlign = 'center';
+    tip.style.wordBreak = 'break-all';
+    tip.style.pointerEvents = 'none';
+    tip.style.lineHeight = '1.4';
+    document.body.appendChild(tip);
+    setTimeout(function() {
+        if (tip.parentNode) document.body.removeChild(tip);
+    }, 2000);
+}
+
+// 分享ROI内容的函数
+function shareRoiContent(encryptedContent, chapterName, password) {
+    const shareData = {
+        title: `${chapterName} - 加密题目分享`,
+        text: `加密题目内容（密码：${password}）：\n\n${encryptedContent}`,
+        url: window.location.href
+    };
+    
+    // 优先使用Web Share API
+    if (navigator.share) {
+        navigator.share(shareData).then(() => {
+            console.log('分享成功');
+        }).catch((error) => {
+            console.log('分享失败:', error);
+            // 如果Web Share API失败，尝试其他方式
+            fallbackShareRoi(encryptedContent, chapterName, password);
+        });
+    } else {
+        // 降级处理
+        fallbackShareRoi(encryptedContent, chapterName, password);
+    }
+}
+
+// 降级分享ROI方式
+function fallbackShareRoi(encryptedContent, chapterName, password) {
+    // 在移动端，尝试使用uni-app的分享API
+    if (window.plus && plus.share) {
+        plus.share.sendWithSystem({
+            type: 'text',
+            content: `加密题目内容（密码：${password}）：\n\n${encryptedContent}`,
+            title: `${chapterName} - 加密题目分享`,
+            // 排除图片分享方式
+            exclude: ['image', 'video', 'audio']
+        }, function(result) {
+            console.log('分享结果:', result);
+        }, function(error) {
+            console.log('分享失败:', error);
+            showCopyTip('分享功能不可用，加密内容已复制到剪贴板。');
+        });
+    } else {
+        // 最后的降级：显示分享提示
+        showCopyTip('分享功能不可用，加密内容已复制到剪贴板。\n\n您可以手动粘贴分享。');
+    }
+}
+
+// 重命名章节
+function renameChapter(oldChapterName, event) {
+    event.stopPropagation(); // 阻止事件冒泡
+    
+    const newChapterName = prompt(`请输入新的章节名称：`, oldChapterName);
+    
+    if (newChapterName && newChapterName.trim() && newChapterName.trim() !== oldChapterName) {
+        const trimmedNewName = newChapterName.trim();
+        
+        // 检查新名称是否已存在
+        if (chapters[trimmedNewName]) {
+            alert('章节名称已存在，请使用其他名称！');
+            return;
+        }
+        
+        // 检查名称长度
+        if (trimmedNewName.length > 50) {
+            alert('章节名称不能超过50个字符！');
+            return;
+        }
+        
+        // 检查名称是否包含特殊字符
+        if (/[<>:"/\\|?*]/.test(trimmedNewName)) {
+            alert('章节名称不能包含特殊字符：< > : " / \\ | ? *');
+            return;
+        }
+        
+        // 重命名章节
+        chapters[trimmedNewName] = chapters[oldChapterName];
+        delete chapters[oldChapterName];
+        
+        // 更新练习记录中的章节名称
+        practiceRecords.forEach(record => {
+            if (record.chapter === oldChapterName) {
+                record.chapter = trimmedNewName;
+            }
+        });
+        
+        // 更新错题记录中的章节名称
+        wrongQuestions.forEach(question => {
+            if (question.chapter === oldChapterName) {
+                question.chapter = trimmedNewName;
+            }
+        });
+        
+        // 更新标签
+        if (tags[oldChapterName]) {
+            tags[trimmedNewName] = tags[oldChapterName];
+            delete tags[oldChapterName];
+        }
+        
+        // 更新收藏章节
+        let favoriteChapters = JSON.parse(localStorage.getItem('favoriteChapters') || '[]');
+        const favoriteIndex = favoriteChapters.indexOf(oldChapterName);
+        if (favoriteIndex !== -1) {
+            favoriteChapters[favoriteIndex] = trimmedNewName;
+            localStorage.setItem('favoriteChapters', JSON.stringify(favoriteChapters));
+        }
+        
+        // 保存数据
+        saveData();
+        
+        // 重新渲染章节列表
+        renderChapters();
+        updateStats();
+        
+        // 显示成功提示
+        showCopyTip(`章节重命名成功！\n\n"${oldChapterName}" → "${trimmedNewName}"`);
+    } else if (newChapterName !== null) {
+        // 用户输入了内容但名称相同或为空
+        if (newChapterName.trim() === oldChapterName) {
+            alert('新名称与原名称相同，无需重命名！');
+        } else {
+            alert('请输入有效的章节名称！');
+        }
+    }
+}
+
+// 测试长按文字选择功能
+function testTextSelection() {
+    console.log('测试文字选择功能...');
+    
+    const readingDiv = document.getElementById('reading-material');
+    if (readingDiv) {
+        console.log('找到阅读材料元素');
+        console.log('user-select:', getComputedStyle(readingDiv).userSelect);
+        console.log('-webkit-user-select:', getComputedStyle(readingDiv).webkitUserSelect);
+        
+        // 检查事件监听器
+        const events = readingDiv._events || [];
+        console.log('已绑定的事件:', events);
+        
+        // 模拟长按
+        const touchEvent = new TouchEvent('touchstart', {
+            touches: [{ clientX: 100, clientY: 100 }],
+            bubbles: true
+        });
+        
+        readingDiv.dispatchEvent(touchEvent);
+        console.log('已触发触摸开始事件');
+    } else {
+        console.log('未找到阅读材料元素');
+    }
+}
+
+// 在页面加载完成后自动测试
+document.addEventListener('DOMContentLoaded', function() {
+    // 延迟测试，确保所有功能已加载
+    setTimeout(() => {
+        if (window.location.hash.includes('test')) {
+            testTextSelection();
+        }
+    }, 1000);
 });
