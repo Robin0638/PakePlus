@@ -161,10 +161,21 @@ function bindEvents() {
         importSection.classList.remove('dragover');
         
         const files = e.dataTransfer.files;
-        if (files.length > 0 && files[0].type === 'text/plain') {
-            readTextFile(files[0]);
+        if (files.length > 0) {
+            const file = files[0];
+            if (file.name.endsWith('.roi')) {
+                // 加密题库文件
+                if (typeof handleFileSelect === 'function') {
+                    // 构造一个模拟的event对象
+                    handleFileSelect({ target: { files: [file] } });
+                } else {
+                    alert('当前环境不支持加密题库导入');
+                }
+            } else if (file.type === 'text/plain' || file.name.endsWith('.txt')) {
+                readTextFile(file);
         } else {
-            alert('请拖拽 .txt 格式的文件');
+                alert('请拖拽 .txt 或 .roi 格式的文件');
+            }
         }
     });
 }
@@ -174,16 +185,23 @@ document.addEventListener('DOMContentLoaded', initApp);
 
 // 响应式导航栏显示/隐藏
 window.addEventListener('resize', function() {
+    // 判断当前是否在练习界面
+    const quizPageActive = document.getElementById('quiz-page')?.classList.contains('active');
+    const chapterCompletePageActive = document.getElementById('chapter-complete-page')?.classList.contains('active');
+    var desktopHeader = document.querySelector('.desktop-header');
+    var mobileNav = document.querySelector('.mobile-bottom-nav');
+    if (quizPageActive || chapterCompletePageActive) {
+        // 练习/完成页面，始终隐藏顶部栏
+        if (desktopHeader) desktopHeader.style.display = 'none';
+        if (mobileNav) mobileNav.style.display = 'none';
+        return;
+    }
     if (window.innerWidth > 768) {
         // 电脑端
-        var desktopHeader = document.querySelector('.desktop-header');
-        var mobileNav = document.querySelector('.mobile-bottom-nav');
         if (desktopHeader) desktopHeader.style.display = 'block';
         if (mobileNav) mobileNav.style.display = 'none';
     } else {
         // 移动端
-        var desktopHeader = document.querySelector('.desktop-header');
-        var mobileNav = document.querySelector('.mobile-bottom-nav');
         if (desktopHeader) desktopHeader.style.display = 'none';
         if (mobileNav) mobileNav.style.display = 'block';
     }
