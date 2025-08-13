@@ -1,0 +1,375 @@
+/* 分享功能样式 */
+
+/* 分享按钮容器 */
+.share-button-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border-color, #e5e7eb);
+}
+
+/* 分享按钮 */
+.share-button {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 10px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.share-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.6s ease;
+}
+
+.share-button:hover::before {
+    left: 100%;
+}
+
+.share-button:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+    background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+}
+
+.share-button:active {
+    transform: translateY(-1px) scale(0.98);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+/* 分享按钮图标 */
+.share-button i {
+    width: 14px;
+    height: 14px;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.share-button:hover i {
+    transform: scale(1.15) rotate(5deg);
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+}
+
+/* 分享成功提示 */
+.share-success {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    padding: 16px 20px;
+    border-radius: 16px;
+    font-size: 15px;
+    font-weight: 600;
+    box-shadow: 0 8px 32px rgba(16, 185, 129, 0.3);
+    z-index: 9999;
+    transform: translateX(100%) scale(0.8);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    max-width: 300px;
+    min-width: 280px;
+    pointer-events: none;
+}
+
+.share-success.show {
+    transform: translateX(0) scale(1);
+}
+
+.share-success.hide {
+    transform: translateX(100%) scale(0.8);
+    opacity: 0;
+}
+
+.share-success i {
+    width: 20px;
+    height: 20px;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+/* 分享按钮动画 */
+@keyframes sharePulse {
+    0% {
+        transform: scale(1);
+    }
+    25% {
+        transform: scale(1.08);
+    }
+    50% {
+        transform: scale(0.95);
+    }
+    75% {
+        transform: scale(1.03);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes shareSuccess {
+    0% {
+        transform: translateX(100%) scale(0.8);
+        opacity: 0;
+    }
+    50% {
+        transform: translateX(-10px) scale(1.05);
+        opacity: 1;
+    }
+    100% {
+        transform: translateX(0) scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes shareSuccessMobile {
+    0% {
+        transform: translateY(-100%) scale(0.8);
+        opacity: 0;
+    }
+    50% {
+        transform: translateY(10px) scale(1.05);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes shareHide {
+    0% {
+        transform: translateX(0) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: translateX(100%) scale(0.8);
+        opacity: 0;
+    }
+}
+
+@keyframes shareHideMobile {
+    0% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-100%) scale(0.8);
+        opacity: 0;
+    }
+}
+
+.share-button.animating {
+    animation: sharePulse 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.share-success.show {
+    animation: shareSuccess 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.share-success.hide {
+    animation: shareHide 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* 移动端动画 */
+@media (max-width: 768px) {
+    .share-success.show {
+        animation: shareSuccessMobile 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+    
+    .share-success.hide {
+        animation: shareHideMobile 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+}
+
+/* 深色模式适配 */
+[data-theme="dark"] .share-button-container {
+    border-top-color: var(--border-color-dark, #374151);
+}
+
+[data-theme="dark"] .share-button {
+    background: linear-gradient(135deg, #4c51bf 0%, #553c9a 100%);
+    box-shadow: 0 4px 15px rgba(76, 81, 191, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+[data-theme="dark"] .share-button:hover {
+    background: linear-gradient(135deg, #434190 0%, #4c1d95 100%);
+    box-shadow: 0 8px 25px rgba(76, 81, 191, 0.5);
+}
+
+[data-theme="dark"] .share-success {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    box-shadow: 0 8px 32px rgba(5, 150, 105, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+    .share-button-container {
+        margin-top: 6px;
+        padding-top: 6px;
+    }
+    
+    .share-button {
+        padding: 5px 8px;
+        font-size: 11px;
+        border-radius: 4px;
+        gap: 3px;
+    }
+    
+    .share-button i {
+        width: 12px;
+        height: 12px;
+    }
+    
+    .share-success {
+        top: 10px;
+        right: 10px;
+        left: 10px;
+        transform: translateY(-100%) scale(0.8);
+        max-width: none;
+        min-width: auto;
+        border-radius: 16px;
+        padding: 12px 16px;
+        font-size: 14px;
+        gap: 8px;
+    }
+    
+    .share-success i {
+        width: 16px;
+        height: 16px;
+    }
+    
+    .share-success.show {
+        transform: translateY(0) scale(1);
+    }
+    
+    .share-success.hide {
+        transform: translateY(-100%) scale(0.8);
+        opacity: 0;
+    }
+}
+
+/* 超小屏幕优化 */
+@media (max-width: 480px) {
+    .share-button-container {
+        margin-top: 4px;
+        padding-top: 4px;
+    }
+    
+    .share-button {
+        padding: 4px 6px;
+        font-size: 10px;
+        border-radius: 3px;
+        gap: 2px;
+    }
+    
+    .share-button i {
+        width: 10px;
+        height: 10px;
+    }
+    
+    .share-success {
+        padding: 10px 12px;
+        font-size: 12px;
+        gap: 6px;
+    }
+    
+    .share-success i {
+        width: 14px;
+        height: 14px;
+    }
+}
+
+/* 极小屏幕优化 */
+@media (max-width: 375px) {
+    .share-button-container {
+        margin-top: 3px;
+        padding-top: 3px;
+    }
+    
+    .share-button {
+        padding: 3px 5px;
+        font-size: 9px;
+        border-radius: 3px;
+        gap: 2px;
+    }
+    
+    .share-button i {
+        width: 9px;
+        height: 9px;
+    }
+    
+    .share-success {
+        padding: 8px 10px;
+        font-size: 11px;
+        gap: 5px;
+    }
+    
+    .share-success i {
+        width: 12px;
+        height: 12px;
+    }
+}
+
+/* 分享按钮禁用状态 */
+.share-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.share-button:disabled:hover {
+    transform: none;
+    box-shadow: none;
+    background: linear-gradient(135deg, var(--accent-blue, #3b82f6), var(--accent-purple, #8b5cf6));
+}
+
+/* 分享按钮加载状态 */
+.share-button.loading {
+    position: relative;
+    color: transparent;
+}
+
+.share-button.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 16px;
+    height: 16px;
+    margin: -8px 0 0 -8px;
+    border: 2px solid transparent;
+    border-top: 2px solid white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+} 
