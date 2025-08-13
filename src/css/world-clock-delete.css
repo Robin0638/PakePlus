@@ -1,0 +1,338 @@
+/* 世界时钟删除按钮样式 */
+
+/* 为世界时钟卡片添加相对定位，以便删除按钮可以绝对定位 */
+.timezone-card {
+    position: relative;
+}
+
+/* 删除按钮基础样式 */
+.world-clock-delete-button {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 10px;
+    background: rgba(220, 38, 38, 0.1);
+    color: #dc2626;
+    border: 1px solid rgba(220, 38, 38, 0.2);
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 10;
+    opacity: 0;
+    transform: scale(0.9);
+}
+
+.world-clock-delete-button:hover {
+    background: rgba(220, 38, 38, 0.15);
+    border-color: rgba(220, 38, 38, 0.3);
+    transform: scale(1);
+}
+
+.world-clock-delete-button:active {
+    transform: scale(0.95);
+}
+
+.world-clock-delete-button svg {
+    width: 14px;
+    height: 14px;
+}
+
+/* 卡片悬停时显示删除按钮 */
+.timezone-card:hover .world-clock-delete-button {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* 删除确认模态框 */
+.world-clock-delete-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.world-clock-delete-modal.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.world-clock-delete-content {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 32px;
+    max-width: 420px;
+    width: 90%;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    transform: scale(0.9);
+    transition: all 0.3s ease;
+    border: 1px solid #e5e7eb;
+}
+
+.world-clock-delete-modal.show .world-clock-delete-content {
+    transform: scale(1);
+}
+
+.world-clock-delete-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1f2937;
+    margin: 0 0 12px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.world-clock-delete-title svg {
+    width: 20px;
+    height: 20px;
+    color: #dc2626;
+}
+
+.world-clock-delete-message {
+    font-size: 14px;
+    color: #6b7280;
+    margin: 0 0 24px 0;
+    line-height: 1.5;
+}
+
+.world-clock-delete-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+}
+
+.world-clock-delete-cancel-btn {
+    padding: 8px 16px;
+    background: #f3f4f6;
+    color: #374151;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.world-clock-delete-cancel-btn:hover {
+    background: #e5e7eb;
+    border-color: #9ca3af;
+}
+
+.world-clock-delete-confirm-btn {
+    padding: 8px 16px;
+    background: #dc2626;
+    color: #ffffff;
+    border: 1px solid #dc2626;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.world-clock-delete-confirm-btn:hover {
+    background: #b91c1c;
+    border-color: #b91c1c;
+}
+
+/* 删除反馈提示 */
+.world-clock-delete-feedback {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 12px 16px;
+    background: #16a34a;
+    color: #ffffff;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 1001;
+    transform: translateX(100%);
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.world-clock-delete-feedback.show {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.world-clock-delete-feedback.hide {
+    transform: translateX(100%);
+    opacity: 0;
+}
+
+/* 深色模式样式 */
+[data-theme="dark"] .world-clock-delete-button {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    border-color: rgba(239, 68, 68, 0.2);
+}
+
+[data-theme="dark"] .world-clock-delete-button:hover {
+    background: rgba(239, 68, 68, 0.15);
+    border-color: rgba(239, 68, 68, 0.3);
+}
+
+[data-theme="dark"] .world-clock-delete-content {
+    background: #1e293b;
+    border-color: #334155;
+}
+
+[data-theme="dark"] .world-clock-delete-title {
+    color: #f8fafc;
+}
+
+[data-theme="dark"] .world-clock-delete-message {
+    color: #cbd5e1;
+}
+
+[data-theme="dark"] .world-clock-delete-cancel-btn {
+    background: #334155;
+    color: #e2e8f0;
+    border-color: #475569;
+}
+
+[data-theme="dark"] .world-clock-delete-cancel-btn:hover {
+    background: #475569;
+    border-color: #64748b;
+}
+
+[data-theme="dark"] .world-clock-delete-confirm-btn {
+    background: #ef4444;
+    border-color: #ef4444;
+}
+
+[data-theme="dark"] .world-clock-delete-confirm-btn:hover {
+    background: #dc2626;
+    border-color: #dc2626;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .world-clock-delete-button {
+        top: 6px;
+        right: 6px;
+        padding: 4px 8px;
+        font-size: 11px;
+        gap: 3px;
+    }
+    
+    .world-clock-delete-button svg {
+        width: 12px;
+        height: 12px;
+    }
+    
+    .world-clock-delete-content {
+        padding: 24px;
+        max-width: 90%;
+    }
+    
+    .world-clock-delete-title {
+        font-size: 16px;
+    }
+    
+    .world-clock-delete-message {
+        font-size: 13px;
+    }
+    
+    .world-clock-delete-actions {
+        gap: 8px;
+    }
+    
+    .world-clock-delete-cancel-btn,
+    .world-clock-delete-confirm-btn {
+        padding: 6px 12px;
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 480px) {
+    .world-clock-delete-button {
+        top: 4px;
+        right: 4px;
+        padding: 3px 6px;
+        font-size: 10px;
+        gap: 2px;
+    }
+    
+    .world-clock-delete-button svg {
+        width: 10px;
+        height: 10px;
+    }
+    
+    .world-clock-delete-content {
+        padding: 20px;
+        max-width: 95%;
+    }
+    
+    .world-clock-delete-title {
+        font-size: 15px;
+    }
+    
+    .world-clock-delete-message {
+        font-size: 12px;
+    }
+    
+    .world-clock-delete-actions {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .world-clock-delete-cancel-btn,
+    .world-clock-delete-confirm-btn {
+        width: 100%;
+        padding: 8px 12px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 375px) {
+    .world-clock-delete-button {
+        top: 3px;
+        right: 3px;
+        padding: 2px 5px;
+        font-size: 9px;
+        gap: 2px;
+    }
+    
+    .world-clock-delete-button svg {
+        width: 9px;
+        height: 9px;
+    }
+    
+    .world-clock-delete-content {
+        padding: 16px;
+        max-width: 98%;
+    }
+    
+    .world-clock-delete-title {
+        font-size: 14px;
+    }
+    
+    .world-clock-delete-message {
+        font-size: 11px;
+    }
+} 
+
+
+
+
+
+
+
