@@ -1,0 +1,432 @@
+/* 闹钟收藏按钮样式 */
+
+/* 收藏按钮基础样式 */
+.favorite-button {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 10px;
+    background: rgba(59, 130, 246, 0.1);
+    color: #3b82f6;
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 10;
+    opacity: 1;
+    transform: scale(1);
+}
+
+.favorite-button:hover {
+    background: rgba(59, 130, 246, 0.15);
+    border-color: rgba(59, 130, 246, 0.3);
+    transform: scale(1);
+}
+
+.favorite-button:active {
+    transform: scale(0.95);
+}
+
+.favorite-button svg {
+    width: 14px;
+    height: 14px;
+    transition: all 0.2s ease;
+}
+
+/* 收藏状态样式 */
+.favorite-button.favorited {
+    background: rgba(59, 130, 246, 0.2);
+    color: #3b82f6;
+    border-color: rgba(59, 130, 246, 0.4);
+}
+
+.favorite-button.favorited svg {
+    fill: #3b82f6;
+    animation: favoritePulse 0.3s ease;
+}
+
+/* 收藏按钮悬停效果 */
+.card[data-alarm-id]:hover .favorite-button {
+    transform: scale(1.05);
+}
+
+/* 收藏的卡片样式 */
+.card[data-alarm-id].favorited {
+    border: 3px solid #3b82f6 !important;
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3), 0 0 0 2px rgba(59, 130, 246, 0.2);
+    transform: translateY(-2px);
+    transition: all 0.3s ease;
+    background: rgba(59, 130, 246, 0.08);
+    position: relative;
+    z-index: 2;
+}
+
+.card[data-alarm-id].favorited::after {
+    content: '⭐';
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    font-size: 20px;
+    background: #3b82f6;
+    color: white;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
+    animation: favoriteStarPulse 2s ease-in-out infinite;
+}
+
+.card[data-alarm-id].favorited:hover {
+    box-shadow: 0 12px 35px rgba(59, 130, 246, 0.4), 0 0 0 3px rgba(59, 130, 246, 0.3);
+    transform: translateY(-3px);
+    background: rgba(59, 130, 246, 0.12);
+}
+
+.card[data-alarm-id].favorited:hover::after {
+    animation: favoriteStarPulse 1s ease-in-out infinite;
+    transform: scale(1.1);
+}
+
+/* 收藏按钮脉冲动画 */
+@keyframes favoritePulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* 收藏按钮发光效果 */
+@keyframes favoriteGlow {
+    0% {
+        box-shadow: 0 0 5px rgba(59, 130, 246, 0.3);
+    }
+    50% {
+        box-shadow: 0 0 15px rgba(59, 130, 246, 0.6);
+    }
+    100% {
+        box-shadow: 0 0 5px rgba(59, 130, 246, 0.3);
+    }
+}
+
+/* 收藏卡片星星脉冲动画 */
+@keyframes favoriteStarPulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
+    }
+    50% {
+        transform: scale(1.1);
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.6);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
+    }
+}
+
+/* 深色模式收藏卡片星星脉冲动画 */
+@keyframes favoriteStarPulseDark {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 2px 8px rgba(96, 165, 250, 0.5);
+    }
+    50% {
+        transform: scale(1.1);
+        box-shadow: 0 4px 12px rgba(96, 165, 250, 0.7);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 2px 8px rgba(96, 165, 250, 0.5);
+    }
+}
+
+.favorite-button.favorited {
+    animation: favoriteGlow 2s ease-in-out infinite;
+}
+
+/* 收藏反馈提示 */
+.favorite-feedback {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 12px 16px;
+    background: #16a34a;
+    color: #ffffff;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 1001;
+    transform: translateX(100%);
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.favorite-feedback.show {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.favorite-feedback.hide {
+    transform: translateX(100%);
+    opacity: 0;
+}
+
+.favorite-feedback.unfavorited {
+    background: #dc2626;
+}
+
+/* 收藏统计样式 */
+.favorite-stats {
+    display: flex;
+    align-items: center;
+    margin-left: 12px;
+    padding: 4px 8px;
+    background: rgba(59, 130, 246, 0.1);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    border-radius: 6px;
+    font-size: 12px;
+    color: #3b82f6;
+}
+
+.favorite-stats .favorite-count {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-weight: 500;
+}
+
+.favorite-stats .favorite-count svg {
+    width: 14px;
+    height: 14px;
+    fill: #3b82f6;
+}
+
+.favorite-stats .favorite-tip {
+    color: var(--text-secondary, #6b7280);
+    font-size: 11px;
+    margin-left: 8px;
+}
+
+/* 深色模式样式 */
+[data-theme="dark"] .favorite-button {
+    background: rgba(96, 165, 250, 0.1);
+    color: #60a5fa;
+    border-color: rgba(96, 165, 250, 0.2);
+}
+
+[data-theme="dark"] .favorite-button:hover {
+    background: rgba(96, 165, 250, 0.15);
+    border-color: rgba(96, 165, 250, 0.3);
+}
+
+[data-theme="dark"] .favorite-button.favorited {
+    background: rgba(96, 165, 250, 0.2);
+    color: #60a5fa;
+    border-color: rgba(96, 165, 250, 0.4);
+}
+
+[data-theme="dark"] .favorite-button.favorited svg {
+    fill: #60a5fa;
+}
+
+[data-theme="dark"] .card[data-alarm-id].favorited {
+    border: 3px solid #60a5fa !important;
+    box-shadow: 0 8px 25px rgba(96, 165, 250, 0.4), 0 0 0 2px rgba(96, 165, 250, 0.25);
+    transform: translateY(-2px);
+    transition: all 0.3s ease;
+    background: rgba(96, 165, 250, 0.12);
+    position: relative;
+    z-index: 2;
+}
+
+[data-theme="dark"] .card[data-alarm-id].favorited::after {
+    content: '⭐';
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    font-size: 20px;
+    background: #60a5fa;
+    color: #1e293b;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(96, 165, 250, 0.5);
+    animation: favoriteStarPulseDark 2s ease-in-out infinite;
+}
+
+[data-theme="dark"] .card[data-alarm-id].favorited:hover {
+    box-shadow: 0 12px 35px rgba(96, 165, 250, 0.5), 0 0 0 3px rgba(96, 165, 250, 0.4);
+    transform: translateY(-3px);
+    background: rgba(96, 165, 250, 0.18);
+}
+
+[data-theme="dark"] .card[data-alarm-id].favorited:hover::after {
+    animation: favoriteStarPulseDark 1s ease-in-out infinite;
+    transform: scale(1.1);
+}
+
+[data-theme="dark"] .favorite-stats {
+    background: rgba(96, 165, 250, 0.1);
+    border-color: rgba(96, 165, 250, 0.2);
+    color: #60a5fa;
+}
+
+[data-theme="dark"] .favorite-stats .favorite-count svg {
+    fill: #60a5fa;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .favorite-button {
+        padding: 4px 8px;
+        font-size: 11px;
+        gap: 3px;
+    }
+    
+    .favorite-button svg {
+        width: 12px;
+        height: 12px;
+    }
+    
+    .favorite-feedback {
+        top: 16px;
+        right: 16px;
+        padding: 10px 14px;
+        font-size: 13px;
+    }
+    
+    .favorite-stats {
+        margin-left: 8px;
+        padding: 3px 6px;
+        font-size: 11px;
+    }
+    
+    .favorite-stats .favorite-count svg {
+        width: 12px;
+        height: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .favorite-button {
+        padding: 3px 6px;
+        font-size: 10px;
+        gap: 2px;
+    }
+    
+    .favorite-button svg {
+        width: 10px;
+        height: 10px;
+    }
+    
+    .favorite-feedback {
+        top: 12px;
+        right: 12px;
+        padding: 8px 12px;
+        font-size: 12px;
+    }
+    
+    .favorite-stats {
+        margin-left: 6px;
+        padding: 2px 4px;
+        font-size: 10px;
+    }
+    
+    .favorite-stats .favorite-count svg {
+        width: 10px;
+        height: 10px;
+    }
+}
+
+@media (max-width: 375px) {
+    .favorite-button {
+        padding: 2px 5px;
+        font-size: 9px;
+        gap: 2px;
+    }
+    
+    .favorite-button svg {
+        width: 9px;
+        height: 9px;
+    }
+    
+    .favorite-feedback {
+        top: 10px;
+        right: 10px;
+        padding: 6px 10px;
+        font-size: 11px;
+    }
+    
+    .favorite-stats {
+        margin-left: 4px;
+        padding: 1px 3px;
+        font-size: 9px;
+    }
+    
+    .favorite-stats .favorite-count svg {
+        width: 9px;
+        height: 9px;
+    }
+}
+
+/* 收藏过滤器按钮样式 */
+#alarmPanel .filter-btn[data-filter="favorite"] {
+    background: rgba(59, 130, 246, 0.1);
+    color: #3b82f6;
+    border-color: rgba(59, 130, 246, 0.2);
+}
+
+#alarmPanel .filter-btn[data-filter="favorite"] svg {
+    fill: #3b82f6;
+}
+
+[data-theme="dark"] #alarmPanel .filter-btn[data-filter="favorite"] {
+    background: rgba(96, 165, 250, 0.1);
+    color: #60a5fa;
+    border-color: rgba(96, 165, 250, 0.2);
+}
+
+@media (max-width: 768px) {
+    #alarmPanel .filter-btn[data-filter="favorite"] svg {
+        width: 14px;
+        height: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    #alarmPanel .filter-btn[data-filter="favorite"] {
+        padding: 6px 10px;
+        font-size: 11px;
+    }
+    
+    #alarmPanel .filter-btn[data-filter="favorite"] svg {
+        width: 12px;
+        height: 12px;
+    }
+}
+
+@media (max-width: 375px) {
+    #alarmPanel .filter-btn[data-filter="favorite"] {
+        padding: 4px 8px;
+        font-size: 10px;
+    }
+    
+    #alarmPanel .filter-btn[data-filter="favorite"] svg {
+        width: 10px;
+        height: 10px;
+    }
+} 
