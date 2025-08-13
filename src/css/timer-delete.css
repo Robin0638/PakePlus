@@ -1,0 +1,243 @@
+/* 计时器删除按钮样式 */
+.timer-delete-button {
+    background: #ef4444 !important;
+    color: white !important;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+}
+
+.timer-delete-button:hover {
+    background: #dc2626 !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+}
+
+.timer-delete-button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+}
+
+.timer-delete-button i {
+    width: 14px;
+    height: 14px;
+}
+
+/* 删除确认模态框样式 */
+.timer-delete-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.timer-delete-modal.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.timer-delete-modal-content {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+}
+
+.timer-delete-modal.show .timer-delete-modal-content {
+    transform: scale(1);
+}
+
+.timer-delete-modal-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #1f2937;
+}
+
+.timer-delete-modal-message {
+    font-size: 14px;
+    color: #6b7280;
+    margin-bottom: 24px;
+    line-height: 1.5;
+}
+
+.timer-delete-modal-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.timer-delete-modal-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 80px;
+}
+
+.timer-delete-modal-cancel {
+    background: #f3f4f6;
+    color: #374151;
+}
+
+.timer-delete-modal-cancel:hover {
+    background: #e5e7eb;
+}
+
+.timer-delete-modal-confirm {
+    background: #ef4444;
+    color: white;
+}
+
+.timer-delete-modal-confirm:hover {
+    background: #dc2626;
+}
+
+/* 删除成功反馈样式 */
+.timer-delete-feedback {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #10b981;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    z-index: 1001;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.timer-delete-feedback.show {
+    transform: translateX(0);
+}
+
+.timer-delete-feedback.hide {
+    transform: translateX(100%);
+}
+
+.timer-delete-feedback i {
+    width: 16px;
+    height: 16px;
+}
+
+/* 深色模式样式 */
+[data-theme="dark"] .timer-delete-button {
+    background: #dc2626;
+    box-shadow: 0 2px 8px rgba(220, 38, 38, 0.4);
+}
+
+[data-theme="dark"] .timer-delete-button:hover {
+    background: #b91c1c;
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.5);
+}
+
+[data-theme="dark"] .timer-delete-modal-content {
+    background: #1f2937;
+    color: #f9fafb;
+}
+
+[data-theme="dark"] .timer-delete-modal-title {
+    color: #f9fafb;
+}
+
+[data-theme="dark"] .timer-delete-modal-message {
+    color: #d1d5db;
+}
+
+[data-theme="dark"] .timer-delete-modal-cancel {
+    background: #374151;
+    color: #f9fafb;
+}
+
+[data-theme="dark"] .timer-delete-modal-cancel:hover {
+    background: #4b5563;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .timer-delete-button {
+        bottom: 12px;
+        right: 12px;
+        padding: 6px 10px;
+        font-size: 11px;
+    }
+    
+    .timer-delete-button i {
+        width: 12px;
+        height: 12px;
+    }
+    
+    .timer-delete-modal-content {
+        padding: 20px;
+        margin: 20px;
+    }
+    
+    .timer-delete-modal-title {
+        font-size: 16px;
+    }
+    
+    .timer-delete-modal-message {
+        font-size: 13px;
+    }
+    
+    .timer-delete-modal-buttons {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .timer-delete-modal-btn {
+        width: 100%;
+        padding: 12px 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .timer-delete-button {
+        bottom: 10px;
+        right: 10px;
+        padding: 5px 8px;
+        font-size: 10px;
+    }
+    
+    .timer-delete-button i {
+        width: 10px;
+        height: 10px;
+    }
+    
+    .timer-delete-feedback {
+        top: 15px;
+        right: 15px;
+        padding: 10px 16px;
+        font-size: 13px;
+    }
+} 
