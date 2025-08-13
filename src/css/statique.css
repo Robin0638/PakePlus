@@ -1,0 +1,755 @@
+/* 无动画模式下修复模式按钮过渡 */
+.no-animation .mode-btn {
+    transition: none !important;
+}
+
+.mode-btn.active {
+    background: #1976d2;
+    color: white;
+}
+
+.mode-btn:hover {
+    background: #1976d2;
+    color: white;
+}
+
+.ai-thinking {
+    color: #ff9800;
+    font-style: italic;
+    animation: pulse 1.5s infinite;
+}
+
+/* 无动画模式下禁用AI思考动画 */
+.no-animation .ai-thinking {
+    animation: none !important;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.current-player {
+    font-size: 1.2em;
+    color: #424242;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.player-indicator {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    border: 2px solid #666;
+    display: inline-block;
+}
+
+.player-indicator.black {
+    background: radial-gradient(circle at 30% 30%, #555, #000);
+}
+
+.player-indicator.white {
+    background: radial-gradient(circle at 30% 30%, #fff, #ddd);
+}
+
+.restart-btn {
+    background: linear-gradient(135deg, #42a5f5, #1976d2);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 10px rgba(25, 118, 210, 0.3);
+}
+
+/* 无动画模式下修复重启按钮过渡 */
+.no-animation .restart-btn {
+    transition: none !important;
+}
+
+.restart-btn:hover {
+    background: linear-gradient(135deg, #1976d2, #1565c0);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(25, 118, 210, 0.4);
+}
+
+.game-container {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    margin: 0 auto;
+    max-width: 800px;
+    width: 90%;
+}
+
+.board {
+    display: grid;
+    grid-template-columns: repeat(15, 1fr);
+    grid-template-rows: repeat(15, 1fr);
+    gap: 1px;
+    background-color: #757575;
+    border: 2px solid #757575;
+    border-radius: 8px;
+    width: min(80vw, 600px);
+    height: min(80vw, 600px);
+    margin: 0 auto;
+    max-width: 100%;
+}
+
+/* 无动画模式下修复单元格过渡 */
+.no-animation .cell {
+    transition: none !important;
+}
+
+.cell:hover:not(.occupied) {
+    background-color: #e8f4fd;
+}
+
+.cell.occupied {
+    cursor: not-allowed;
+}
+
+.piece {
+    width: 80%;
+    height: 80%;
+    border-radius: 50%;
+    border: 2px solid rgba(0, 0, 0, 0.2);
+    animation: dropIn 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* 无动画模式下修复棋子显示 */
+.no-animation .piece {
+    animation: none !important;
+}
+
+.piece.black {
+    background: radial-gradient(circle at 30% 30%, #555, #000);
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.piece.white {
+    background: radial-gradient(circle at 30% 30%, #fff, #ddd);
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes dropIn {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+    70% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+    margin: 5vh auto;
+    padding: 40px;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+/* 无动画模式下修复模态框按钮过渡 */
+.no-animation .modal-btn {
+    transition: none !important;
+}
+
+.modal-btn:hover {
+    background: linear-gradient(135deg, #1976d2, #1565c0);
+    transform: translateY(-2px);
+}
+
+.start-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    width: 100%;
+    position: relative;
+    z-index: 100;
+    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+    padding: 20px;
+    box-sizing: border-box;
+}
+.menu-container {
+    background: #fff;
+    border-radius: 16px;
+    padding: 48px 36px 36px 36px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+    text-align: center;
+    max-width: 420px;
+    width: 100%;
+    animation: fadeIn 0.8s ease-out;
+    margin: 0 auto;
+}
+
+/* 无动画模式下禁用菜单容器动画 */
+.no-animation .menu-container {
+    animation: none !important;
+}
+.game-logo {
+    font-size: 3.2em;
+    margin-bottom: 18px;
+    color: #1976d2;
+    text-shadow: 2px 2px 8px rgba(25,118,210,0.10);
+    animation: float 3s ease-in-out infinite;
+}
+
+/* 无动画模式下禁用logo动画 */
+.no-animation .game-logo {
+    animation: none !important;
+}
+.game-title {
+    font-size: 2.2em;
+    color: #1976d2;
+    font-weight: bold;
+    margin-bottom: 8px;
+    letter-spacing: 2px;
+}
+.game-subtitle {
+    font-size: 1.1em;
+    color: #666;
+    margin-bottom: 28px;
+}
+.menu-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 28px;
+}
+.menu-btn {
+    padding: 13px 0;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.08em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.22s cubic-bezier(.4,0,.2,1);
+    box-shadow: 0 2px 8px rgba(25,118,210,0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 无动画模式下修复菜单按钮过渡 */
+.no-animation .menu-btn {
+    transition: none !important;
+}
+.btn-new-game {
+    background: #1976d2;
+    color: #fff;
+}
+.btn-new-game:hover {
+    background: #1565c0;
+    transform: translateY(-2px) scale(1.04);
+    box-shadow: 0 4px 16px rgba(25,118,210,0.18);
+}
+.btn-load-game {
+    background: #7f8c8d;
+    color: #fff;
+}
+.btn-load-game:hover {
+    background: #95a5a6;
+    transform: translateY(-2px) scale(1.04);
+    box-shadow: 0 4px 16px rgba(127,140,141,0.18);
+}
+.btn-clear-archive {
+    background: #ecf0f1;
+    color: #e74c3c;
+    border: 1.5px solid #e74c3c;
+}
+.btn-clear-archive:hover {
+    background: #e74c3c;
+    color: #fff;
+    transform: translateY(-2px) scale(1.04);
+    box-shadow: 0 4px 16px rgba(231,76,60,0.18);
+}
+
+.btn-game-records {
+    background: linear-gradient(135deg, #3742fa, #5352ed);
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    font-size: 18px;
+    font-weight: 600;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 8px rgba(55, 66, 250, 0.2);
+    margin-top: 15px;
+}
+
+.btn-game-records:hover {
+    background: linear-gradient(135deg, #5352ed, #3742fa);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(55, 66, 250, 0.3);
+}
+.game-mode-select {
+    background: rgba(25,118,210,0.06);
+    border-radius: 10px;
+    padding: 14px 0 10px 0;
+    margin-bottom: 10px;
+    margin-top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    font-size: 1.08em;
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+}
+
+.archive-group {
+    display: flex;
+    gap: 18px;
+    justify-content: center;
+    margin-top: 18px;
+}
+
+.archive-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 24px;
+    border-radius: 8px;
+    border: 2px solid #1976d2;
+    background: rgba(255,255,255,0.95);
+    color: #1976d2;
+    font-size: 1.08em;
+    font-weight: 500;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(25,118,210,0.08);
+    transition: all 0.22s cubic-bezier(.4,0,.2,1);
+    position: relative;
+}
+
+/* 无动画模式下修复存档按钮过渡 */
+.no-animation .archive-btn {
+    transition: none !important;
+}
+
+.archive-btn:hover {
+    background: #1976d2;
+    color: #fff;
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 4px 16px rgba(25,118,210,0.18);
+}
+
+.archive-icon {
+    font-size: 1.2em;
+}
+
+.archive-tip {
+    margin-top: 16px;
+    color: #1976d2;
+    font-size: 1.08em;
+    min-height: 1.5em;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 0.5s;
+}
+
+.archive-tip.show {
+    opacity: 1;
+    animation: tipFade 2s;
+}
+
+/* 无动画模式下修复存档提示 */
+.no-animation .archive-tip.show {
+    animation: none !important;
+}
+
+@keyframes tipFade {
+    0% { opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+.pause-btn {
+    background: linear-gradient(135deg, #e3f2fd 60%, #bbdefb 100%);
+    color: #1976d2;
+    border: 2.5px solid #1976d2;
+    border-radius: 50%;
+    width: 54px;
+    height: 54px;
+    font-size: 2.1em;
+    font-weight: bold;
+    box-shadow: 0 2px 12px rgba(25,118,210,0.10), 0 0px 0px #fff;
+    cursor: pointer;
+    transition: all 0.22s cubic-bezier(.4,0,.2,1), box-shadow 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    outline: none;
+    z-index: 200;
+    backdrop-filter: blur(2px);
+    position: fixed;
+    top: 20px;
+    left: 20px;
+}
+
+/* 无动画模式下修复暂停按钮 */
+.no-animation .pause-btn {
+    transition: none !important;
+}
+.pause-btn:hover {
+    background: #1976d2;
+    color: #fff;
+    box-shadow: 0 8px 32px 0 #1976d2cc, 0 0 0 4px #e3f2fd;
+    border-color: #1565c0;
+    transform: scale(1.11);
+}
+
+.pause-modal {
+    max-width: 460px;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.1);
+    animation: modalSlideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* 无动画模式下禁用暂停弹窗动画 */
+.no-animation .pause-modal {
+    animation: none !important;
+}
+.pause-modal h2 {
+    color: #1976d2;
+    margin-bottom: 32px;
+    font-size: 1.8em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+.pause-title {
+    color: #1976d2;
+    margin-bottom: 32px;
+    font-size: 1.8em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    font-weight: 700;
+    text-shadow: 0 2px 4px rgba(25, 118, 210, 0.1);
+}
+.pause-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 0 8px;
+}
+.pause-menu-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    padding: 18px 0;
+    border: none;
+    border-radius: 14px;
+    font-size: 1.12em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    position: relative;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+.pause-menu-btn svg {
+    flex-shrink: 0;
+    transition: transform 0.3s ease;
+}
+.pause-menu-btn span {
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    transition: transform 0.3s ease;
+}
+.pause-menu-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    transition: left 0.6s ease;
+}
+.pause-menu-btn:hover::before {
+    left: 100%;
+}
+
+/* 无动画模式下禁用伪元素动画 */
+.no-animation .pause-menu-btn::before {
+    display: none !important;
+}
+.pause-menu-btn:hover svg {
+    transform: scale(1.1);
+}
+.pause-menu-btn:hover span {
+    transform: translateX(2px);
+}
+
+/* 无动画模式下修复悬停效果 */
+.no-animation .pause-menu-btn:hover svg {
+    transform: scale(1.1) !important;
+}
+.no-animation .pause-menu-btn:hover span {
+    transform: translateX(2px) !important;
+}
+.continue-btn {
+    background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
+    color: #fff;
+    box-shadow: 0 6px 20px rgba(25, 118, 210, 0.2);
+}
+.continue-btn:hover {
+    background: linear-gradient(135deg, #1565c0 0%, #0d47a1 100%);
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 12px 30px rgba(25, 118, 210, 0.3);
+}
+.pause-menu .menu-btn {
+    background: linear-gradient(135deg, #7f8c8d 0%, #95a5a6 100%);
+    color: #fff;
+    box-shadow: 0 6px 20px rgba(127, 140, 141, 0.2);
+}
+.pause-menu .menu-btn:hover {
+    background: linear-gradient(135deg, #95a5a6 0%, #bdc3c7 100%);
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 12px 30px rgba(127, 140, 141, 0.3);
+}
+.pause-menu .restart-btn {
+    background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+    color: #e74c3c;
+    border: 2px solid #e74c3c;
+    box-shadow: 0 6px 20px rgba(231, 76, 60, 0.1);
+}
+.pause-menu .restart-btn:hover {
+    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+    color: #fff;
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 12px 30px rgba(231, 76, 60, 0.3);
+    border-color: #e74c3c;
+}
+.pause-menu .settings-btn {
+    background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+    color: #2c3e50;
+    border: 2px solid #bdc3c7;
+    box-shadow: 0 6px 20px rgba(44, 62, 80, 0.1);
+}
+.pause-menu .settings-btn:hover {
+    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+    color: #fff;
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 12px 30px rgba(44, 62, 80, 0.3);
+    border-color: #2c3e50;
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* 暂停菜单背景遮罩美化 */
+#pauseModal {
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(8px);
+}
+
+.load-archive-modal {
+    max-width: 480px;
+    text-align: center;
+}
+.load-archive-modal h2 {
+    color: #1976d2;
+    margin-bottom: 24px;
+    font-size: 1.6em;
+}
+.archive-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 24px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+.archive-item {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 16px;
+    cursor: pointer;
+    transition: all 0.22s cubic-bezier(.4,0,.2,1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* 无动画模式下修复存档项过渡 */
+.no-animation .archive-item {
+    transition: none !important;
+}
+.archive-item:hover {
+    background: #e9ecef;
+    border-color: #1976d2;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(25,118,210,0.1);
+}
+.archive-item.empty {
+    background: #f1f2f6;
+    color: #7f8c8d;
+    cursor: not-allowed;
+}
+.archive-item.empty:hover {
+    background: #f1f2f6;
+    border-color: #e9ecef;
+    transform: none;
+    box-shadow: none;
+}
+.archive-info {
+    text-align: left;
+}
+.archive-title {
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 4px;
+}
+.archive-date {
+    font-size: 0.9em;
+    color: #7f8c8d;
+}
+.archive-score {
+    font-size: 0.9em;
+    color: #27ae60;
+    font-weight: bold;
+}
+.archive-actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+.archive-action-btn {
+    padding: 10px 24px;
+    border: none;
+    border-radius: 6px;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.22s cubic-bezier(.4,0,.2,1);
+}
+
+/* 无动画模式下修复存档操作按钮过渡 */
+.no-animation .archive-action-btn {
+    transition: none !important;
+}
+.cancel-btn {
+    background: #7f8c8d;
+    color: #fff;
+}
+.cancel-btn:hover {
+    background: #95a5a6;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(127,140,141,0.2);
+}
+
+.win-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 8px;
+}
+.win-home-btn {
+    background: #7f8c8d;
+    color: #fff;
+}
+.win-home-btn:hover {
+    background: #95a5a6;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(127,140,141,0.3);
+}
+.win-restart-btn {
+    background: #1976d2;
+    color: #fff;
+}
+.win-restart-btn:hover {
+    background: #1565c0;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(25,118,210,0.3);
+}
+.win-stats-btn {
+    background: #f39c12;
+    color: #fff;
+}
+.win-stats-btn:hover {
+    background: #e67e22;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(243,156,18,0.3);
+}
+
+.archive-mode {
+    font-size: 0.85em;
+    color: #1976d2;
+    font-weight: 500;
+    margin-top: 2px;
+}
+
+.archive-delete-btn {
+    background: none;
+    border: none;
+    color: #e74c3c;
+    font-size: 1.1em;
+    margin-left: 10px;
+    cursor: pointer;
+    transition: color 0.2s;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
