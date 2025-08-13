@@ -1,0 +1,136 @@
+/* 秒表分享按钮样式 */
+
+/* 分享按钮基础样式 */
+.stopwatch-share-button {
+    position: absolute;
+    bottom: 8px;
+    right: 160px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 10px;
+    background: rgba(34, 197, 94, 0.1);
+    color: #22c55e;
+    border: 1px solid rgba(34, 197, 94, 0.2);
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 10;
+    opacity: 0;
+    transform: scale(0.9);
+}
+
+.stopwatch-share-button:hover {
+    background: rgba(34, 197, 94, 0.15);
+    border-color: rgba(34, 197, 94, 0.3);
+    transform: scale(1);
+}
+
+.stopwatch-share-button:active {
+    transform: scale(0.95);
+}
+
+.stopwatch-share-button svg {
+    width: 14px;
+    height: 14px;
+}
+
+/* 卡片悬停时显示分享按钮 */
+.card[data-stopwatch-id]:hover .stopwatch-share-button {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* 分享按钮只在暂停时显示 */
+.stopwatch-share-button.show {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* 分享反馈提示 */
+.stopwatch-share-feedback {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 12px 16px;
+    background: #16a34a;
+    color: #ffffff;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 1001;
+    transform: translateX(100%);
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.stopwatch-share-feedback.show {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.stopwatch-share-feedback.hide {
+    transform: translateX(100%);
+    opacity: 0;
+}
+
+/* 深色模式样式 */
+[data-theme="dark"] .stopwatch-share-button {
+    background: rgba(74, 222, 128, 0.1);
+    color: #4ade80;
+    border-color: rgba(74, 222, 128, 0.2);
+}
+
+[data-theme="dark"] .stopwatch-share-button:hover {
+    background: rgba(74, 222, 128, 0.15);
+    border-color: rgba(74, 222, 128, 0.3);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .stopwatch-share-button {
+        bottom: 6px;
+        right: 140px;
+        padding: 4px 8px;
+        font-size: 11px;
+        gap: 3px;
+    }
+    
+    .stopwatch-share-button svg {
+        width: 12px;
+        height: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .stopwatch-share-button {
+        bottom: 4px;
+        right: 120px;
+        padding: 3px 6px;
+        font-size: 10px;
+        gap: 2px;
+    }
+    
+    .stopwatch-share-button svg {
+        width: 10px;
+        height: 10px;
+    }
+}
+
+@media (max-width: 375px) {
+    .stopwatch-share-button {
+        bottom: 3px;
+        right: 110px;
+        padding: 2px 5px;
+        font-size: 9px;
+        gap: 2px;
+    }
+    
+    .stopwatch-share-button svg {
+        width: 9px;
+        height: 9px;
+    }
+} 
