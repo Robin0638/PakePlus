@@ -1,0 +1,241 @@
+/* 世界时钟收藏按钮样式 */
+
+/* 收藏按钮基础样式 */
+.world-clock-favorite-button {
+    position: absolute;
+    top: 8px;
+    right: 80px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 10px;
+    background: rgba(59, 130, 246, 0.1);
+    color: #3b82f6;
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 10;
+    opacity: 0;
+    transform: scale(0.9);
+}
+
+.world-clock-favorite-button:hover {
+    background: rgba(59, 130, 246, 0.15);
+    border-color: rgba(59, 130, 246, 0.3);
+    transform: scale(1);
+}
+
+.world-clock-favorite-button:active {
+    transform: scale(0.95);
+}
+
+.world-clock-favorite-button svg {
+    width: 14px;
+    height: 14px;
+    transition: all 0.2s ease;
+}
+
+/* 收藏状态样式 */
+.world-clock-favorite-button.favorited {
+    background: rgba(59, 130, 246, 0.2);
+    color: #3b82f6;
+    border-color: rgba(59, 130, 246, 0.4);
+}
+
+.world-clock-favorite-button.favorited svg {
+    fill: #3b82f6;
+    animation: favoritePulse 0.3s ease;
+}
+
+/* 卡片悬停时显示收藏按钮 */
+.timezone-card:hover .world-clock-favorite-button {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* 收藏的卡片样式 */
+.timezone-card.favorited {
+    border: 2px solid #3b82f6 !important;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+    transform: translateY(-2px);
+    transition: all 0.3s ease;
+    background: rgba(59, 130, 246, 0.02);
+}
+
+.timezone-card.favorited:hover {
+    box-shadow: 0 6px 16px rgba(59, 130, 246, 0.2);
+    transform: translateY(-3px);
+}
+
+/* 收藏按钮脉冲动画 */
+@keyframes favoritePulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* 收藏按钮发光效果 */
+@keyframes favoriteGlow {
+    0% {
+        box-shadow: 0 0 5px rgba(59, 130, 246, 0.3);
+    }
+    50% {
+        box-shadow: 0 0 15px rgba(59, 130, 246, 0.6);
+    }
+    100% {
+        box-shadow: 0 0 5px rgba(59, 130, 246, 0.3);
+    }
+}
+
+.world-clock-favorite-button.favorited {
+    animation: favoriteGlow 2s ease-in-out infinite;
+}
+
+/* 收藏反馈提示 */
+.world-clock-favorite-feedback {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 12px 16px;
+    background: #16a34a;
+    color: #ffffff;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 1001;
+    transform: translateX(100%);
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.world-clock-favorite-feedback.show {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.world-clock-favorite-feedback.hide {
+    transform: translateX(100%);
+    opacity: 0;
+}
+
+.world-clock-favorite-feedback.unfavorited {
+    background: #6b7280;
+}
+
+/* 深色模式样式 */
+[data-theme="dark"] .world-clock-favorite-button {
+    background: rgba(96, 165, 250, 0.1);
+    color: #60a5fa;
+    border-color: rgba(96, 165, 250, 0.2);
+}
+
+[data-theme="dark"] .world-clock-favorite-button:hover {
+    background: rgba(96, 165, 250, 0.15);
+    border-color: rgba(96, 165, 250, 0.3);
+}
+
+[data-theme="dark"] .world-clock-favorite-button.favorited {
+    background: rgba(96, 165, 250, 0.2);
+    color: #60a5fa;
+    border-color: rgba(96, 165, 250, 0.4);
+}
+
+[data-theme="dark"] .world-clock-favorite-button.favorited svg {
+    fill: #60a5fa;
+}
+
+[data-theme="dark"] .timezone-card.favorited {
+    border: 2px solid #60a5fa !important;
+    box-shadow: 0 4px 12px rgba(96, 165, 250, 0.15);
+    background: rgba(96, 165, 250, 0.05);
+}
+
+[data-theme="dark"] .timezone-card.favorited:hover {
+    box-shadow: 0 6px 16px rgba(96, 165, 250, 0.2);
+    transform: translateY(-3px);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .world-clock-favorite-button {
+        top: 6px;
+        right: 65px;
+        padding: 4px 8px;
+        font-size: 11px;
+        gap: 3px;
+    }
+    
+    .world-clock-favorite-button svg {
+        width: 12px;
+        height: 12px;
+    }
+    
+    .world-clock-favorite-feedback {
+        top: 16px;
+        right: 16px;
+        padding: 10px 14px;
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 480px) {
+    .world-clock-favorite-button {
+        top: 4px;
+        right: 55px;
+        padding: 3px 6px;
+        font-size: 10px;
+        gap: 2px;
+    }
+    
+    .world-clock-favorite-button svg {
+        width: 10px;
+        height: 10px;
+    }
+    
+    .world-clock-favorite-feedback {
+        top: 12px;
+        right: 12px;
+        padding: 8px 12px;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 375px) {
+    .world-clock-favorite-button {
+        top: 3px;
+        right: 50px;
+        padding: 2px 5px;
+        font-size: 9px;
+        gap: 2px;
+    }
+    
+    .world-clock-favorite-button svg {
+        width: 9px;
+        height: 9px;
+    }
+    
+    .world-clock-favorite-feedback {
+        top: 10px;
+        right: 10px;
+        padding: 6px 10px;
+        font-size: 11px;
+    }
+} 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
