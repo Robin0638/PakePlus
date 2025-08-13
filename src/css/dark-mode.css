@@ -1,0 +1,1343 @@
+/* 深色模式样式文件 */
+
+
+
+
+
+/* CSS变量定义 - 浅色模式 */
+:root {
+    /* 背景色 */
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8fafc;
+    --bg-tertiary: #f1f5f9;
+    --bg-overlay: rgba(255, 255, 255, 0.8);
+    --bg-gradient: linear-gradient(135deg, #eff6ff 0%, #ffffff 100%);
+    
+    /* 文字颜色 */
+    --text-primary: #1f2937;
+    --text-secondary: #374151;
+    --text-tertiary: #6b7280;
+    --text-muted: #9ca3af;
+    
+    /* 边框颜色 */
+    --border-primary: #e5e7eb;
+    --border-secondary: #d1d5db;
+    --border-tertiary: #e2e8f0;
+    
+    /* 卡片和组件背景 */
+    --card-bg: #ffffff;
+    --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    --card-border: #e5e7eb;
+    
+    /* 按钮颜色 */
+    --btn-primary-bg: #2563eb;
+    --btn-primary-hover: #1d4ed8;
+    --btn-primary-text: #ffffff;
+    --btn-secondary-bg: #f3f4f6;
+    --btn-secondary-hover: #e5e7eb;
+    --btn-secondary-text: #374151;
+    
+    /* 特殊颜色 */
+    --accent-blue: #2563eb;
+    --accent-green: #16a34a;
+    --accent-red: #dc2626;
+    --accent-yellow: #ca8a04;
+    
+    /* 滚动条 */
+    --scrollbar-track: #f1f5f9;
+    --scrollbar-thumb: #cbd5e1;
+    --scrollbar-thumb-hover: #94a3b8;
+    
+    /* 菜单栏 */
+    --menu-bg: rgba(255, 255, 255, 0.8);
+    --menu-border: #e5e7eb;
+    --menu-item-text: #6b7280;
+    --menu-item-active-bg: #eff6ff;
+    --menu-item-active-text: #2563eb;
+    --menu-item-hover-bg: rgba(59, 130, 246, 0.1);
+    --menu-item-hover-text: #3b82f6;
+    
+    /* 时间显示 */
+    --time-primary: #2563eb;
+    --time-secondary: #6b7280;
+    --time-separator: #9ca3af;
+    
+    /* 设置面板 */
+    --settings-bg: #ffffff;
+    --settings-border: #e5e7eb;
+    --stats-bg: #f8fafc;
+    --stats-border: #e2e8f0;
+    
+    /* 对话框 */
+    --modal-bg: #ffffff;
+    --modal-overlay: rgba(0, 0, 0, 0.5);
+    --modal-border: #e5e7eb;
+}
+
+/* CSS变量定义 - 深色模式 */
+[data-theme="dark"] {
+    /* 背景色 */
+    --bg-primary: #0f172a;
+    --bg-secondary: #1e293b;
+    --bg-tertiary: #334155;
+    --bg-overlay: rgba(15, 23, 42, 0.8);
+    --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    
+    /* 文字颜色 */
+    --text-primary: #f8fafc;
+    --text-secondary: #e2e8f0;
+    --text-tertiary: #cbd5e1;
+    --text-muted: #94a3b8;
+    
+    /* 边框颜色 */
+    --border-primary: #334155;
+    --border-secondary: #475569;
+    --border-tertiary: #475569;
+    
+    /* 卡片和组件背景 */
+    --card-bg: #1e293b;
+    --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    --card-border: #334155;
+    
+    /* 按钮颜色 */
+    --btn-primary-bg: #3b82f6;
+    --btn-primary-hover: #2563eb;
+    --btn-primary-text: #ffffff;
+    --btn-secondary-bg: #334155;
+    --btn-secondary-hover: #475569;
+    --btn-secondary-text: #e2e8f0;
+    
+    /* 特殊颜色 */
+    --accent-blue: #3b82f6;
+    --accent-green: #22c55e;
+    --accent-red: #ef4444;
+    --accent-yellow: #eab308;
+    
+    /* 滚动条 */
+    --scrollbar-track: #1e293b;
+    --scrollbar-thumb: #475569;
+    --scrollbar-thumb-hover: #64748b;
+    
+    /* 菜单栏 */
+    --menu-bg: rgba(15, 23, 42, 0.8);
+    --menu-border: #334155;
+    --menu-item-text: #94a3b8;
+    --menu-item-active-bg: #1e3a8a;
+    --menu-item-active-text: #3b82f6;
+    --menu-item-hover-bg: rgba(59, 130, 246, 0.2);
+    --menu-item-hover-text: #60a5fa;
+    
+    /* 时间显示 */
+    --time-primary: #3b82f6;
+    --time-secondary: #cbd5e1;
+    --time-separator: #94a3b8;
+    
+    /* 设置面板 */
+    --settings-bg: #1e293b;
+    --settings-border: #334155;
+    --stats-bg: #334155;
+    --stats-border: #475569;
+    
+    /* 对话框 */
+    --modal-bg: #1e293b;
+    --modal-overlay: rgba(0, 0, 0, 0.7);
+    --modal-border: #334155;
+}
+
+/* 应用CSS变量到现有样式 */
+body {
+    background: var(--bg-gradient);
+    color: var(--text-primary);
+}
+
+/* 菜单栏样式 */
+.menu-bar {
+    border-bottom: 1px solid var(--menu-border);
+    background: var(--menu-bg);
+    backdrop-filter: blur(8px);
+}
+
+.menu-bar.mobile {
+    border-top: 1px solid var(--menu-border);
+    border-bottom: none;
+    background: var(--card-bg);
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.menu-item {
+    color: var(--menu-item-text);
+    background: none;
+    border: none;
+}
+
+.menu-item.active {
+    color: var(--menu-item-active-text);
+    background: var(--menu-item-active-bg);
+    border-bottom: 2px solid var(--menu-item-active-text);
+}
+
+.menu-item:hover:not(.active) {
+    color: var(--menu-item-hover-text);
+    background: var(--menu-item-hover-bg);
+}
+
+.menu-item.mobile {
+    flex: 1;
+    flex-direction: column;
+    gap: 3px;
+    padding: 8px 12px;
+    min-height: 50px;
+    justify-content: center;
+    position: relative;
+    color: var(--menu-item-text);
+}
+
+.menu-item.mobile span {
+    font-size: 11px;
+    line-height: 1.2;
+    color: var(--menu-item-text);
+}
+
+.menu-item.mobile i {
+    width: 18px;
+    height: 18px;
+    margin-bottom: 2px;
+    color: var(--menu-item-text);
+}
+
+.menu-item.mobile.active {
+    color: var(--menu-item-active-text);
+    background: var(--menu-item-active-bg);
+    border-bottom: 2px solid var(--menu-item-active-text);
+}
+
+.menu-item.mobile.active span,
+.menu-item.mobile.active i {
+    color: var(--menu-item-active-text);
+}
+
+.menu-item.mobile:hover:not(.active) {
+    color: var(--menu-item-hover-text);
+    background: var(--menu-item-hover-bg);
+}
+
+.menu-item.mobile:hover:not(.active) span,
+.menu-item.mobile:hover:not(.active) i {
+    color: var(--menu-item-hover-text);
+}
+
+/* 时钟样式 */
+.time-display {
+    color: var(--text-primary);
+}
+
+.time-hours, .time-minutes {
+    color: var(--time-primary);
+}
+
+.time-separator {
+    color: var(--time-separator);
+}
+
+.time-seconds {
+    color: var(--time-secondary);
+}
+
+.date-display {
+    color: var(--text-tertiary);
+}
+
+/* 世界时钟样式 */
+.timezone-title {
+    color: var(--text-secondary);
+}
+
+.timezone-card {
+    background: var(--card-bg);
+    box-shadow: var(--card-shadow);
+    border: 1px solid var(--card-border);
+}
+
+.timezone-card .city-name {
+    color: var(--text-primary);
+}
+
+.timezone-card .timezone-name {
+    color: var(--text-tertiary);
+}
+
+.timezone-card .time-display-small {
+    color: var(--time-primary);
+}
+
+.timezone-card .date-display-small {
+    color: var(--text-tertiary);
+}
+
+
+
+/* 世界时钟卡片的动态深色模式 */
+.timezone-card.timezone-dark {
+    background: var(--bg-secondary);
+    border-color: var(--border-secondary);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.timezone-card.timezone-dark .city-name {
+    color: var(--text-secondary);
+}
+
+.timezone-card.timezone-dark .timezone-name {
+    color: var(--text-muted);
+}
+
+.timezone-card.timezone-dark .time-display-small {
+    color: var(--time-secondary);
+}
+
+.timezone-card.timezone-dark .date-display-small {
+    color: var(--text-muted);
+}
+
+
+
+/* 深色主题下的世界时钟卡片动态深色模式 */
+[data-theme="dark"] .timezone-card.timezone-dark {
+    background: var(--bg-tertiary);
+    border-color: var(--border-tertiary);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .timezone-card.timezone-dark .city-name {
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .timezone-card.timezone-dark .timezone-name {
+    color: var(--text-tertiary);
+}
+
+[data-theme="dark"] .timezone-card.timezone-dark .time-display-small {
+    color: var(--time-primary);
+}
+
+[data-theme="dark"] .timezone-card.timezone-dark .date-display-small {
+    color: var(--text-tertiary);
+}
+
+.add-timezone-section {
+    background: var(--bg-overlay);
+    border: 1px solid var(--border-primary);
+}
+
+.timezone-select {
+    border: 1px solid var(--border-secondary);
+    background: var(--card-bg);
+    color: var(--text-primary);
+}
+
+.add-timezone-btn {
+    background: var(--btn-primary-bg);
+    color: var(--btn-primary-text);
+}
+
+.add-timezone-btn:hover {
+    background: var(--btn-primary-hover);
+}
+
+/* 滚动条样式 */
+.clock-container::-webkit-scrollbar-track,
+.panel-content::-webkit-scrollbar-track {
+    background: var(--scrollbar-track);
+}
+
+.clock-container::-webkit-scrollbar-thumb,
+.panel-content::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb);
+}
+
+.clock-container::-webkit-scrollbar-thumb:hover,
+.panel-content::-webkit-scrollbar-thumb:hover {
+    background: var(--scrollbar-thumb-hover);
+}
+
+/* 面板样式 */
+.panel-title {
+    color: var(--text-primary);
+}
+
+.add-button {
+    background: var(--btn-primary-bg);
+    color: var(--btn-primary-text);
+}
+
+.add-button:hover {
+    background: var(--btn-primary-hover);
+}
+
+.about-button {
+    background: var(--btn-secondary-bg);
+    color: var(--btn-secondary-text);
+    border: 1px solid var(--border-secondary);
+}
+
+.about-button:hover {
+    background: var(--btn-secondary-hover);
+    border-color: var(--text-muted);
+}
+
+.empty-state {
+    color: var(--text-tertiary);
+}
+
+.empty-state svg {
+    color: var(--text-muted);
+}
+
+/* 卡片样式 */
+.card {
+    background: var(--card-bg);
+    box-shadow: var(--card-shadow);
+    border: 1px solid var(--card-border);
+}
+
+.card-title {
+    color: var(--text-primary);
+}
+
+
+
+.time-display-large {
+    color: var(--time-primary);
+}
+
+/* 控制按钮样式 */
+.play-button {
+    background: #dcfce7;
+    color: var(--accent-green);
+}
+
+.play-button:hover {
+    background: #bbf7d0;
+}
+
+.pause-button {
+    background: #fee2e2;
+    color: var(--accent-red);
+}
+
+.pause-button:hover {
+    background: #fecaca;
+}
+
+.reset-button {
+    background: var(--btn-secondary-bg);
+    color: var(--text-tertiary);
+}
+
+.reset-button:hover {
+    background: var(--btn-secondary-hover);
+}
+
+.lap-button {
+    background: #dbeafe;
+    color: var(--accent-blue);
+}
+
+.lap-button:hover {
+    background: #bfdbfe;
+}
+
+.disabled-button {
+    background: var(--btn-secondary-bg);
+    color: var(--text-muted);
+}
+
+/* 进度条样式 */
+.progress-bar {
+    background: var(--border-primary);
+}
+
+.progress-fill {
+    background: var(--accent-blue);
+}
+
+/* 时间输入样式 */
+.time-input {
+    border: 1px solid var(--border-secondary);
+    background: var(--card-bg);
+    color: var(--text-primary);
+}
+
+.time-picker {
+    border: 1px solid var(--border-secondary);
+    background: var(--card-bg);
+    color: var(--text-primary);
+}
+
+.sound-select {
+    border: 1px solid var(--border-secondary);
+    background: var(--card-bg);
+    color: var(--text-primary);
+}
+
+.sound-select:focus {
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+.day-button {
+    border: 1px solid var(--border-secondary);
+    background: var(--card-bg);
+    color: var(--text-primary);
+}
+
+.day-button:hover {
+    background: var(--bg-tertiary);
+}
+
+.day-button.active {
+    background: var(--accent-blue);
+    color: white;
+    border-color: var(--accent-blue);
+}
+
+/* 切换开关样式 */
+.toggle-slider {
+    background-color: var(--text-muted);
+}
+
+input:checked + .toggle-slider {
+    background-color: var(--accent-blue);
+}
+
+/* 计次记录样式 */
+.laps-section {
+    border-top: 1px solid var(--border-primary);
+}
+
+.laps-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.laps-title {
+    color: var(--text-tertiary);
+    margin: 0;
+}
+
+.clear-laps-btn {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 8px;
+    background: var(--accent-red);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.clear-laps-btn:hover {
+    background: var(--btn-danger-hover);
+}
+
+.clear-laps-btn svg {
+    width: 12px;
+    height: 12px;
+}
+
+.lap-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem;
+    margin-bottom: 0.25rem;
+    background: var(--card-bg);
+    border-radius: 6px;
+    border: 1px solid var(--border-secondary);
+    color: var(--text-tertiary);
+}
+
+.lap-info {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.lap-number {
+    font-weight: 600;
+    color: var(--text-secondary);
+    min-width: 30px;
+}
+
+.lap-time {
+    font-weight: 500;
+    color: var(--text-primary);
+    flex: 1;
+}
+
+.lap-interval {
+    font-size: 0.8em;
+    color: var(--text-muted);
+    font-weight: 400;
+}
+
+.delete-lap-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.delete-lap-btn:hover {
+    background: var(--accent-red);
+    color: white;
+}
+
+.delete-lap-btn svg {
+    width: 14px;
+    height: 14px;
+}
+
+/* 计时器完成提示 */
+.timer-complete {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    padding: 12px;
+    margin-top: 12px;
+    text-align: center;
+    animation: timerComplete 0.5s ease-in-out;
+}
+
+.timer-complete span {
+    color: var(--accent-red);
+    font-weight: 600;
+    font-size: 1.1em;
+}
+
+@keyframes timerComplete {
+    0% {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* 深色模式下的计时器完成提示 */
+[data-theme="dark"] .timer-complete {
+    background: rgba(239, 68, 68, 0.1);
+    border-color: rgba(239, 68, 68, 0.3);
+}
+
+[data-theme="dark"] .timer-complete span {
+    color: #fca5a5;
+}
+
+.completion-count {
+    margin-top: 8px;
+    font-size: 0.9em;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+[data-theme="dark"] .completion-count {
+    color: #d1d5db;
+}
+
+/* 设置面板样式 */
+.settings-section {
+    background: var(--settings-bg);
+    box-shadow: var(--card-shadow);
+    border: 1px solid var(--settings-border);
+}
+
+.settings-title {
+    color: var(--text-primary);
+}
+
+.setting-button {
+    background: var(--btn-secondary-bg);
+    border: 1px solid var(--border-tertiary);
+    color: var(--btn-secondary-text);
+}
+
+.setting-button:hover {
+    background: var(--btn-secondary-hover);
+    border-color: var(--border-secondary);
+}
+
+.setting-description {
+    color: var(--text-tertiary);
+}
+
+.stats-subtitle {
+    color: var(--text-secondary);
+}
+
+.stat-item {
+    background: var(--stats-bg);
+    border: 1px solid var(--stats-border);
+}
+
+.stat-number {
+    color: var(--accent-blue);
+}
+
+.stat-label {
+    color: var(--text-tertiary);
+}
+
+/* 备份列表样式 */
+.backup-item {
+    background: var(--stats-bg);
+    border: 1px solid var(--stats-border);
+}
+
+.backup-item:hover {
+    background: var(--bg-tertiary);
+    border-color: var(--border-secondary);
+}
+
+.backup-date {
+    color: var(--text-primary);
+}
+
+.backup-key {
+    color: var(--text-tertiary);
+}
+
+.backup-button.restore {
+    background: #dbeafe;
+    color: var(--accent-blue);
+}
+
+.backup-button.restore:hover {
+    background: #bfdbfe;
+}
+
+.backup-button.delete {
+    background: #fee2e2;
+    color: var(--accent-red);
+}
+
+.backup-button.delete:hover {
+    background: #fecaca;
+}
+
+/* 关于对话框样式 */
+.about-modal {
+    background: var(--modal-overlay);
+}
+
+.about-content {
+    background: var(--modal-bg);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+}
+
+.about-header {
+    border-bottom: 1px solid var(--modal-border);
+    justify-content: center;
+}
+
+.about-title {
+    color: var(--text-primary);
+}
+
+.about-close {
+    color: var(--text-muted);
+}
+
+.about-close:hover {
+    color: var(--text-secondary);
+}
+
+.about-section h4 {
+    color: var(--text-secondary);
+}
+
+.about-section p,
+.about-section ul,
+.about-section li {
+    color: var(--text-tertiary);
+}
+
+
+
+/* 深色模式切换按钮样式 */
+.theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: none;
+    background: var(--card-bg);
+    color: var(--text-primary);
+    box-shadow: var(--card-shadow);
+    border: 1px solid var(--card-border);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    z-index: 1001;
+}
+
+.theme-toggle:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.theme-toggle svg {
+    width: 20px;
+    height: 20px;
+    transition: transform 0.3s ease;
+}
+
+.theme-toggle:hover svg {
+    transform: rotate(180deg);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .theme-toggle {
+        top: auto !important;
+        bottom: 80px !important;
+        right: 20px !important;
+        width: 50px !important;
+        height: 50px !important;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2) !important;
+    }
+    
+    .theme-toggle svg {
+        width: 22px !important;
+        height: 22px !important;
+    }
+    
+    /* 移动端面板头部深色模式适配 */
+    .panel-header {
+        background: var(--bg-overlay);
+        border-bottom: 1px solid var(--border-primary);
+    }
+    
+    /* 移动端时钟面板添加时区部分 */
+    #clockPanel .add-timezone-section {
+        background: var(--bg-overlay);
+        border-bottom: 1px solid var(--border-primary);
+    }
+    
+    .time-range-inputs {
+        gap: 0.75rem;
+    }
+    
+    .theme-description {
+        margin-left: 0;
+        margin-top: 0.5rem;
+    }
+}
+
+/* 深色模式下的特殊调整 */
+[data-theme="dark"] .play-button {
+    background: #064e3b;
+    color: #22c55e;
+}
+
+[data-theme="dark"] .play-button:hover {
+    background: #065f46;
+}
+
+[data-theme="dark"] .pause-button {
+    background: #7f1d1d;
+    color: #ef4444;
+}
+
+[data-theme="dark"] .pause-button:hover {
+    background: #991b1b;
+}
+
+[data-theme="dark"] .lap-button {
+    background: #1e3a8a;
+    color: #3b82f6;
+}
+
+[data-theme="dark"] .lap-button:hover {
+    background: #1e40af;
+}
+
+[data-theme="dark"] .timer-complete {
+    background: #7f1d1d;
+    border: 1px solid #dc2626;
+}
+
+[data-theme="dark"] .backup-button.restore {
+    background: #1e3a8a;
+    color: #3b82f6;
+}
+
+[data-theme="dark"] .backup-button.restore:hover {
+    background: #1e40af;
+}
+
+[data-theme="dark"] .backup-button.delete {
+    background: #7f1d1d;
+    color: #ef4444;
+}
+
+[data-theme="dark"] .backup-button.delete:hover {
+    background: #991b1b;
+}
+
+/* 深色模式下移动端底部栏的强制覆盖 */
+[data-theme="dark"] .menu-bar.mobile {
+    background: var(--card-bg) !important;
+    border-top-color: var(--menu-border) !important;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3) !important;
+}
+
+[data-theme="dark"] .menu-item.mobile {
+    color: var(--menu-item-text) !important;
+}
+
+[data-theme="dark"] .menu-item.mobile span {
+    color: var(--menu-item-text) !important;
+}
+
+[data-theme="dark"] .menu-item.mobile i {
+    color: var(--menu-item-text) !important;
+}
+
+[data-theme="dark"] .menu-item.mobile.active {
+    color: var(--menu-item-active-text) !important;
+    background: var(--menu-item-active-bg) !important;
+    border-bottom-color: var(--menu-item-active-text) !important;
+}
+
+[data-theme="dark"] .menu-item.mobile.active span,
+[data-theme="dark"] .menu-item.mobile.active i {
+    color: var(--menu-item-active-text) !important;
+}
+
+[data-theme="dark"] .menu-item.mobile:hover:not(.active) {
+    color: var(--menu-item-hover-text) !important;
+    background: var(--menu-item-hover-bg) !important;
+}
+
+[data-theme="dark"] .menu-item.mobile:hover:not(.active) span,
+[data-theme="dark"] .menu-item.mobile:hover:not(.active) i {
+    color: var(--menu-item-hover-text) !important;
+}
+
+/* 深色模式下主内容区域的移动端适配 */
+@media (max-width: 768px) {
+    [data-theme="dark"] .main-content {
+        background: var(--bg-gradient);
+    }
+    
+    [data-theme="dark"] #clockPanel {
+        background: var(--bg-gradient);
+    }
+    
+    [data-theme="dark"] .panel-content {
+        background: var(--bg-gradient);
+    }
+}
+
+/* 主题设置样式 */
+.theme-settings {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.theme-option {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.theme-option-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.theme-switch-label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.theme-switch-input {
+    display: none;
+}
+
+.theme-switch-slider {
+    position: relative;
+    width: 44px;
+    height: 24px;
+    background-color: var(--text-muted);
+    border-radius: 24px;
+    transition: background-color 0.3s ease;
+}
+
+.theme-switch-slider:before {
+    content: "";
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 18px;
+    height: 18px;
+    background-color: white;
+    border-radius: 50%;
+    transition: transform 0.3s ease;
+}
+
+.theme-switch-input:checked + .theme-switch-slider {
+    background-color: var(--accent-blue);
+}
+
+.theme-switch-input:checked + .theme-switch-slider:before {
+    transform: translateX(20px);
+}
+
+.theme-description {
+    font-size: 0.875rem;
+    color: var(--text-tertiary);
+    margin-left: 68px;
+}
+
+.theme-time-settings {
+    padding: 1rem;
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    border: 1px solid var(--border-primary);
+}
+
+.time-range-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.time-input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.time-input-group label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
+.time-input-group .time-input {
+    padding: 0.5rem;
+    border: 1px solid var(--border-secondary);
+    border-radius: 6px;
+    background: var(--card-bg);
+    color: var(--text-primary);
+    font-size: 0.875rem;
+}
+
+.theme-manual-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .time-range-inputs {
+        gap: 0.75rem;
+    }
+    
+    .theme-description {
+        margin-left: 0;
+        margin-top: 0.5rem;
+    }
+}
+
+/* 闹钟搜索功能样式 */
+.search-section {
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    border: 1px solid var(--border-primary);
+}
+
+.search-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.search-icon {
+    position: absolute;
+    left: 12px;
+    color: var(--text-muted);
+    width: 16px;
+    height: 16px;
+    z-index: 1;
+}
+
+.search-input {
+    width: 100%;
+    padding: 10px 40px 10px 40px;
+    border: 1px solid var(--border-secondary);
+    border-radius: 8px;
+    background: var(--card-bg);
+    color: var(--text-primary);
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+.search-input::placeholder {
+    color: var(--text-muted);
+}
+
+.search-clear-btn {
+    position: absolute;
+    right: 8px;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    transition: color 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-clear-btn:hover {
+    color: var(--text-secondary);
+    background: var(--bg-tertiary);
+}
+
+.search-filters {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    padding: 6px 12px;
+    border: 1px solid var(--border-secondary);
+    background: var(--card-bg);
+    color: var(--text-secondary);
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.filter-btn:hover {
+    background: var(--bg-tertiary);
+    border-color: var(--border-primary);
+}
+
+.filter-btn.active {
+    background: var(--accent-blue);
+    color: white;
+    border-color: var(--accent-blue);
+}
+
+.filter-btn.active:hover {
+    background: var(--btn-primary-hover);
+}
+
+/* 搜索结果高亮 */
+.alarm-card-highlight {
+    background: rgba(59, 130, 246, 0.1) !important;
+    border-color: var(--accent-blue) !important;
+}
+
+.alarm-card-highlight .card-title {
+    color: var(--accent-blue) !important;
+}
+
+.stopwatch-card-highlight {
+    background: rgba(59, 130, 246, 0.1) !important;
+    border-color: var(--accent-blue) !important;
+}
+
+.stopwatch-card-highlight .card-title {
+    color: var(--accent-blue) !important;
+}
+
+.timer-card-highlight {
+    background: rgba(59, 130, 246, 0.1) !important;
+    border-color: var(--accent-blue) !important;
+}
+
+.timer-card-highlight .card-title {
+    color: var(--accent-blue) !important;
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+    .search-section {
+        padding: 0.75rem;
+        margin-bottom: 1rem;
+    }
+    
+    .search-filters {
+        gap: 0.25rem;
+    }
+    
+    .filter-btn {
+        padding: 4px 8px;
+        font-size: 11px;
+    }
+} 
+
+/* 深色模式下的计时器总时长显示 */
+body.dark .timer-total-duration-info {
+    background: rgba(59, 130, 246, 0.2);
+    color: #60a5fa;
+}
+
+body.dark .duration-value {
+    color: #93c5fd;
+}
+
+body.dark .timer-completed-total {
+    background: rgba(34, 197, 94, 0.2);
+    color: #4ade80;
+}
+
+body.dark .completed-value {
+    color: #86efac;
+} 
+
+
+
+/* 指针时钟深色模式样式 */
+[data-theme="dark"] .analog-clock {
+    background: linear-gradient(145deg, #1e293b, #334155);
+    border-color: #475569;
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.3),
+        inset 0 2px 4px rgba(255, 255, 255, 0.1),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] .marker {
+    background: #94a3b8;
+}
+
+[data-theme="dark"] .hour-hand {
+    background: linear-gradient(to top, #94a3b8, #64748b);
+}
+
+[data-theme="dark"] .minute-hand {
+    background: linear-gradient(to top, #94a3b8, #64748b);
+}
+
+[data-theme="dark"] .second-hand {
+    background: linear-gradient(to top, #ef4444, #dc2626);
+}
+
+[data-theme="dark"] .hand-center {
+    background: #475569;
+    border-color: #64748b;
+}
+
+[data-theme="dark"] .submariner-bezel {
+    border-color: #64748b;
+    background: linear-gradient(145deg, #475569, #64748b);
+}
+
+[data-theme="dark"] .bezel-marker {
+    background: #e2e8f0;
+}
+
+[data-theme="dark"] .analog-date,
+[data-theme="dark"] .analog-timezone {
+    background: var(--card-bg, #1e293b);
+    color: var(--text-primary, #f8fafc);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* 深色模式下的时钟设置样式 */
+[data-theme="dark"] .setting-label {
+    color: var(--text-primary, #f8fafc);
+}
+
+[data-theme="dark"] .setting-select {
+    background: var(--card-bg, #1e293b);
+    color: var(--text-primary, #f8fafc);
+    border-color: var(--border-primary, #475569);
+}
+
+[data-theme="dark"] .setting-select:focus {
+    border-color: var(--accent-blue, #60a5fa);
+    box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2);
+}
+
+/* 深色模式下的世界时钟指针时钟样式 */
+[data-theme="dark"] .mini-analog-clock {
+    background: var(--card-bg, #1e293b);
+    border-color: var(--border-primary, #475569);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .mini-marker {
+    background: var(--text-primary, #f8fafc);
+}
+
+[data-theme="dark"] .mini-hour-hand {
+    background: #ffffff;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="dark"] .mini-minute-hand {
+    background: #ffffff;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="dark"] .mini-second-hand {
+    background: #ef4444;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="dark"] .mini-hand-center {
+    background: #f8fafc;
+    border-color: #475569;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+} 
