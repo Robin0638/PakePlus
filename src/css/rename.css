@@ -1,0 +1,176 @@
+/* 闹钟重命名功能样式 */
+
+/* 重命名按钮 */
+.rename-button {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding: 2px 4px;
+    border: none;
+    border-radius: 3px;
+    background: transparent;
+    color: var(--text-secondary, #6b7280);
+    font-size: 10px;
+    font-weight: normal;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    user-select: none;
+    margin-left: 6px;
+}
+
+.rename-button:hover {
+    background: var(--btn-secondary-hover-bg, #f3f4f6);
+    color: var(--text-primary, #111827);
+    transform: none;
+}
+
+.rename-button:active {
+    transform: none;
+}
+
+.rename-button i {
+    width: 10px;
+    height: 10px;
+    transition: all 0.2s ease;
+}
+
+/* 重命名按钮悬停效果 */
+.rename-button:hover i {
+    transform: scale(1.05);
+}
+
+/* 闹钟标题区域 */
+.alarm-title-section {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.alarm-title-section h3 {
+    margin: 0;
+    flex: 1;
+    min-width: 0;
+}
+
+
+
+
+
+
+
+/* 重命名反馈提示 */
+.rename-feedback {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: var(--accent-green, #10b981);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    z-index: 1000;
+    animation: slideInRight 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+
+
+.rename-error {
+    color: var(--accent-red, #ef4444);
+    font-size: 12px;
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.rename-error i {
+    width: 12px;
+    height: 12px;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .rename-button {
+        padding: 2px 4px;
+        font-size: 9px;
+        gap: 2px;
+        margin-left: 4px;
+    }
+    
+    .rename-button i {
+        width: 9px;
+        height: 9px;
+    }
+    
+
+    
+
+}
+
+@media (max-width: 480px) {
+    .alarm-title-section {
+        gap: 6px;
+    }
+    
+    .rename-button {
+        padding: 1px 3px;
+        font-size: 8px;
+        gap: 1px;
+        margin-left: 4px;
+    }
+    
+    .rename-button i {
+        width: 8px;
+        height: 8px;
+    }
+    
+
+    
+
+}
+
+@media (max-width: 375px) {
+    .rename-button {
+        padding: 1px 2px;
+        font-size: 7px;
+        gap: 1px;
+        margin-left: 3px;
+    }
+    
+    .rename-button i {
+        width: 7px;
+        height: 7px;
+    }
+    
+
+    
+
+}
+
+/* 深色模式适配 */
+@media (prefers-color-scheme: dark) {
+    .rename-button {
+        background: transparent;
+        color: var(--text-secondary-dark, #9ca3af);
+    }
+    
+    .rename-button:hover {
+        background: var(--btn-secondary-hover-bg-dark, #374151);
+        color: var(--text-primary-dark, #f9fafb);
+    }
+    
+
+    
+
+} 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
