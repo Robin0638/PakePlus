@@ -1,0 +1,346 @@
+/* 计时器分享按钮样式 */
+
+/* 分享按钮基础样式 */
+.timer-share-button {
+    position: absolute;
+    top: 8px;
+    right: 85px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 10px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 10;
+    opacity: 0.9;
+    transform: scale(0.95);
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+
+
+.timer-share-button:hover {
+    opacity: 1;
+    transform: scale(1.05);
+    background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.timer-share-button:active {
+    transform: scale(0.95);
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+}
+
+.timer-share-button svg {
+    width: 14px;
+    height: 14px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.timer-share-button:hover svg {
+    transform: scale(1.15) rotate(5deg);
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+}
+
+/* 卡片悬停时显示分享按钮 */
+.card[data-timer-id]:hover .timer-share-button {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* 分享按钮动画状态 */
+.timer-share-button.animating {
+    animation: timerSharePulse 0.6s ease-in-out;
+}
+
+.timer-share-button.loading {
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+.timer-share-button.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 16px;
+    height: 16px;
+    margin: -8px 0 0 -8px;
+    border: 2px solid transparent;
+    border-top: 2px solid white;
+    border-radius: 50%;
+    animation: timerShareSpin 1s linear infinite;
+}
+
+/* 分享成功提示 */
+.timer-share-success {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    padding: 16px 20px;
+    border-radius: 16px;
+    font-size: 15px;
+    font-weight: 600;
+    box-shadow: 0 8px 32px rgba(16, 185, 129, 0.3);
+    z-index: 10000;
+    transform: translateX(100%) scale(0.8);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    max-width: 300px;
+    min-width: 280px;
+    pointer-events: none;
+}
+
+.timer-share-success.show {
+    transform: translateX(0) scale(1);
+}
+
+.timer-share-success.hide {
+    transform: translateX(100%) scale(0.8);
+}
+
+.timer-share-success svg {
+    width: 20px;
+    height: 20px;
+    animation: timerShareSuccess 0.6s ease-in-out;
+}
+
+/* 分享错误提示 */
+.timer-share-error {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: white;
+    padding: 16px 20px;
+    border-radius: 16px;
+    font-size: 15px;
+    font-weight: 600;
+    box-shadow: 0 8px 32px rgba(239, 68, 68, 0.3);
+    z-index: 10000;
+    transform: translateX(100%) scale(0.8);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    max-width: 300px;
+    min-width: 280px;
+    pointer-events: none;
+}
+
+.timer-share-error.show {
+    transform: translateX(0) scale(1);
+}
+
+.timer-share-error.hide {
+    transform: translateX(100%) scale(0.8);
+}
+
+.timer-share-error svg {
+    width: 20px;
+    height: 20px;
+    animation: timerShareError 0.6s ease-in-out;
+}
+
+/* 动画定义 */
+@keyframes timerSharePulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+@keyframes timerShareSpin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes timerShareSuccess {
+    0% { transform: scale(0) rotate(-180deg); }
+    50% { transform: scale(1.2) rotate(0deg); }
+    100% { transform: scale(1) rotate(0deg); }
+}
+
+@keyframes timerShareError {
+    0% { transform: scale(0) rotate(180deg); }
+    50% { transform: scale(1.2) rotate(0deg); }
+    100% { transform: scale(1) rotate(0deg); }
+}
+
+/* 深色主题样式 */
+[data-theme="dark"] .timer-share-button {
+    background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
+    box-shadow: 0 2px 8px rgba(124, 58, 237, 0.4);
+}
+
+[data-theme="dark"] .timer-share-button:hover {
+    background: linear-gradient(135deg, #6d28d9 0%, #4c1d95 100%);
+    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.5);
+}
+
+[data-theme="dark"] .timer-share-success {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    box-shadow: 0 8px 32px rgba(5, 150, 105, 0.4);
+}
+
+[data-theme="dark"] .timer-share-error {
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+    box-shadow: 0 8px 32px rgba(220, 38, 38, 0.4);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .timer-share-button {
+        top: 6px;
+        right: 75px;
+        padding: 4px 8px;
+        font-size: 11px;
+        gap: 3px;
+    }
+
+    .timer-share-button svg {
+        width: 12px;
+        height: 12px;
+    }
+
+    .timer-share-success,
+    .timer-share-error {
+        padding: 12px 16px;
+        font-size: 14px;
+        max-width: 280px;
+        min-width: 260px;
+    }
+
+    .timer-share-success svg,
+    .timer-share-error svg {
+        width: 18px;
+        height: 18px;
+    }
+}
+
+@media (max-width: 480px) {
+    .timer-share-button {
+        top: 4px;
+        right: 65px;
+        padding: 3px 6px;
+        font-size: 10px;
+        gap: 2px;
+    }
+
+    .timer-share-button svg {
+        width: 11px;
+        height: 11px;
+    }
+
+    .timer-share-success,
+    .timer-share-error {
+        padding: 10px 14px;
+        font-size: 13px;
+        max-width: 260px;
+        min-width: 240px;
+    }
+
+    .timer-share-success svg,
+    .timer-share-error svg {
+        width: 16px;
+        height: 16px;
+    }
+}
+
+@media (max-width: 375px) {
+    .timer-share-button {
+        top: 3px;
+        right: 60px;
+        padding: 2px 5px;
+        font-size: 9px;
+        gap: 2px;
+    }
+
+    .timer-share-button svg {
+        width: 10px;
+        height: 10px;
+    }
+
+    .timer-share-success,
+    .timer-share-error {
+        padding: 8px 12px;
+        font-size: 12px;
+        max-width: 240px;
+        min-width: 220px;
+    }
+
+    .timer-share-success svg,
+    .timer-share-error svg {
+        width: 15px;
+        height: 15px;
+    }
+}
+
+/* 禁用状态 */
+.timer-share-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.timer-share-button:disabled:hover {
+    transform: scale(0.95);
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+}
+
+/* 移动端优化 */
+@media (max-width: 768px) {
+    .timer-share-success.show {
+        animation: timerShareSuccessMobile 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .timer-share-success.hide {
+        animation: timerShareHideMobile 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .timer-share-error.show {
+        animation: timerShareSuccessMobile 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .timer-share-error.hide {
+        animation: timerShareHideMobile 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+}
+
+@keyframes timerShareSuccessMobile {
+    0% { 
+        transform: translateX(100%) scale(0.8);
+        opacity: 0;
+    }
+    100% { 
+        transform: translateX(0) scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes timerShareHideMobile {
+    0% { 
+        transform: translateX(0) scale(1);
+        opacity: 1;
+    }
+    100% { 
+        transform: translateX(100%) scale(0.8);
+        opacity: 0;
+    }
+} 
