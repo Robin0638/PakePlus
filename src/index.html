@@ -1,32 +1,1356 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <link rel="stylesheet" href="styles.css" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>PakePlus App</title>
-        <script type="module" src="/main.js" defer></script>
-    </head>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title id="title">翻转走时</title>
+    <!-- 引入Font Awesome Awesome图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <style>
+        /* 问题反馈浮球样式 */
+        .feedback-float {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 50px;
+            height: 50px;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            will-change: transform;
+        }
+        .feedback-float:hover {
+            transform: scale(1.1);
+        }
+        .feedback-float i {
+            font-size: 24px;
+        }
+        .feedback-dialog {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 600px;
+            height: 80%;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            z-index: 1001;
+            overflow: hidden;
+            backdrop-filter: blur(5px);
+            scrollbar-width: thin;
+            scrollbar-color: #4CAF50 rgba(255, 255, 255, 0.3);
+        }
+        .feedback-dialog iframe {
+            width: 100%;
+            height: calc(100% - 40px);
+        }
+        .feedback-loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1002;
+            font-size: 48px;
+            color: #4CAF50;
+        }
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #555;
+        }
+        
+        /* 禁止用户选择和复制文本 */
+        body {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        
+        /* 基础样式 */
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column;
+            position: relative;
+            transition: background-color 0.5s ease;
+        }
+        .footer {
+            font-size: 10px;
+            text-align: center;
+            margin-top: 20px;
+            transition: color 0.5s ease;
+        }
+        .clock {
+            width: 80vw;
+            max-width: 800px;
+            margin: 20px;
+            text-align: center;
+            font-size: calc(110px + 2vw);
+            padding: calc(20px + 1vw);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.5s ease;
+        }
+        .clock div {
+            display: inline-block;
+            margin: 0 calc(5px + 0.5vw);
+            padding: calc(10px + 0.5vw);
+            border-radius: 5px;
+            transition: all 0.5s ease;
+        }
+        .clock div.flip {
+            animation: flip 0.5s ease;
+        }
+        .date, .location {
+            width: 80vw;
+            max-width: 700px;
+            margin: 10px;
+            text-align: center;
+            font-size: calc(24px + 1vw);
+            padding: calc(10px + 0.5vw);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.5s ease;
+        }
+        .date div, .location div {
+            display: inline-block;
+            margin: 0 calc(3px + 0.2vw);
+            padding: calc(3px + 0.2vw);
+            border-radius: 3px;
+            transition: all 0.5s ease;
+        }
+        @keyframes flip {
+            0% {
+                transform: rotateX(0deg);
+            }
+            50% {
+                transform: rotateX(90deg);
+                opacity: 0;
+            }
+            100% {
+                transform: rotateX(0deg);
+                opacity: 1;
+            }
+        }
+        .theme-toggle, .settings {
+            position: absolute;
+            top: 10px;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .theme-toggle {
+            right: 20px;
+        }
+        .settings {
+            left: 20px;
+        }
+        
+        /* 图标动画效果 */
+        .settings:hover i {
+            transform: rotate(90deg) scale(1.2);
+        }
+        
+        .theme-toggle:hover i {
+            transform: scale(1.2);
+        }
+        
+        .settings i, .theme-toggle i {
+            transition: all 0.3s ease;
+            color: #00008B;
+        }
+        
+        .theme-toggle i {
+            animation: pulse 2s infinite alternate;
+        }
+        
+        @keyframes pulse {
+            from {
+                transform: scale(1);
+                opacity: 0.8;
+            }
+            to {
+                transform: scale(1.1);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        
+        .spin-animation {
+            animation: spin 0.5s ease-out forwards;
+        }
+        
+        /* 优化的设置面板样式 */
+        .settings-dialog {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            width: 95%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        .settings-dialog h2 {
+            margin-top: 0;
+            margin-bottom: 25px;
+            text-align: center;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+            transition: all 0.5s ease;
+        }
+        
+        .settings-group {
+            margin-bottom: 20px;
+        }
+        
+        .settings-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            transition: color 0.5s ease;
+        }
+        
+        .settings-group select, .settings-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .settings-group select:focus, .settings-group input:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+        }
+        
+        .settings-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+        
+        .settings-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            background-color: #444;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .settings-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -60%);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%);
+            }
+        }
 
-    <body>
-        <main class="container">
-            <h1>Welcome to PakePlus</h1>
-            <form class="row" id="greet-form">
-                <input id="inputValue" placeholder="Enter a something..." />
-            </form>
-            <div class="resultBox">
-                <span>result: </span>
-                <span id="result"></span>
-            </div>
-            <div class="invokeBox">
-                <button id="openUrl">open_url_browser</button>
-                <button id="openUrlNew">open_url_new</button>
-                <button id="runCommand">run_command</button>
-                <button id="downloadFile">download_file</button>
-                <button id="getExeDir">get_exe_dir</button>
-                <button id="getEnvVar">get_env_var</button>
-                <button id="findPort">find_port</button>
-            </div>
-        </main>
-    </body>
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            backdrop-filter: blur(3px);
+            animation: fadeOverlay 0.3s ease-out;
+        }
+        
+        @keyframes fadeOverlay {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* 主题样式定义 */
+        
+        /* 经典主题 (默认) */
+        body.theme-classic {
+            background-color: #f0f0f0;
+            transition: background-color 0.5s ease;
+        }
+        body.theme-classic .clock, 
+        body.theme-classic .date, 
+        body.theme-classic .location {
+            background-color: #fff;
+            color: #333;
+            transition: all 0.5s ease;
+        }
+        body.theme-classic .clock div, 
+        body.theme-classic .date div, 
+        body.theme-classic .location div {
+            background-color: #ddd;
+            transition: all 0.5s ease;
+        }
+        body.theme-classic .footer {
+            color: #777;
+            transition: color 0.5s ease;
+        }
+        body.theme-classic .settings-dialog {
+            background-color: white;
+            transition: background-color 0.5s ease;
+        }
+        body.theme-classic .settings-dialog h2 {
+            color: #333;
+            border-bottom-color: #eee;
+            transition: all 0.5s ease;
+        }
+        body.theme-classic .settings-group label {
+            color: #555;
+            transition: color 0.5s ease;
+        }
+        body.theme-classic .settings-group select,
+        body.theme-classic .settings-group input {
+            background-color: #f9f9f9;
+            border-color: #ddd;
+            color: #333;
+            transition: all 0.5s ease;
+        }
+        
+        /* 经典主题深色模式 */
+        body.theme-classic.dark {
+            background-color: #333;
+        }
+        body.theme-classic.dark .clock, 
+        body.theme-classic.dark .date, 
+        body.theme-classic.dark .location {
+            background-color: #444;
+            color: #fff;
+        }
+        body.theme-classic.dark .clock div, 
+        body.theme-classic.dark .date div, 
+        body.theme-classic.dark .location div {
+            background-color: #666;
+        }
+        body.theme-classic.dark .footer {
+            color: #ccc;
+        }
+        body.theme-classic.dark .settings-dialog {
+            background-color: #444;
+        }
+        body.theme-classic.dark .settings-dialog h2 {
+            color: #fff;
+            border-bottom-color: #555;
+        }
+        body.theme-classic.dark .settings-group label {
+            color: #ddd;
+        }
+        body.theme-classic.dark .settings-group select,
+        body.theme-classic.dark .settings-group input {
+            background-color: #555;
+            border-color: #666;
+            color: #fff;
+        }
+        
+        /* 现代主题 */
+        body.theme-modern {
+            background-color: #1a1a2e;
+        }
+        body.theme-modern .clock, 
+        body.theme-modern .date, 
+        body.theme-modern .location {
+            background-color: #16213e;
+            color: #e94560;
+            box-shadow: 0 0 15px rgba(233, 69, 96, 0.2);
+        }
+        body.theme-modern .clock div, 
+        body.theme-modern .date div, 
+        body.theme-modern .location div {
+            background-color: #0f3460;
+            color: #ffffff;
+        }
+        body.theme-modern .footer {
+            color: #c4c4c4;
+        }
+        body.theme-modern .settings-dialog {
+            background-color: #16213e;
+        }
+        body.theme-modern .settings-dialog h2 {
+            color: #e94560;
+            border-bottom-color: #0f3460;
+        }
+        body.theme-modern .settings-group label {
+            color: #ffffff;
+        }
+        body.theme-modern .settings-group select,
+        body.theme-modern .settings-group input {
+            background-color: #0f3460;
+            border-color: #e94560;
+            color: #ffffff;
+        }
+        body.theme-modern .settings-group select:focus,
+        body.theme-modern .settings-group input:focus {
+            border-color: #e94560;
+            box-shadow: 0 0 0 3px rgba(233, 69, 96, 0.2);
+        }
+        body.theme-modern .settings-actions {
+            border-top-color: #0f3460;
+        }
+        body.theme-modern .settings-btn {
+            background-color: #e94560;
+        }
+        body.theme-modern .settings-btn:hover {
+            background-color: #ff6b6b;
+        }
+        
+        /* 极简主题 */
+        body.theme-minimal {
+            background-color: #ffffff;
+        }
+        body.theme-minimal .clock, 
+        body.theme-minimal .date, 
+        body.theme-minimal .location {
+            background-color: #ffffff;
+            color: #333333;
+            box-shadow: none;
+            border: 1px solid #f0f0f0;
+        }
+        body.theme-minimal .clock div, 
+        body.theme-minimal .date div, 
+        body.theme-minimal .location div {
+            background-color: #f9f9f9;
+            color: #333333;
+        }
+        body.theme-minimal .footer {
+            color: #b0b0b0;
+        }
+        body.theme-minimal .settings-dialog {
+            background-color: white;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+        }
+        body.theme-minimal .settings-dialog h2 {
+            color: #333;
+            border-bottom-color: #f0f0f0;
+        }
+        body.theme-minimal .settings-group label {
+            color: #555;
+        }
+        body.theme-minimal .settings-group select,
+        body.theme-minimal .settings-group input {
+            background-color: #ffffff;
+            border-color: #e0e0e0;
+            color: #333;
+        }
+        body.theme-minimal .settings-group select:focus,
+        body.theme-minimal .settings-group input:focus {
+            border-color: #999;
+        }
+        body.theme-minimal .settings-actions {
+            border-top-color: #f0f0f0;
+        }
+        body.theme-minimal .settings-btn {
+            background-color: #f0f0f0;
+            color: #555;
+        }
+        body.theme-minimal .settings-btn:hover {
+            background-color: #e0e0e0;
+        }
+        
+        /* 复古主题 */
+        body.theme-vintage {
+            background-color: #f5f1e6;
+        }
+        body.theme-vintage .clock, 
+        body.theme-vintage .date, 
+        body.theme-vintage .location {
+            background-color: #e8ded1;
+            color: #8b5a2b;
+            box-shadow: 0 4px 8px rgba(139, 90, 43, 0.1);
+        }
+        body.theme-vintage .clock div, 
+        body.theme-vintage .date div, 
+        body.theme-vintage .location div {
+            background-color: #d4c5b1;
+            color: #5d4037;
+        }
+        body.theme-vintage .footer {
+            color: #8b5a2b;
+        }
+        body.theme-vintage .settings-dialog {
+            background-color: #e8ded1;
+        }
+        body.theme-vintage .settings-dialog h2 {
+            color: #8b5a2b;
+            border-bottom-color: #d4c5b1;
+        }
+        body.theme-vintage .settings-group label {
+            color: #5d4037;
+        }
+        body.theme-vintage .settings-group select,
+        body.theme-vintage .settings-group input {
+            background-color: #d4c5b1;
+            border-color: #bcaaa4;
+            color: #5d4037;
+        }
+        body.theme-vintage .settings-group select:focus,
+        body.theme-vintage .settings-group input:focus {
+            border-color: #8b5a2b;
+        }
+        body.theme-vintage .settings-actions {
+            border-top-color: #d4c5b1;
+        }
+        body.theme-vintage .settings-btn {
+            background-color: #8b5a2b;
+        }
+        body.theme-vintage .settings-btn:hover {
+            background-color: #a0522d;
+        }
+        
+        /* 活力主题 */
+        body.theme-vibrant {
+            background-color: #f8f0e3;
+            background-image: linear-gradient(135deg, #f8f0e3 0%, #e6ccb2 100%);
+        }
+        body.theme-vibrant .clock, 
+        body.theme-vibrant .date, 
+        body.theme-vibrant .location {
+            background-color: #ffffff;
+            color: #c8553d;
+            box-shadow: 0 4px 15px rgba(200, 85, 61, 0.1);
+        }
+        body.theme-vibrant .clock div, 
+        body.theme-vibrant .date div, 
+        body.theme-vibrant .location div {
+            background-color: #ffddd2;
+            color: #e63946;
+        }
+        body.theme-vibrant .footer {
+            color: #588157;
+        }
+        body.theme-vibrant .settings-dialog {
+            background-color: #ffffff;
+        }
+        body.theme-vibrant .settings-dialog h2 {
+            color: #c8553d;
+            border-bottom-color: #ffddd2;
+        }
+        body.theme-vibrant .settings-group label {
+            color: #588157;
+        }
+        body.theme-vibrant .settings-group select,
+        body.theme-vibrant .settings-group input {
+            background-color: #f8f0e3;
+            border-color: #ffddd2;
+            color: #c8553d;
+        }
+        body.theme-vibrant .settings-group select:focus,
+        body.theme-vibrant .settings-group input:focus {
+            border-color: #c8553d;
+        }
+        body.theme-vibrant .settings-actions {
+            border-top-color: #ffddd2;
+        }
+        body.theme-vibrant .settings-btn {
+            background-color: #588157;
+        }
+        body.theme-vibrant .settings-btn:hover {
+            background-color: #6a994e;
+        }
+        
+        @media (max-width: 600px) {
+            body {
+                height: auto;
+                min-height: 100vh;
+                padding: 10px;
+            }
+            .clock {
+                font-size: calc(30px + 1vw);
+                padding: 8px;
+                margin: 8px;
+                width: 95vw;
+            }
+            .clock div {
+                margin: 0 1px;
+                padding: 2px;
+            }
+            .date, .location {
+                font-size: calc(16px + 1vw);
+                padding: 8px;
+                margin: 8px;
+                width: 95vw;
+            }
+            .date div, .location div {
+                margin: 0 1px;
+                padding: 2px;
+            }
+            .settings-dialog {
+                padding: 6px;
+                width: 98%;
+                max-height: 95vh;
+            }
+            .settings-dialog h2 {
+                font-size: 16px;
+                margin-bottom: 10px;
+                padding-bottom: 8px;
+            }
+            .settings-group {
+                margin-bottom: 12px;
+            }
+            .settings-group label {
+                font-size: 12px;
+                margin-bottom: 4px;
+            }
+            .settings-group select, 
+            .settings-group input {
+                padding: 12px;
+                font-size: 14px;
+                min-height: 40px;
+            }
+            .settings-btn {
+                padding: 10px 20px;
+                font-size: 14px;
+                min-height: 40px;
+            }
+            .feedback-float {
+                width: 40px;
+                height: 40px;
+                bottom: 10px;
+                left: 10px;
+            }
+            .feedback-float i {
+                font-size: 18px;
+            }
+                font-size: calc(30px + 1vw);
+                padding: 8px;
+                margin: 8px;
+                width: 95vw;
+            }
+            .clock div {
+                margin: 0 1px;
+                padding: 2px;
+            }
+            .date, .location {
+                font-size: calc(16px + 1vw);
+                padding: 8px;
+                margin: 8px;
+                width: 95vw;
+            }
+            .date div, .location div {
+                margin: 0 1px;
+                padding: 2px;
+            }
+            .settings-dialog {
+                padding: 6px;
+                width: 98%;
+                max-height: 95vh;
+            }
+            .settings-dialog h2 {
+                font-size: 16px;
+                margin-bottom: 10px;
+                padding-bottom: 8px;
+            }
+            .settings-group {
+                margin-bottom: 12px;
+            }
+            .settings-group label {
+                font-size: 12px;
+                margin-bottom: 4px;
+            }
+            .settings-group select, 
+            .settings-group input {
+                padding: 12px;
+                font-size: 14px;
+                min-height: 40px;
+            }
+            .settings-btn {
+                padding: 10px 20px;
+                font-size: 14px;
+                min-height: 40px;
+            }
+            .feedback-float {
+                width: 40px;
+                height: 40px;
+                bottom: 10px;
+                left: 10px;
+            }
+            .feedback-float i {
+                font-size: 18px;
+            }
+                font-size: calc(18px + 1vw);
+            }
+            .date div, .location div {
+                margin: 0 calc(2px + 0.1vw);
+                padding: calc(2px + 0.1vw);
+            }
+            body {
+                flex-direction: column;
+            }
+            .theme-toggle, .settings {
+                font-size: 20px;
+            }
+            .settings-dialog {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body class="theme-classic">
+    <!-- 使用Font Awesome图标替换emoji -->
+    <div class="settings" id="settings"><i class="fas fa-cog"></i></div>
+    <div class="theme-toggle" id="theme-toggle"><i class="fas fa-sun"></i></div>
+    
+    <div class="overlay" id="overlay"></div>
+    <div class="settings-dialog" id="settings-dialog">
+        <h2 id="settings-title">设置</h2>
+        <div class="settings-group">
+            <label id="time-format-label">时间格式:</label>
+            <select id="time-format">
+                <option value="hours">到小时</option>
+                <option value="minutes" selected>到分钟</option>
+                <option value="seconds">到秒</option>
+            </select>
+        </div>
+        <div class="settings-group">
+            <label id="date-format-label">日期格式:</label>
+            <select id="date-format">
+                <option value="year">到年</option>
+                <option value="month">到月</option>
+                <option value="day" selected>到日</option>
+            </select>
+        </div>
+        <div class="settings-group">
+            <label id="language-label">语言:</label>
+            <select id="language">
+                <option value="zh-CN">简体中文</option>
+                <option value="zh-TW">繁體中文</option>
+                <option value="fr">Français</option>
+                <option value="en">English</option>
+                <option value="ja">日本語</option>
+                <option value="de">Deutsch</option>
+                <option value="es">España</option>
+                <option value="ar">العربية</option>
+            </select>
+        </div>
+        <div class="settings-group">
+            <label id="theme-label">主题:</label>
+            <select id="theme-select">
+                <option value="classic">经典</option>
+                <option value="modern">现代</option>
+                <option value="minimal">极简</option>
+                <option value="vintage">复古</option>
+                <option value="vibrant">活力</option>
+            </select>
+        </div>
+        <div class="settings-group" id="classic-theme-options" style="display: none;">
+            <label id="classic-mode-label">经典主题模式:</label>
+            <select id="classic-mode">
+                <option value="light">浅色模式</option>
+                <option value="dark">深色模式</option>
+            </select>
+        </div>
+        <div class="settings-actions">
+            <button id="close-settings" class="settings-btn">X</button>
+        </div>
+    </div>
+    
+    <div class="clock" id="clock"></div>
+    <div class="date" id="date"></div>
+    <div class="location" id="location"></div>
+    
+    <script>
+        let showSeconds = localStorage.getItem('time-format') === 'seconds' || false;
+        let locationText = '地理位置: ';
+        const defaultLang = localStorage.getItem('language') || (navigator.language || navigator.userLanguage).startsWith('zh') ? (navigator.language || navigator.userLanguage).includes('-TW') ? 'zh-TW' : 'zh-CN' : 'en';
+        const defaultTimeFormat = localStorage.getItem('time-format') || 'minutes';
+        const defaultDateFormat = localStorage.getItem('date-format') || 'day';
+        const defaultTheme = localStorage.getItem('theme') || 'classic';
+        const defaultClassicMode = localStorage.getItem('classic-mode') || 'light';
+
+        // 定义非经典主题列表，用于主题切换循环
+        const nonClassicThemes = ['modern', 'minimal', 'vintage', 'vibrant'];
+
+        const translations = {
+            'zh-CN': {
+                'title': '翻页时钟',
+                'settings-title': '设置',
+                'time-format-label': '时间格式到:',
+                'date-format-label': '日期格式到:',
+                'language-label': '语言选择:',
+                'theme-label': '主题选择:',
+                'classic-mode-label': '经典主题模式:',
+                'hours': '小时',
+                'minutes': '分钟',
+                'seconds': '秒',
+                'year': '年',
+                'month': '月',
+                'day': '日',
+                'location': '地理位置（IP）: ',
+                'classic': '经典',
+                'modern': '现代',
+                'minimal': '极简',
+                'vintage': '复古',
+                'vibrant': '活力',
+                'light': '浅色模式',
+                'dark': '深色模式'
+            },
+            'zh-TW': {
+                'title': '翻頁時鐘',
+                'settings-title': '設置',
+                'time-format-label': '時間格式保留至:',
+                'date-format-label': '日期格式保留至:',
+                'language-label': '語言選項:',
+                'theme-label': '主題選擇:',
+                'classic-mode-label': '經典主題模式:',
+                'hours': '小時',
+                'minutes': '分鐘',
+                'seconds': '秒',
+                'year': '年',
+                'month': '月',
+                'day': '日',
+                'location': '地理位置（IP）: ',
+                'classic': '經典',
+                'modern': '現代',
+                'minimal': '極簡',
+                'vintage': '復古',
+                'vibrant': '活力',
+                'light': '淺色模式',
+                'dark': '深色模式'
+            },
+            'fr': {
+                'title': 'Horloge de page',
+                'settings-title': 'Paramètres',
+                'time-format-label': 'Format de l\'heure:',
+                'date-format-label': 'Format de la date:',
+                'language-label': 'Langue:',
+                'theme-label': 'Thème:',
+                'classic-mode-label': 'Mode thème classique:',
+                'hours': 'heures',
+                'minutes': 'minutes',
+                'seconds': 'secondes',
+                'year': 'année',
+                'month': 'mois',
+                'day': 'jour',
+                'location': 'Emplacement géographique: ',
+                'classic': 'Classique',
+                'modern': 'Moderne',
+                'minimal': 'Minimaliste',
+                'vintage': 'Vintage',
+                'vibrant': 'Vibrant',
+                'light': 'Mode clair',
+                'dark': 'Mode sombre'
+            },
+            'en': {
+                'title': 'Flip Clock',
+                'settings-title': 'Settings',
+                'time-format-label': 'Time format to:',
+                'date-format-label': 'Date format to:',
+                'language-label': 'Language:',
+                'theme-label': 'Theme:',
+                'classic-mode-label': 'Classic theme mode:',
+                'hours': 'hours',
+                'minutes': 'minutes',
+                'seconds': 'seconds',
+                'year': 'year',
+                'month': 'month',
+                'day': 'day',
+                'location': 'Location: ',
+                'classic': 'Classic',
+                'modern': 'Modern',
+                'minimal': 'Minimal',
+                'vintage': 'Vintage',
+                'vibrant': 'Vibrant',
+                'light': 'Light mode',
+                'dark': 'Dark mode'
+            },
+            'ja': {
+                'title': 'ページ時計',
+                'settings-title': '設定',
+                'time-format-label': '時間形式:',
+                'date-format-label': '日付形式:',
+                'language-label': '言語:',
+                'theme-label': 'テーマ:',
+                'classic-mode-label': 'クラシックテーマモード:',
+                'hours': '時まで',
+                'minutes': '分まで',
+                'seconds': '秒まで',
+                'year': '年まで',
+                'month': '月まで',
+                'day': '日まで',
+                'location': '地理位置: ',
+                'classic': 'クラシック',
+                'modern': 'モダン',
+                'minimal': 'ミニマル',
+                'vintage': 'ヴィンテージ',
+                'vibrant': '鮮やか',
+                'light': 'ライトモード',
+                'dark': 'ダークモード'
+            },
+            'de': {
+                'title': 'Flip-Uhr',
+                'settings-title': 'Einstellungen',
+                'time-format-label': 'Zeitformat bis zu:',
+                'date-format-label': 'Datumsformat bis zu:',
+                'language-label': 'Sprache:',
+                'theme-label': 'Design:',
+                'classic-mode-label': 'Klassik-Design-Modus:',
+                'hours': 'Stunden',
+                'minutes': 'Minuten',
+                'seconds': 'Sekunden',
+                'year': 'Jahr',
+                'month': 'Monat',
+                'day': 'Tag',
+                'location': 'Standort (IP): ',
+                'classic': 'Klassisch',
+                'modern': 'Modern',
+                'minimal': 'Minimal',
+                'vintage': 'Vintage',
+                'vibrant': 'Leuchtend',
+                'light': 'Hellmodus',
+                'dark': 'Dunkelmodus'
+            },
+            'es': {
+                'title': 'Reloj de página',
+                'settings-title': 'Ajustes',
+                'time-format-label': 'Formato de hora hasta:',
+                'date-format-label': 'Formato de fecha hasta:',
+                'language-label': 'Idioma:',
+                'theme-label': 'Tema:',
+                'classic-mode-label': 'Modo tema clásico:',
+                'hours': 'horas',
+                'minutes': 'minutos',
+                'seconds': 'segundos',
+                'year': 'año',
+                'month': 'mes',
+                'day': 'día',
+                'location': 'Ubicación (IP): ',
+                'classic': 'Clásico',
+                'modern': 'Moderno',
+                'minimal': 'Mínimo',
+                'vintage': 'Vintage',
+                'vibrant': 'Vibrante',
+                'light': 'Modo claro',
+                'dark': 'Modo oscuro'
+            },
+            'ar': {
+                'title': 'ساعة التبديل',
+                'settings-title': 'الإعدادات',
+                'time-format-label': 'تنسيق الوقت إلى:',
+                'date-format-label': 'تنسيق التاريخ إلى:',
+                'language-label': 'اختيار اللغة:',
+                'theme-label': 'الثيم:',
+                'classic-mode-label': 'وضع السمة الكلاسيكية:',
+                'hours': 'ساعة',
+                'minutes': 'دقيقة',
+                'seconds': 'ثانية',
+                'year': 'سنة',
+                'month': 'شهر',
+                'day': 'يوم',
+                'location': 'الموقع (IP): ',
+                'classic': 'كلاسيكي',
+                'modern': 'حديث',
+                'minimal': 'أدنى',
+                'vintage': 'عتيق',
+                'vibrant': 'نابض بالحياة',
+                'light': 'وضع الفاتح',
+                'dark': 'وضع الداكن'
+            }
+        };
+
+        function updateClock() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            const day = now.getDate();
+            const month = now.getMonth() + 1;
+            const year = now.getFullYear();
+            const clockElement = document.getElementById('clock');
+            const dateElement = document.getElementById('date');
+
+            // 根据设置的时间格式更新时间
+            let newClockHtml;
+            if (showSeconds) {
+                newClockHtml = `<div>${hours}</div>:<div>${minutes}</div>:<div class="flip">${seconds}</div>`;
+            } else if (document.getElementById('time-format').value === 'minutes') {
+                newClockHtml = `<div>${hours}</div>:<div>${minutes}</div>`;
+            } else {
+                newClockHtml = `<div>${hours}</div>`;
+            }
+            if (clockElement.innerHTML !== newClockHtml) {
+                clockElement.innerHTML = newClockHtml;
+            }
+
+            // 根据设置的日期格式更新日期
+            let newDateHtml;
+            switch (document.getElementById('date-format').value) {
+                case 'year':
+                    newDateHtml = `<div class="flip">${year}</div>`;
+                    break;
+                case 'month':
+                    newDateHtml = `<div class="flip">${month}</div>${translations[document.getElementById('language').value]['month']}<div class="flip">${year}</div>${translations[document.getElementById('language').value]['year']}`;
+                    break;
+                case 'day':
+                    const lang = document.getElementById('language').value;
+                    if (lang === 'en') {
+                        newDateHtml = `<div class="flip">${month}</div>${translations[lang]['month']}<div class="flip">${day}</div>${translations[lang]['day']} ${translations[lang]['year']}<div class="flip">${year}</div>`;
+                    } else if (lang === 'fr') {
+                        newDateHtml = `<div class="flip">${month}</div>${translations[lang]['month']}, <div class="flip">${day}</div>${translations[lang]['day']}, <div class="flip">${year}</div>${translations[lang]['year']}`;
+                    } else if (lang === 'es') {
+                        newDateHtml = `<div class="flip">${day}</div>${translations[lang]['day']}<div class="flip">${month}</div>${translations[lang]['month']}<div class="flip">${year}</div>`;
+                    } else if (lang === 'de') {
+                        newDateHtml = `<div class="flip">${day}</div>${translations[lang]['day']}<div class="flip">${month}</div>${translations[lang]['month']}<div class="flip">${year}</div>`;
+                    } else if (lang === 'ar') {
+                        newDateHtml = `${translations[lang]['year']} <div class="flip">${year}</div> ${translations[lang]['month']} <div class="flip">${month}</div> ${translations[lang]['day']} <div class="flip">${day}</div>`;
+                    } else {
+                        newDateHtml = `<div class="flip">${year}</div>${translations[lang]['year']}<div class="flip">${month}</div>${translations[lang]['month']}<div class="flip">${day}</div>${translations[lang]['day']}`;
+                    }
+                    break;
+                default:
+                    break;
+            }
+            if (dateElement.innerHTML !== newDateHtml) {
+                dateElement.innerHTML = newDateHtml;
+            }
+
+            setTimeout(updateClock, 1000);
+        }
+
+        function toggleTheme() {
+            // 如果当前是经典主题，切换深浅色
+            if (document.getElementById('theme-select').value === 'classic') {
+                toggleClassicMode();
+                return;
+            }
+            
+            // 非经典主题之间循环切换（不会切换到经典主题）
+            const currentTheme = document.getElementById('theme-select').value;
+            const currentIndex = nonClassicThemes.indexOf(currentTheme);
+            // 计算下一个主题索引，循环非经典主题列表
+            const nextIndex = (currentIndex + 1) % nonClassicThemes.length;
+            const nextTheme = nonClassicThemes[nextIndex];
+            
+            applyTheme(nextTheme);
+        }
+
+        function applyTheme(theme) {
+            // 移除所有主题类和深色类
+            const themes = ['theme-classic', 'theme-modern', 'theme-minimal', 'theme-vintage', 'theme-vibrant'];
+            themes.forEach(t => {
+                document.body.classList.remove(t);
+            });
+            document.body.classList.remove('dark');
+            
+            // 添加选中的主题类
+            document.body.classList.add(`theme-${theme}`);
+            document.getElementById('theme-select').value = theme;
+            localStorage.setItem('theme', theme);
+            
+            // 如果是经典主题，应用保存的深浅色模式
+            if (theme === 'classic') {
+                const mode = localStorage.getItem('classic-mode') || 'light';
+                document.getElementById('classic-mode').value = mode;
+                if (mode === 'dark') {
+                    document.body.classList.add('dark');
+                }
+                document.getElementById('classic-theme-options').style.display = 'block';
+            } else {
+                document.getElementById('classic-theme-options').style.display = 'none';
+            }
+            
+            // 更新主题图标以匹配当前主题风格
+            updateThemeIcon(theme);
+        }
+
+        function toggleClassicMode() {
+            const isDark = document.body.classList.toggle('dark');
+            const mode = isDark ? 'dark' : 'light';
+            document.getElementById('classic-mode').value = mode;
+            localStorage.setItem('classic-mode', mode);
+            
+            // 更新图标
+            updateThemeIcon('classic');
+        }
+
+        function updateThemeIcon(theme) {
+            const themeToggle = document.getElementById('theme-toggle');
+            const iconElement = themeToggle.querySelector('i');
+            
+            // 添加动画类
+            iconElement.classList.add('spin-animation');
+            
+            // 根据主题和模式设置不同的图标
+            setTimeout(() => {
+                if (theme === 'classic') {
+                    // 经典主题根据深浅色显示不同图标
+                    const isDark = document.body.classList.contains('dark');
+                    themeToggle.innerHTML = isDark ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
+                } else {
+                    switch(theme) {
+                        case 'modern':
+                            themeToggle.innerHTML = '<i class="fas fa-bolt"></i>';
+                            break;
+                        case 'minimal':
+                            themeToggle.innerHTML = '<i class="fas fa-circle"></i>';
+                            break;
+                        case 'vintage':
+                            themeToggle.innerHTML = '<i class="fas fa-hourglass-half"></i>';
+                            break;
+                        case 'vibrant':
+                            themeToggle.innerHTML = '<i class="fas fa-palette"></i>';
+                            break;
+                    }
+                }
+                iconElement.classList.remove('spin-animation');
+            }, 300);
+        }
+
+        function closeSettingsDialog() {
+            document.getElementById('settings-dialog').style.display = 'none';
+            document.getElementById('overlay').style.display = 'none';
+        }
+
+        function updateLanguage() {
+            const lang = document.getElementById('language').value;
+            document.getElementById('title').innerText = translations[lang]['title'];
+            document.getElementById('settings-title').innerText = translations[lang]['settings-title'];
+            document.getElementById('time-format-label').innerText = translations[lang]['time-format-label'];
+            document.getElementById('date-format-label').innerText = translations[lang]['date-format-label'];
+            document.getElementById('language-label').innerText = translations[lang]['language-label'];
+            document.getElementById('theme-label').innerText = translations[lang]['theme-label'];
+            document.getElementById('classic-mode-label').innerText = translations[lang]['classic-mode-label'];
+            
+            // 更新下拉选项文本
+            document.getElementById('time-format').querySelector(`option[value="hours"]`).innerText = translations[lang]['hours'];
+            document.getElementById('time-format').querySelector(`option[value="minutes"]`).innerText = translations[lang]['minutes'];
+            document.getElementById('time-format').querySelector(`option[value="seconds"]`).innerText = translations[lang]['seconds'];
+            document.getElementById('date-format').querySelector(`option[value="year"]`).innerText = translations[lang]['year'];
+            document.getElementById('date-format').querySelector(`option[value="month"]`).innerText = translations[lang]['month'];
+            document.getElementById('date-format').querySelector(`option[value="day"]`).innerText = translations[lang]['day'];
+            
+            // 更新主题选项文本
+            document.getElementById('theme-select').querySelector(`option[value="classic"]`).innerText = translations[lang]['classic'];
+            document.getElementById('theme-select').querySelector(`option[value="modern"]`).innerText = translations[lang]['modern'];
+            document.getElementById('theme-select').querySelector(`option[value="minimal"]`).innerText = translations[lang]['minimal'];
+            document.getElementById('theme-select').querySelector(`option[value="vintage"]`).innerText = translations[lang]['vintage'];
+            document.getElementById('theme-select').querySelector(`option[value="vibrant"]`).innerText = translations[lang]['vibrant'];
+            
+            // 更新经典主题模式选项
+            document.getElementById('classic-mode').querySelector(`option[value="light"]`).innerText = translations[lang]['light'];
+            document.getElementById('classic-mode').querySelector(`option[value="dark"]`).innerText = translations[lang]['dark'];
+            
+            locationText = translations[lang]['location'];
+            document.getElementById('location').innerText = locationText;
+            getGeoLocation(lang);
+            localStorage.setItem('language', lang);
+        }
+
+        function getGeoLocation(lang) {
+            fetch('https://ipapi.co/json/') // 调用IP地址获取地理位置
+                 .then(response => response.json())
+                 .then(data => {
+                    let locationHtml = `${locationText}${data.timezone}, ${data.city}, ${data.region}, ${data.country}`;
+                    document.getElementById('location').innerText = locationHtml;
+                })
+                 .catch(error => {
+                    console.error('Error fetching location:', error);
+                    document.getElementById('location').innerText = `${locationText}N/A无法获取地理位置`;
+                });
+        }
+
+        // 为设置按钮添加点击动画
+        document.getElementById('settings').addEventListener('click', () => {
+            const icon = document.querySelector('.settings i');
+            icon.classList.add('spin-animation');
+            
+            setTimeout(() => {
+                document.getElementById('settings-dialog').style.display = 'block';
+                document.getElementById('overlay').style.display = 'block';
+                // 根据当前主题显示或隐藏经典主题选项
+                document.getElementById('classic-theme-options').style.display = 
+                    document.getElementById('theme-select').value === 'classic' ? 'block' : 'none';
+                icon.classList.remove('spin-animation');
+            }, 300);
+        });
+
+        document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
+        document.getElementById('close-settings').addEventListener('click', closeSettingsDialog);
+
+        // 点击遮罩层关闭设置面板
+        document.getElementById('overlay').addEventListener('click', closeSettingsDialog);
+
+        document.getElementById('time-format').addEventListener('change', () => {
+            showSeconds = document.getElementById('time-format').value === 'seconds';
+            updateClock();
+            localStorage.setItem('time-format', document.getElementById('time-format').value);
+        });
+
+        document.getElementById('date-format').addEventListener('change', () => {
+            updateClock();
+            localStorage.setItem('date-format', document.getElementById('date-format').value);
+        });
+
+        document.getElementById('language').addEventListener('change', updateLanguage);
+
+        // 主题选择事件
+        document.getElementById('theme-select').addEventListener('change', () => {
+            const selectedTheme = document.getElementById('theme-select').value;
+            applyTheme(selectedTheme);
+            // 显示或隐藏经典主题选项
+            document.getElementById('classic-theme-options').style.display = 
+                selectedTheme === 'classic' ? 'block' : 'none';
+        });
+
+        // 经典主题模式切换
+        document.getElementById('classic-mode').addEventListener('change', () => {
+            const mode = document.getElementById('classic-mode').value;
+            if (mode === 'dark') {
+                document.body.classList.add('dark');
+            } else {
+                document.body.classList.remove('dark');
+            }
+            localStorage.setItem('classic-mode', mode);
+            updateThemeIcon('classic');
+        });
+
+        // 初始化设置
+        document.getElementById('language').value = defaultLang;
+        document.getElementById('time-format').value = defaultTimeFormat;
+        document.getElementById('date-format').value = defaultDateFormat;
+        document.getElementById('classic-mode').value = defaultClassicMode;
+        
+        // 应用保存的主题
+        applyTheme(defaultTheme);
+
+        // 更新语言和时钟
+        updateLanguage();
+        getGeoLocation(defaultLang);
+        updateClock();
+
+    </script>
+    <div class="footer">
+        Powerby fitten-codechat 20250309 @bilibili 布吉岛与我不造 @抖音 Robin1
+    </div>
+<div class="feedback-float" id="feedback-float" style="touch-action: manipulation;">
+        <i class="fas fa-comment-dots"></i>
+    </div>
+    <script>
+        // 问题反馈浮球
+        const feedbackFloat = document.getElementById('feedback-float');
+        const language = document.getElementById('language').value;
+        
+        // 根据语言设置提示文本
+        const feedbackText = {
+            'zh-CN': '问题反馈',
+            'zh-TW': '問題反饋',
+            'en': 'Feedback',
+            'fr': 'Retour',
+            'ja': 'フィードバック',
+            'de': 'Feedback',
+            'es': 'Comentarios',
+            'ar': 'تعليقات'
+        };
+        
+        feedbackFloat.setAttribute('title', feedbackText[language] || feedbackText['zh-CN']);
+        
+        // 点击/触摸浮球打开内嵌窗口
+        function showFeedbackDialog() {
+            const feedbackDialog = document.createElement('div');
+            feedbackDialog.className = 'feedback-dialog';
+            feedbackDialog.innerHTML = `
+                <iframe src="https://www.wjx.cn/vm/tGs43n3.aspx" frameborder="0" style="width:100%;height:100%;"></iframe>
+                <button class="close-btn" style="touch-action: manipulation;">×</button>
+            `;
+            document.body.appendChild(feedbackDialog);
+            
+            // 关闭按钮事件
+            const closeBtn = feedbackDialog.querySelector('.close-btn');
+            closeBtn.addEventListener('click', function() {
+                document.body.removeChild(feedbackDialog);
+            });
+            closeBtn.addEventListener('touchend', function(e) {
+                e.preventDefault();
+                document.body.removeChild(feedbackDialog);
+            });
+        }
+        
+        feedbackFloat.addEventListener('click', showFeedbackDialog);
+        feedbackFloat.addEventListener('touchend', function(e) {
+            e.preventDefault();
+            showFeedbackDialog();
+        });
+    </script>
+<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 隐藏加载图标
+            document.getElementById('loading-icon').style.display = 'none';
+            const feedbackFloat = document.querySelector('.feedback-float');
+            const feedbackDialog = document.querySelector('.feedback-dialog');
+            const overlay = document.querySelector('.overlay');
+            const closeBtn = document.querySelector('.close-btn');
+
+            if (feedbackFloat && feedbackDialog && overlay && closeBtn) {
+                feedbackFloat.addEventListener('click', function() {
+                    feedbackDialog.style.display = 'block';
+                    overlay.style.display = 'block';
+                    // 确保iframe加载内容
+                    const iframe = feedbackDialog.querySelector('iframe');
+                    if (iframe && !iframe.src) {
+                        iframe.src = 'feedback.html'; // 替换为实际的反馈页面URL
+                    }
+                });
+
+                closeBtn.addEventListener('click', function() {
+                    feedbackDialog.style.display = 'none';
+                    overlay.style.display = 'none';
+                });
+            }
+        });
+    </script>
+</body>
 </html>
+    
