@@ -1,0 +1,1532 @@
+/* 浅色模式变量 */
+:root {
+    --todoList-bg: #ffffff;
+    --todoList-card-bg: #f5f7fa;
+    --todoList-text: #2c3e50;
+    --todoList-text-secondary: #7f8c8d;
+    --todoList-border: #e8edf2;
+    --todoList-primary: #3498db;
+    --todoList-primary-hover: #2980b9;
+    --todoList-danger: #e74c3c;
+    --todoList-danger-hover: #c0392b;
+    --todoList-success: #2ecc71;
+    --todoList-success-hover: #27ae60;
+    --todoList-warning: #f39c12;
+    --todoList-warning-hover: #d35400;
+    --todoList-shadow: rgba(0, 0, 0, 0.08);
+    --todoList-favorite: #f1c40f;
+    --todoList-favorite-hover: #f39c12;
+    --todoList-input-bg: #ffffff;
+    --todoList-input-border: #e8edf2;
+    --todoList-input-text: #2c3e50;
+    --todoList-input-placeholder: #95a5a6;
+    --todoList-scrollbar-track: #f5f7fa;
+    --todoList-scrollbar-thumb: #bdc3c7;
+    --todoList-scrollbar-thumb-hover: #95a5a6;
+}
+
+/* 深色模式变量 */
+[data-theme="dark"] {
+    --todoList-bg: #1a1a1a;
+    --todoList-card-bg: #2d2d2d;
+    --todoList-text: #e0e0e0;
+    --todoList-text-secondary: #a0a0a0;
+    --todoList-border: #404040;
+    --todoList-primary: #4a9eff;
+    --todoList-primary-hover: #357abd;
+    --todoList-danger: #ff6b6b;
+    --todoList-danger-hover: #ff5252;
+    --todoList-success: #2ecc71;
+    --todoList-success-hover: #27ae60;
+    --todoList-warning: #ffa502;
+    --todoList-warning-hover: #ff9f1a;
+    --todoList-shadow: rgba(0, 0, 0, 0.2);
+    --todoList-favorite: #ffd700;
+    --todoList-favorite-hover: #ffed4e;
+    --todoList-input-bg: #2d2d2d;
+    --todoList-input-border: #404040;
+    --todoList-input-text: #e0e0e0;
+    --todoList-input-placeholder: #808080;
+    --todoList-scrollbar-track: #2d2d2d;
+    --todoList-scrollbar-thumb: #404040;
+    --todoList-scrollbar-thumb-hover: #505050;
+}
+
+/* 基础样式 */
+.todoList-container {
+    background-color: var(--todoList-bg);
+    color: var(--todoList-text);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.todoList-card {
+    background-color: var(--todoList-card-bg);
+    border: 1px solid var(--todoList-border);
+    box-shadow: 0 2px 4px var(--todoList-shadow);
+    transition: all 0.3s ease;
+}
+
+.todoList-input {
+    background-color: var(--todoList-input-bg);
+    border: 1px solid var(--todoList-input-border);
+    color: var(--todoList-input-text);
+}
+
+.todoList-input::placeholder {
+    color: var(--todoList-input-placeholder);
+}
+
+/* 滚动条样式 */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--todoList-scrollbar-track);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--todoList-scrollbar-thumb);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--todoList-scrollbar-thumb-hover);
+}
+
+.todoList-container {
+    padding: 20px;
+    background: var(--todoList-bg);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px var(--todoList-shadow);
+    transition: background-color 0.3s ease;
+}
+
+.todoList-search {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.todoList-search input {
+    width: 100%;
+    padding: 12px 20px;
+    padding-left: 40px;
+    border: 1px solid var(--todoList-border);
+    border-radius: 8px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    background: var(--todoList-card-bg);
+    color: var(--todoList-text);
+}
+
+.todoList-search input:focus {
+    border-color: var(--todoList-primary);
+    box-shadow: 0 0 0 2px rgb(255, 255, 255);
+    outline: none;
+}
+
+.todoList-search i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--todoList-text-secondary);
+}
+
+.todoList-List {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.todoList-item {
+    background: var(--todoList-card-bg);
+    border-radius: 10px;
+    padding: 15px;
+    transition: all 0.3s ease;
+    border: 1px solid var(--todoList-border);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.todoList-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px var(--todoList-shadow);
+}
+
+.todoList-checkbox {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--todoList-primary);
+    border-radius: 4px;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s ease;
+}
+
+.todoList-checkbox.checked {
+    background: var(--todoList-primary);
+}
+
+.todoList-checkbox.checked::after {
+    content: '✓';
+    position: absolute;
+    color: white;
+    font-size: 14px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.todoList-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.todoList-title {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--todoList-text);
+}
+
+.todoList-title.completed {
+    text-decoration: line-through;
+    color: var(--todoList-text-secondary);
+}
+
+.todoList-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 13px;
+    color: var(--todoList-text-secondary);
+}
+
+.todoList-date {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.todoList-priority {
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.todoList-priority.high {
+    background: var(--todoList-danger);
+    color: white;
+}
+
+.todoList-priority.medium {
+    background: var(--todoList-warning);
+    color: var(--todoList-text);
+}
+
+.todoList-priority.low {
+    background: var(--todoList-success);
+    color: white;
+}
+
+.todoList-tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.todoList-tag {
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    background: var(--todoList-primary);
+    color: white;
+}
+
+.todoList-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.todoList-action-btn {
+    padding: 6px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    color: var(--todoList-text-secondary);
+    background: transparent;
+    transition: all 0.2s ease;
+}
+
+.todoList-action-btn:hover {
+    background: var(--todoList-primary);
+    color: white;
+}
+
+.todoList-action-btn.delete:hover {
+    background: var(--todoList-danger);
+}
+
+.empty-todoList-message {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--todoList-text-secondary);
+}
+
+.empty-icon {
+    font-size: 48px;
+    margin-bottom: 15px;
+}
+
+.sub-text {
+    font-size: 14px;
+    color: var(--todoList-text-secondary);
+    margin-top: 8px;
+}
+
+.add-todoList-btn {
+    background: var(--todoList-primary);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    box-shadow: 0 2px 4px rgba(92, 156, 230, 0.2);
+}
+
+.add-todoList-btn:hover {
+    background: var(--todoList-primary-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(92, 156, 230, 0.3);
+}
+
+.add-todoList-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgb(255, 255, 255);
+}
+
+/* 导入模态框样式 */
+.import-format-hint {
+    background: var(--todoList-card-bg);
+    border: 1px solid var(--todoList-border);
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.import-format-hint h4 {
+    color: var(--todoList-text);
+    margin-bottom: 10px;
+}
+
+.import-format-hint pre {
+    background: var(--todoList-bg);
+    padding: 12px;
+    border-radius: 6px;
+    overflow-x: auto;
+    color: var(--todoList-text);
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+/* 日期分隔符样式 */
+.date-separator {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--todoList-text-secondary);
+    padding: 10px 0;
+    margin-top: 20px;
+    border-bottom: 1px solid var(--todoList-border);
+}
+
+/* Search结果样式 */
+.search-results-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 10px 0;
+}
+
+.search-stats {
+    background: var(--todoList-card-bg);
+    border: 1px solid var(--todoList-border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 10px;
+}
+
+.search-stats-content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--todoList-text);
+}
+
+.search-stats-icon {
+    font-size: 16px;
+}
+
+.search-stats-text {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.search-todoList-section {
+    background: var(--todoList-card-bg);
+    border: 1px solid var(--todoList-border);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.search-todoList-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background: var(--todoList-primary);
+    color: white;
+}
+
+.search-todoList-name {
+    font-weight: 500;
+    font-size: 15px;
+}
+
+.search-todoList-count {
+    font-size: 13px;
+    opacity: 0.9;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 2px 8px;
+    border-radius: 12px;
+}
+
+.search-todoList-section .todoList-item {
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    border-bottom: 1px solid var(--todoList-border);
+}
+
+.search-todoList-section .todoList-item:last-child {
+    border-bottom: none;
+}
+
+.search-todoList-section .todoList-item:hover {
+    background: var(--todoList-card-bg);
+    transform: none;
+    box-shadow: none;
+}
+
+/* high亮Search匹配文本 */
+.highlight-match {
+    background: var(--todoList-warning);
+    color: var(--todoList-text);
+    padding: 0 2px;
+    border-radius: 2px;
+}
+
+/* List收藏功能样式 */
+.List-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 1px solid var(--todoList-border);
+    background: var(--todoList-card-bg);
+    margin-bottom: 8px;
+}
+
+.List-item:hover {
+    background: var(--todoList-primary);
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px var(--todoList-shadow);
+}
+
+.List-item.active {
+    background: var(--todoList-primary);
+    color: white;
+    border-color: var(--todoList-primary);
+}
+
+.List-item-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex: 1;
+    min-width: 0;
+}
+
+.List-item-text {
+    font-weight: 500;
+    font-size: 14px;
+    margin-right: 8px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.List-item-count {
+    background: rgba(255, 255, 255, 0.2);
+    color: inherit;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    min-width: 20px;
+    text-align: center;
+}
+
+.List-favorite-btn {
+    background: none;
+    border: none;
+    color: var(--todoList-text-secondary);
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    margin-left: 8px;
+    flex-shrink: 0;
+}
+
+.List-favorite-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--todoList-favorite);
+}
+
+.List-favorite-btn.favorited {
+    color: var(--todoList-favorite);
+}
+
+.List-favorite-btn.favorited:hover {
+    color: var(--todoList-favorite-hover);
+    transform: scale(1.1);
+}
+
+.List-favorite-btn i {
+    font-size: 14px;
+}
+
+/* 收藏的List特殊样式 */
+.List-item.favorited {
+    border-color: var(--todoList-favorite);
+    background: linear-gradient(135deg, var(--todoList-card-bg) 0%, rgba(255, 215, 0, 0.1) 100%);
+}
+
+.List-item.favorited:hover {
+    background: linear-gradient(135deg, var(--todoList-primary) 0%, rgba(255, 215, 0, 0.2) 100%);
+}
+
+.List-item.favorited.active {
+    background: linear-gradient(135deg, var(--todoList-primary) 0%, rgba(255, 215, 0, 0.3) 100%);
+}
+
+/* 收藏分隔线 */
+.favorite-separator {
+    margin: 16px 0 8px 0;
+    padding: 0 16px;
+    font-size: 12px;
+    color: var(--todoList-text-secondary);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+}
+
+.favorite-separator::before {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--todoList-border);
+    margin-right: 12px;
+}
+
+.favorite-separator::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--todoList-border);
+    margin-left: 12px;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .List-item {
+        padding: 10px 12px;
+    }
+    
+    .List-item-text {
+        font-size: 13px;
+    }
+    
+    .List-favorite-btn {
+        padding: 4px;
+    }
+    
+    .List-favorite-btn i {
+        font-size: 12px;
+    }
+}
+
+/* 移动端List菜单样式优化 */
+@media (max-width: 768px) {
+    /* List容器布局调整 */
+    .Lists-container {
+        flex-direction: column;
+        height: calc(100vh - 120px);
+    }
+    
+    /* 侧边栏样式 */
+    .Lists-sidebar {
+        width: 100%;
+        max-height: 140px;
+        border-right: none;
+        border-bottom: 1px solid var(--todoList-border);
+        padding: 8px;
+    }
+    
+    /* Search框样式 */
+    .Lists-search {
+        padding: 8px;
+        margin-bottom: 8px;
+    }
+    
+    .Lists-search .search-box {
+        position: relative;
+    }
+    
+    .Lists-search input {
+        width: 100%;
+        padding: 8px 12px 8px 32px;
+        border: 1px solid var(--todoList-border);
+        border-radius: 20px;
+        font-size: 14px;
+        background: var(--todoList-card-bg);
+    }
+    
+    .Lists-search .search-icon {
+        position: absolute;
+        left: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--todoList-text-secondary);
+        font-size: 14px;
+    }
+    
+    /* List导航横向滚动 */
+    .Lists-nav {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        padding: 4px 0;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none; /* Firefox */
+        -ms-overflow-style: none; /* IE and Edge */
+    }
+    
+    .Lists-nav::-webkit-scrollbar {
+        display: none; /* Chrome, Safari, Opera */
+    }
+    
+    /* ListItem样式 */
+    .List-item {
+        flex: 0 0 auto;
+        margin-right: 8px;
+        padding: 8px 12px;
+        border-radius: 16px;
+        white-space: nowrap;
+        min-width: max-content;
+        border: 1px solid var(--todoList-border);
+        background: var(--todoList-card-bg);
+    }
+    
+    .List-item:last-child {
+        margin-right: 0;
+    }
+    
+    .List-item-content {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+    
+    .List-item-text {
+        font-size: 13px;
+        font-weight: 500;
+        max-width: 120px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    
+    .List-item-count {
+        background: rgba(255, 255, 255, 0.2);
+        color: inherit;
+        padding: 2px 6px;
+        border-radius: 10px;
+        font-size: 11px;
+        font-weight: 600;
+        min-width: 18px;
+        text-align: center;
+    }
+    
+    .List-favorite-btn {
+        padding: 4px;
+        margin-left: 4px;
+    }
+    
+    .List-favorite-btn i {
+        font-size: 11px;
+    }
+    
+    /* 收藏分隔线移动端样式 */
+    .favorite-separator {
+        margin: 8px 0 4px 0;
+        padding: 0 8px;
+        font-size: 11px;
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+    
+    /* ListContent区域 */
+    .List-content {
+        flex: 1;
+        padding: 8px;
+        height: calc(100% - 140px);
+    }
+    
+    /* ListTitle */
+    .List-header {
+        padding: 8px 0;
+        border-bottom: 1px solid var(--todoList-border);
+        margin-bottom: 8px;
+    }
+    
+    .List-header h3 {
+        font-size: 16px;
+        font-weight: 600;
+        margin: 0;
+        color: var(--todoList-text);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    
+    /* List操作按钮 */
+    .List-actions {
+        display: flex;
+        gap: 6px;
+        margin-top: 8px;
+    }
+    
+    .List-action-btn {
+        padding: 6px 10px;
+        font-size: 12px;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        flex: 1;
+        justify-content: center;
+    }
+    
+    .List-action-btn i {
+        font-size: 11px;
+    }
+}
+
+/* 小屏幕设备进一步优化 */
+@media (max-width: 480px) {
+    .Lists-sidebar {
+        max-height: 120px;
+        padding: 6px;
+    }
+    
+    .Lists-search {
+        padding: 6px;
+    }
+    
+    .Lists-search input {
+        padding: 6px 10px 6px 28px;
+        font-size: 13px;
+    }
+    
+    .Lists-search .search-icon {
+        left: 8px;
+        font-size: 13px;
+    }
+    
+    .List-item {
+        padding: 6px 10px;
+        margin-right: 6px;
+        border-radius: 14px;
+    }
+    
+    .List-item-text {
+        font-size: 12px;
+        max-width: 100px;
+    }
+    
+    .List-item-count {
+        padding: 1px 5px;
+        font-size: 10px;
+        min-width: 16px;
+    }
+    
+    .List-favorite-btn {
+        padding: 3px;
+    }
+    
+    .List-favorite-btn i {
+        font-size: 10px;
+    }
+    
+    .favorite-separator {
+        font-size: 10px;
+        margin: 6px 0 3px 0;
+        padding: 0 6px;
+    }
+    
+    .List-content {
+        padding: 6px;
+        height: calc(100% - 120px);
+    }
+    
+    .List-header h3 {
+        font-size: 15px;
+    }
+    
+    .List-actions {
+        gap: 4px;
+    }
+    
+    .List-action-btn {
+        padding: 5px 8px;
+        font-size: 11px;
+    }
+    
+    .List-action-btn i {
+        font-size: 10px;
+    }
+}
+
+/* 超小屏幕设备 */
+@media (max-width: 320px) {
+    .Lists-sidebar {
+        max-height: 100px;
+        padding: 4px;
+    }
+    
+    .Lists-search {
+        padding: 4px;
+    }
+    
+    .Lists-search input {
+        padding: 5px 8px 5px 24px;
+        font-size: 12px;
+    }
+    
+    .Lists-search .search-icon {
+        left: 6px;
+        font-size: 12px;
+    }
+    
+    .List-item {
+        padding: 5px 8px;
+        margin-right: 4px;
+        border-radius: 12px;
+    }
+    
+    .List-item-text {
+        font-size: 11px;
+        max-width: 80px;
+    }
+    
+    .List-item-count {
+        padding: 1px 4px;
+        font-size: 9px;
+        min-width: 14px;
+    }
+    
+    .List-favorite-btn {
+        padding: 2px;
+    }
+    
+    .List-favorite-btn i {
+        font-size: 9px;
+    }
+    
+    .favorite-separator {
+        font-size: 9px;
+        margin: 4px 0 2px 0;
+        padding: 0 4px;
+    }
+    
+    .List-content {
+        padding: 4px;
+        height: calc(100% - 100px);
+    }
+    
+    .List-header h3 {
+        font-size: 14px;
+    }
+    
+    .List-action-btn {
+        padding: 4px 6px;
+        font-size: 10px;
+    }
+    
+    .List-action-btn i {
+        font-size: 9px;
+    }
+}
+
+/* 横屏模式优化 */
+@media (orientation: landscape) and (max-width: 896px) {
+    .Lists-container {
+        flex-direction: row;
+        height: calc(100vh - 80px);
+    }
+    
+    .Lists-sidebar {
+        width: 200px;
+        max-height: none;
+        border-right: 1px solid var(--todoList-border);
+        border-bottom: none;
+    }
+    
+    .Lists-nav {
+        flex-direction: column;
+        overflow-x: visible;
+        overflow-y: auto;
+        max-height: calc(100vh - 140px);
+    }
+    
+    .List-item {
+        margin-right: 0;
+        margin-bottom: 4px;
+        white-space: normal;
+        min-width: auto;
+    }
+    
+    .List-content {
+        height: 100%;
+    }
+}
+
+/* Search空状态样式 */
+.empty-search-message {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--todoList-text-secondary);
+}
+
+.empty-search-message p {
+    margin: 0;
+    font-size: 14px;
+}
+
+.empty-search-message::before {
+    content: '🔍';
+    font-size: 24px;
+    display: block;
+    margin-bottom: 12px;
+}
+
+/* 移动端ListItemContent样式 */
+@media (max-width: 768px) {
+    /* 批量操作工具栏 */
+    .batch-toolbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 8px 12px;
+        background: var(--todoList-card-bg);
+        border: 1px solid var(--todoList-border);
+        border-radius: 8px;
+        margin-bottom: 8px;
+        font-size: 13px;
+    }
+    
+    .batch-select-all {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+    
+    .batch-select-all input[type="checkbox"] {
+        width: 16px;
+        height: 16px;
+    }
+    
+    .batch-info {
+        font-size: 12px;
+        color: var(--todoList-text-secondary);
+    }
+    
+    /* List任务Item */
+    .List-task-item {
+        padding: 10px;
+        margin-bottom: 6px;
+        border-radius: 8px;
+        border: 1px solid var(--todoList-border);
+        background: var(--todoList-card-bg);
+    }
+    
+    .List-task-header {
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+        margin-bottom: 6px;
+    }
+    
+    .List-task-checkbox {
+        width: 18px;
+        height: 18px;
+        margin-top: 2px;
+        flex-shrink: 0;
+    }
+    
+    .List-task-content {
+        flex: 1;
+        min-width: 0;
+    }
+    
+    .List-task-title {
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--todoList-text);
+        margin-bottom: 4px;
+        line-height: 1.3;
+    }
+    
+    .List-task-title.completed {
+        text-decoration: line-through;
+        color: var(--todoList-text-secondary);
+    }
+    
+    .List-task-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        align-items: center;
+        font-size: 11px;
+        color: var(--todoList-text-secondary);
+    }
+    
+    .List-task-priority {
+        padding: 2px 6px;
+        border-radius: 8px;
+        font-size: 10px;
+        font-weight: 600;
+    }
+    
+    .List-task-due-date {
+        display: flex;
+        align-items: center;
+        gap: 3px;
+    }
+    
+    .List-task-actions {
+        display: flex;
+        gap: 4px;
+        margin-top: 6px;
+    }
+    
+    .List-task-action {
+        padding: 4px 6px;
+        border: none;
+        border-radius: 4px;
+        background: transparent;
+        color: var(--todoList-text-secondary);
+        font-size: 11px;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    
+    .List-task-action:hover {
+        background: var(--todoList-primary);
+        color: white;
+    }
+    
+    .List-task-action.delete:hover {
+        background: var(--todoList-danger);
+    }
+    
+    /* CompletedItem区域 */
+    .completed-items-section {
+        margin-top: 12px;
+        padding-top: 8px;
+        border-top: 1px solid var(--todoList-border);
+    }
+    
+    .completed-items-section h4 {
+        font-size: 13px;
+        color: var(--todoList-text-secondary);
+        margin: 0 0 8px 0;
+        font-weight: 500;
+    }
+    
+    /* 空状态消息 */
+    .empty-List-message {
+        text-align: center;
+        padding: 30px 20px;
+        color: var(--todoList-text-secondary);
+    }
+    
+    .empty-List-message .empty-icon {
+        font-size: 36px;
+        margin-bottom: 12px;
+    }
+    
+    .empty-List-message p {
+        font-size: 14px;
+        margin: 0;
+    }
+}
+
+/* 小屏幕设备ListItem进一步优化 */
+@media (max-width: 480px) {
+    .batch-toolbar {
+        padding: 6px 8px;
+        font-size: 12px;
+    }
+    
+    .batch-select-all input[type="checkbox"] {
+        width: 14px;
+        height: 14px;
+    }
+    
+    .batch-info {
+        font-size: 11px;
+    }
+    
+    .List-task-item {
+        padding: 8px;
+        margin-bottom: 4px;
+    }
+    
+    .List-task-header {
+        gap: 6px;
+        margin-bottom: 4px;
+    }
+    
+    .List-task-checkbox {
+        width: 16px;
+        height: 16px;
+    }
+    
+    .List-task-title {
+        font-size: 13px;
+        margin-bottom: 3px;
+    }
+    
+    .List-task-meta {
+        gap: 4px;
+        font-size: 10px;
+    }
+    
+    .List-task-priority {
+        padding: 1px 4px;
+        font-size: 9px;
+    }
+    
+    .List-task-actions {
+        gap: 3px;
+        margin-top: 4px;
+    }
+    
+    .List-task-action {
+        padding: 3px 5px;
+        font-size: 10px;
+    }
+    
+    .completed-items-section {
+        margin-top: 8px;
+        padding-top: 6px;
+    }
+    
+    .completed-items-section h4 {
+        font-size: 12px;
+        margin-bottom: 6px;
+    }
+    
+    .empty-List-message {
+        padding: 20px 15px;
+    }
+    
+    .empty-List-message .empty-icon {
+        font-size: 28px;
+        margin-bottom: 8px;
+    }
+    
+    .empty-List-message p {
+        font-size: 13px;
+    }
+}
+
+/* 超小屏幕设备ListItem */
+@media (max-width: 320px) {
+    .batch-toolbar {
+        padding: 4px 6px;
+        font-size: 11px;
+    }
+    
+    .batch-select-all input[type="checkbox"] {
+        width: 12px;
+        height: 12px;
+    }
+    
+    .batch-info {
+        font-size: 10px;
+    }
+    
+    .List-task-item {
+        padding: 6px;
+        margin-bottom: 3px;
+    }
+    
+    .List-task-header {
+        gap: 4px;
+        margin-bottom: 3px;
+    }
+    
+    .List-task-checkbox {
+        width: 14px;
+        height: 14px;
+    }
+    
+    .List-task-title {
+        font-size: 12px;
+        margin-bottom: 2px;
+    }
+    
+    .List-task-meta {
+        gap: 3px;
+        font-size: 9px;
+    }
+    
+    .List-task-priority {
+        padding: 1px 3px;
+        font-size: 8px;
+    }
+    
+    .List-task-actions {
+        gap: 2px;
+        margin-top: 3px;
+    }
+    
+    .List-task-action {
+        padding: 2px 4px;
+        font-size: 9px;
+    }
+    
+    .completed-items-section {
+        margin-top: 6px;
+        padding-top: 4px;
+    }
+    
+    .completed-items-section h4 {
+        font-size: 11px;
+        margin-bottom: 4px;
+    }
+    
+    .empty-List-message {
+        padding: 15px 10px;
+    }
+    
+    .empty-List-message .empty-icon {
+        font-size: 24px;
+        margin-bottom: 6px;
+    }
+    
+    .empty-List-message p {
+        font-size: 12px;
+    }
+}
+
+/* 移动端滑动功能样式 */
+@media (max-width: 768px) {
+    /* 滑动状态样式 */
+    .List-item.swipe-ready {
+        transition: transform 0.2s ease;
+        position: relative;
+        z-index: 10;
+    }
+    
+    .List-item.swipe-right {
+        background: linear-gradient(135deg, var(--todoList-favorite) 0%, rgba(255, 215, 0, 0.3) 100%);
+        box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
+    }
+    
+    .List-item.swipe-left {
+        background: linear-gradient(135deg, var(--todoList-danger) 0%, rgba(231, 76, 60, 0.3) 100%);
+        box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+    }
+    
+    /* 滑动提示指示器 */
+    .List-item::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(90deg, 
+            rgba(255, 215, 0, 0.1) 0%, 
+            transparent 20%, 
+            transparent 80%, 
+            rgba(231, 76, 60, 0.1) 100%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+        border-radius: inherit;
+    }
+    
+    .List-item.swipe-ready::before {
+        opacity: 1;
+    }
+    
+    /* 滑动操作提示 */
+    .List-item::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 20px;
+        height: 20px;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+    }
+    
+    .List-item.swipe-right::after {
+        content: '⭐';
+        right: 10px;
+        opacity: 0.8;
+    }
+    
+    .List-item.swipe-left::after {
+        content: '🗑️';
+        left: 10px;
+        opacity: 0.8;
+    }
+}
+
+/* Delet确认对话框样式 */
+.swipe-delete-dialog {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease;
+}
+
+.swipe-delete-content {
+    background: var(--todoList-card-bg);
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px;
+    max-width: 300px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    animation: slideUp 0.3s ease;
+}
+
+.swipe-delete-icon {
+    font-size: 32px;
+    margin-bottom: 12px;
+}
+
+.swipe-delete-text {
+    font-size: 16px;
+    color: var(--todoList-text);
+    margin-bottom: 20px;
+    font-weight: 500;
+}
+
+.swipe-delete-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.swipe-delete-cancel,
+.swipe-delete-confirm {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex: 1;
+    max-width: 100px;
+}
+
+.swipe-delete-cancel {
+    background: var(--todoList-border);
+    color: var(--todoList-text);
+}
+
+.swipe-delete-cancel:hover {
+    background: var(--todoList-text-secondary);
+    color: white;
+}
+
+.swipe-delete-confirm {
+    background: var(--todoList-danger);
+    color: white;
+}
+
+.swipe-delete-confirm:hover {
+    background: var(--todoList-danger-hover);
+    transform: translateY(-1px);
+}
+
+/* 动画效果 */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* 深色模式适配 */
+@media (prefers-color-scheme: dark) {
+    .swipe-delete-content {
+        background: var(--todoList-card-bg);
+        border: 1px solid var(--todoList-border);
+    }
+    
+    .swipe-delete-cancel {
+        background: var(--todoList-border);
+        color: var(--todoList-text);
+    }
+    
+    .swipe-delete-cancel:hover {
+        background: var(--todoList-text-secondary);
+        color: var(--todoList-card-bg);
+    }
+}
+
+/* 小屏幕设备对话框优化 */
+@media (max-width: 480px) {
+    .swipe-delete-content {
+        padding: 16px;
+        margin: 16px;
+    }
+    
+    .swipe-delete-icon {
+        font-size: 28px;
+        margin-bottom: 10px;
+    }
+    
+    .swipe-delete-text {
+        font-size: 14px;
+        margin-bottom: 16px;
+    }
+    
+    .swipe-delete-actions {
+        gap: 8px;
+    }
+    
+    .swipe-delete-cancel,
+    .swipe-delete-confirm {
+        padding: 8px 16px;
+        font-size: 13px;
+        max-width: 80px;
+    }
+}
+
+@media (max-width: 320px) {
+    .swipe-delete-content {
+        padding: 12px;
+        margin: 12px;
+    }
+    
+    .swipe-delete-icon {
+        font-size: 24px;
+        margin-bottom: 8px;
+    }
+    
+    .swipe-delete-text {
+        font-size: 13px;
+        margin-bottom: 12px;
+    }
+    
+    .swipe-delete-cancel,
+    .swipe-delete-confirm {
+        padding: 6px 12px;
+        font-size: 12px;
+        max-width: 70px;
+    }
+}
+
+/* SoonThings卡片小字体样式 */
+.todoList-card.small-text .todoList-title,
+.todoList-card.small-text .todoList-meta,
+.todoList-card.small-text .todoList-description,
+.todoList-card.small-text .todoList-tag,
+.todoList-card.small-text .todoList-priority {
+    font-size: 12px !important;
+}
+
+@media (max-width: 600px) {
+    .todoList-card.small-text .todoList-title,
+    .todoList-card.small-text .todoList-meta,
+    .todoList-card.small-text .todoList-description,
+    .todoList-card.small-text .todoList-tag,
+    .todoList-card.small-text .todoList-priority {
+        font-size: 1px !important;
+    }
+    .add-todoList-btn {
+        font-size: 6px !important;
+        padding: 0 2px !important;
+        border-radius: 1px !important;
+    }
+    .batch-toolbar {
+        font-size: 6px !important;
+        padding: 0 1px !important;
+    }
+    .batch-toolbar button,
+    .batch-toolbar .delete {
+        font-size: 6px !important;
+        padding: 0 2px !important;
+        border-radius: 1px !important;
+    }
+} 
