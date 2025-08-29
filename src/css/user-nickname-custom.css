@@ -1,0 +1,14 @@
+/* 顶部用户昵称默认白色字体 */
+.user-nickname {
+    color: #fff !important;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.08);
+}
+
+body.dark-theme .user-nickname {
+    color: #fff !important;
+}
+body.light-theme .user-nickname {
+    color: #fff !important;
+} 
