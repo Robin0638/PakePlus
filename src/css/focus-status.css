@@ -1,0 +1,211 @@
+/* 专注时钟状态显示样式 */
+.focus-status-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-right: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 6px 10px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.focus-status-container:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.focus-status-container.active {
+    background: linear-gradient(135deg, #ff6347, #ff8c69);
+    border-color: #ff6347;
+    animation: pulse 2s infinite;
+}
+
+.focus-status-container.active:hover {
+    background: linear-gradient(135deg, #ff5252, #ff7f7f);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 99, 71, 0.3);
+}
+
+.focus-status-icon {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 14px;
+    animation: rotate 2s linear infinite;
+}
+
+.focus-status-container.active .focus-status-icon {
+    /* animation: rotate 1s linear infinite; */
+    animation: pulse-scale 1.2s infinite;
+}
+
+@keyframes pulse-scale {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.25);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.focus-status-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-width: 0;
+}
+
+.focus-status-event {
+    font-size: 12px;
+    font-weight: 500;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 120px;
+    line-height: 1.2;
+}
+
+.focus-status-timer {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 400;
+    line-height: 1.2;
+}
+
+.focus-status-container.active .focus-status-timer {
+    color: #fff;
+    font-weight: 500;
+}
+
+/* 动画效果 */
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(255, 99, 71, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(255, 99, 71, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(255, 99, 71, 0);
+    }
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* 深色主题适配 */
+body.dark-theme .focus-status-container {
+    background: rgba(0, 0, 0, 0.3);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-theme .focus-status-container:hover {
+    background: rgba(0, 0, 0, 0.4);
+}
+
+body.dark-theme .focus-status-container.active {
+    background: linear-gradient(135deg, #ff6347, #ff8c69);
+    border-color: #ff6347;
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+    .focus-status-container {
+        padding: 4px 8px;
+        margin-right: 8px;
+        max-width: 260px;
+    }
+    
+    .focus-status-event {
+        max-width: 180px;
+        font-size: 11px;
+    }
+    
+    .focus-status-timer {
+        font-size: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .focus-status-container {
+        padding: 3px 6px;
+        margin-right: 6px;
+        max-width: 200px;
+    }
+    
+    .focus-status-event {
+        max-width: 120px;
+        font-size: 10px;
+    }
+    
+    .focus-status-timer {
+        font-size: 9px;
+    }
+    
+    .focus-status-icon {
+        width: 16px;
+        height: 16px;
+        font-size: 12px;
+    }
+}
+
+/* 隐藏状态（当没有专注时） */
+.focus-status-container.hidden {
+    display: none;
+}
+
+/* 加载状态 */
+.focus-status-container.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.focus-status-container.loading .focus-status-icon {
+    animation: rotate 1s linear infinite;
+}
+
+/* Completed状态 */
+.focus-status-container.completed {
+    background: linear-gradient(135deg, #4caf50, #66bb6a);
+    border-color: #4caf50;
+}
+
+.focus-status-container.completed:hover {
+    background: linear-gradient(135deg, #43a047, #5cb85c);
+}
+
+.focus-status-container.completed .focus-status-icon {
+    animation: none;
+}
+
+/* 暂停状态 */
+.focus-status-container.paused {
+    background: linear-gradient(135deg, #ff9800, #ffb74d);
+    border-color: #ff9800;
+}
+
+.focus-status-container.paused:hover {
+    background: linear-gradient(135deg, #f57c00, #ffa726);
+}
+
+.focus-status-container.paused .focus-status-icon {
+    animation: none;
+} 
