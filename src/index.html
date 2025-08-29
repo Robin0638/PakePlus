@@ -1,32 +1,1296 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <link rel="stylesheet" href="styles.css" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>PakePlus App</title>
-        <script type="module" src="/main.js" defer></script>
-    </head>
-
-    <body>
-        <main class="container">
-            <h1>Welcome to PakePlus</h1>
-            <form class="row" id="greet-form">
-                <input id="inputValue" placeholder="Enter a something..." />
-            </form>
-            <div class="resultBox">
-                <span>result: </span>
-                <span id="result"></span>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title></title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/clear-dialog.css">
+    <link rel="stylesheet" href="css/simple-weather.css">
+    <link rel="stylesheet" href="css/ai-float-button.css">
+    <link rel="stylesheet" href="css/bottom-nav-new.css">
+    <link rel="stylesheet" href="css/sidebar-nav.css">
+    <link rel="stylesheet" href="css/create-menu.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/countdown.css">
+    <link rel="stylesheet" href="css/todoList.css">
+    <link rel="stylesheet" href="css/petittools.css">
+    <link rel="stylesheet" href="css/tag-filter.css">
+    <link rel="stylesheet" href="css/date-filter.css">
+    <link rel="stylesheet" href="css/filter-collapse.css">
+    <link rel="stylesheet" href="css/unified-filter.css">
+    <link rel="stylesheet" href="css/calendar.css">
+    <link rel="stylesheet" href="css/project-search.css">
+    <link rel="stylesheet" href="css/event-detail-window.css">
+    <link rel="stylesheet" href="css/water-reminder.css">
+    <link rel="stylesheet" href="css/rest-reminder.css">
+    <link rel="stylesheet" href="css/hot-today.css">
+    <link rel="stylesheet" href="css/horoscope.css">
+    <link rel="stylesheet" href="css/quick-nav.css">
+    <link rel="stylesheet" href="css/button-count.css">
+    <link rel="stylesheet" href="css/notes.css">
+    <link rel="stylesheet" href="css/ai-star.css">
+    <link rel="stylesheet" href="css/project-mobile-grid.css">
+    <link rel="stylesheet" href="css/ongoing-event.css">
+    <link rel="stylesheet" href="css/relax-group-tabs.css">
+    <link rel="stylesheet" href="css/user-info-modal.css">
+    <link rel="stylesheet" href="css/points-info-modal.css">
+    <link rel="stylesheet" href="css/date-calc-card.css">
+    <link rel="stylesheet" href="css/lottery-card.css">
+    <link rel="stylesheet" href="css/weather-detail.css">
+    <link rel="stylesheet" href="css/decibel-meter.css">
+    <link rel="stylesheet" href="css/diet-calorie.css">
+    <link rel="stylesheet" href="css/daka.css">
+    <link rel="stylesheet" href="css/share-daka-image.css">
+    <link rel="stylesheet" href="css/focus-status.css">
+    <link rel="stylesheet" href="css/holiday-lunar-float.css">
+    <link rel="stylesheet" href="css/user-nickname-custom.css">
+    <link rel="stylesheet" href="css/note-darkmode-fix.css">
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <script src="js/dayPilot/daypilot-all.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.3.0/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/countdown.css">
+    <link rel="stylesheet" href="css/todoList.css">
+    <link rel="stylesheet" href="css/petittools.css">
+    <link rel="stylesheet" href="css/tag-filter.css">
+    <link rel="stylesheet" href="css/date-filter.css">
+    <link rel="stylesheet" href="css/filter-collapse.css">
+    <link rel="stylesheet" href="css/unified-filter.css">
+    <link rel="stylesheet" href="css/calendar.css">
+    <link rel="stylesheet" href="css/project-search.css">
+    <link rel="stylesheet" href="css/event-detail-window.css">
+    <link rel="stylesheet" href="css/water-reminder.css">
+    <link rel="stylesheet" href="css/rest-reminder.css">
+    <link rel="stylesheet" href="css/hot-today.css">
+    <link rel="stylesheet" href="css/horoscope.css">
+    <link rel="stylesheet" href="css/quick-nav.css">
+    <link rel="stylesheet" href="css/button-count.css">
+    <link rel="stylesheet" href="css/notes.css">
+    <link rel="stylesheet" href="css/ai-star.css">
+    <link rel="stylesheet" href="css/project-mobile-grid.css">
+</head>
+<body class="light-theme">
+    <div class="app-container">
+        <!-- 头部区域 -->
+        <header>
+            <div class="header-left">
+                <button class="header-sidebar-toggle" id="header-sidebar-toggle" title="Quick Navigation">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <button id="holiday-lunar-float" class="holiday-lunar-float" type="button" style="background:none;border:none;">
+                    <span id="today-solar" style="display:block;"></span>
+                    <span id="today-lunar" style="display:block;"></span>
+                </button>
+                <div class="logo"></div>
             </div>
-            <div class="invokeBox">
-                <button id="openUrl">open_url_browser</button>
-                <button id="openUrlNew">open_url_new</button>
-                <button id="runCommand">run_command</button>
-                <button id="downloadFile">download_file</button>
-                <button id="getExeDir">get_exe_dir</button>
-                <button id="getEnvVar">get_env_var</button>
-                <button id="findPort">find_port</button>
+            <div class="user-controls">
+                <div class="points-info">
+                    <span class="points-icon star-icon"><i class="fas fa-star"></i></span>
+                    <span id="header-points">0</span>
+                </div>
+                <button type="button" class="user-profile-btn" id="user-profile-btn" style="background:none;border:none;padding:0;margin:0;display:flex;align-items:center;gap:8px;cursor:pointer;">
+                    <img id="user-avatar" class="user-avatar" src="img/1.png" alt="User Avatar">
+                    <span id="user-name" class="user-nickname">Not Logged In</span>
+                </button>
+                <button class="settings-btn" id="settings-btn">Set</button>
+            </div>
+        </header>
+
+        <!-- 主Content区域 -->
+        <main>
+            <div id="login-modal" class="modal">
+                <div class="modal-content">
+                    <div class="welcome-header">
+                        <h2>Welcome to Treanly</h2>
+                    </div>
+                    <div class="welcome-message">
+                        <p class="sub-text">Input nickname to begin</p>
+                    </div>
+                    <div class="login-form">
+                        <div class="avatar-upload">
+                            <div class="avatar-preview">
+                                <img id="avatar-preview" src="img/1.png" alt="Avatar Preview">
+                            </div>
+                            <div class="avatar-upload-btn">
+                                <label for="avatar-input" class="upload-label">
+                                    <i class="fas fa-camera"></i>
+                                    <span>Select Avatar</span>
+                                </label>
+                                <input type="file" id="avatar-input" accept="image/*" style="display: none;">
+                            </div>
+                            <div class="avatar-tip">Supports JPG, PNG; max 20MB</div>
+                        </div>
+                        <div class="input-group">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="nickname-input" placeholder="Type your nickname" 
+                                   pattern="^[\u4e00-\u9fa5a-zA-Z0-9_]{2,20}$"
+                                   title="Nickname must be 2-20 characters, using only Chinese, English, numbers, or underscores">
+                        </div>
+                        <div class="privacy-agreement">
+                            <label class="checkbox-container">
+                                <input type="checkbox" id="privacy-agree">
+                                <span class="checkmark"></span>
+                                <span class="agreement-text">I’ve read and agree to <a href="privacy.html" target="_blank">the Privacy Policy</a></span>
+                            </label>
+                        </div>
+                        <button id="login-btn" class="primary-btn">
+                            <i class="fas fa-rocket"></i>
+                            Okay
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Soon视图 -->
+            <section id="recent-tasks" class="view-section active">
+                <div class="view-header">
+                    <h2>Upcoming</h2>
+                    <div class="view-controls">
+                        <button id="select-all-btn" class="select-btn" style="display: none;">
+                            <i class="fas fa-check-double"></i>Select All
+                        </button>
+                        <button id="deselect-all-btn" class="select-btn" style="display: none;">
+                            <i class="fas fa-times"></i>Deselect All
+                        </button>
+                        <button id="cancel-select-btn" class="select-btn" style="display: none;">
+                            <i class="fas fa-ban"></i>Cancel Selection
+                        </button>
+                        <button id="batch-delete-btn" class="danger-btn" style="display: none;">
+                            <i class="fas fa-trash"></i>Batch Delete
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="List-view" class="view-content active">
+                    <div class="List-search-container">
+                        <div class="search-box">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" id="List-search-input" placeholder="Search name, description, location or tags..." class="search-input">
+                            <button id="clear-search-btn" class="clear-search-btn" style="display: none;">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        
+                        <!-- 统一筛选卡片 -->
+                        <div id="unified-filter-container" class="unified-filter-container">
+                            <div class="unified-filter-header">
+                                <div class="unified-filter-title">
+                                    <i class="fas fa-filter"></i>
+                                    Filter Conditions
+                                </div>
+                                <div class="unified-filter-actions">
+                                    <button id="clear-all-filters-btn" class="clear-all-filters-btn" style="display: none;">
+                                        <i class="fas fa-times"></i>
+                                        Clear All Filters
+                                    </button>
+                                    <button id="unified-filter-toggle" class="filter-toggle-btn" title="Collapse/Expand">
+                                        <i class="fas fa-chevron-down"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="unified-filter-content" id="unified-filter-content">
+                                <!-- 筛选选项卡 -->
+                                <div class="filter-tabs">
+                                    <button class="filter-tab active" data-tab="tag-filter">
+                                        <i class="fas fa-tags"></i>
+                                        Tags
+                                        <span class="tab-count" id="tag-count">0</span>
+                                    </button>
+                                    <button class="filter-tab" data-tab="project-filter">
+                                        <i class="fas fa-project-diagram"></i>
+                                        Item
+                                    </button>
+                                    <button class="filter-tab" data-tab="date-filter">
+                                        <i class="fas fa-calendar-alt"></i>
+                                        Date
+                                    </button>
+                                </div>
+                                
+                                <!-- Label筛选Content -->
+                                <div id="tag-filter-panel" class="filter-panel active">
+                                    <div class="tag-filter-buttons" id="tag-filter-buttons">
+                                        <!-- Label按钮将由JS动态生成 -->
+                                    </div>
+                                    <div class="filter-status" id="filter-status" style="display: none;">
+                                        <i class="fas fa-filter"></i>
+                                        <span id="filter-status-text">No filters applied</span>
+                                    </div>
+                                </div>
+                                
+                                <!-- Item筛选Content -->
+                                <div id="project-filter-panel" class="filter-panel">
+                                    <div class="project-filter-select">
+                                        <select id="project-filter-select" class="project-select">
+                                            <option value="">All Items</option>
+                                            <!-- Item选项将由JS动态生成 -->
+                                        </select>
+                                    </div>
+                                    <div class="filter-status" id="project-filter-status" style="display: none;">
+                                        <i class="fas fa-filter"></i>
+                                        <span id="project-filter-status-text">No item filter applied</span>
+                                    </div>
+                                </div>
+                                
+                                <!-- Date筛选Content -->
+                                <div id="date-filter-panel" class="filter-panel">
+                                    <div class="date-range-selector">
+                                        <div class="date-input-group">
+                                            <label for="start-date">Start Date</label>
+                                            <input type="date" id="start-date" class="date-input">
+                                        </div>
+                                        <div class="date-input-group">
+                                            <label for="end-date">End Date</label>
+                                            <input type="date" id="end-date" class="date-input">
+                                        </div>
+                                    </div>
+                                    <div class="quick-date-buttons" id="quick-date-buttons">
+                                        <button class="quick-date-btn" data-type="today">Today</button>
+                                        <button class="quick-date-btn" data-type="tomorrow">Tomorrow</button>
+                                        <button class="quick-date-btn" data-type="this-week">This Week</button>
+                                        <button class="quick-date-btn" data-type="next-week">Next Week</button>
+                                        <button class="quick-date-btn" data-type="this-month">This Month</button>
+                                        <button class="quick-date-btn" data-type="next-month">Next Month</button>
+                                    </div>
+                                    <div class="date-filter-status" id="date-filter-status" style="display: none;">
+                                        <i class="fas fa-calendar-check"></i>
+                                        <span id="date-filter-status-text">No date filter applied</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="date-header">
+                        <h3 id="today-date">Today (Loading...)</h3>
+                    </div>
+                    <div id="task-List" class="task-List">
+                        <!-- 任务列表将通过JS动态生成 -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- 大Item视图 -->
+            <section id="projects" class="view-section">
+                <div class="view-header">
+                </div>
+                <div class="projects-container" id="projects-container">
+                    <!-- Item列表将通过JS动态生成 -->
+                </div>
+            </section>
+
+            <!-- New视图 -->
+            <section id="create" class="view-section">
+                <div class="view-header">
+                    <div class="view-header-left">
+                        <button id="create-back-btn" class="back-btn" title="Back">
+                            <i class="fas fa-arrow-left"></i>
+                        </button>
+                    <h2>New</h2>
+                    </div>
+                    <div class="create-tabs">
+                        <button id="traditional-create-tab" class="active">Traditional Create</button>
+                        <button id="import-tab">External Import</button>
+                    </div>
+                </div>
+                
+                <div id="traditional-create" class="create-content active">
+                    <form id="task-form">
+                        <div class="form-group">
+                            <label for="event-name">Name (Required)</label>
+                            <input type="text" id="event-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="event-project">Things belongs to Item (Optional)</label>
+                            <input type="text" id="event-project">
+                        </div>
+                        <div class="form-group">
+                            <label>Things Time</label>
+                            <div class="datetime-range">
+                                <div class="datetime-input">
+                                    <label for="event-start-time">Start Time</label>
+                                    <input type="datetime-local" id="event-start-time" required>
+                                </div>
+                                <div class="datetime-input">
+                                    <label for="event-end-time">End Time</label>
+                                    <input type="datetime-local" id="event-end-time" required>
+                                </div>
+                                <div class="repeat-options">
+                                    <label for="event-repeat">Repeat</label>
+                                    <select id="event-repeat">
+                                        <option value="none">No Repeat</option>
+                                        <option value="daily">Daily</option>
+                                        <option value="weekly">Weekly</option>
+                                        <option value="monthly">Monthly</option>
+                                        <option value="yearly">Yearly</option>
+                                    </select>
+                                    <div id="repeat-end-date" class="repeat-end-date" style="display: none;">
+                                        <label for="event-repeat-end">End Date</label>
+                                        <input type="date" id="event-repeat-end">
+                                    </div>
+                                    <div id="repeat-count" class="repeat-count" style="display: none;">
+                                        <div class="repeat-count-header">
+                                            <label>Custom Repeat Count</label>
+                                            <div class="toggle-switch">
+                                                <input type="checkbox" id="enable-repeat-count">
+                                                <label for="enable-repeat-count"></label>
+                                            </div>
+                                        </div>
+                                        <div id="repeat-count-input" class="repeat-count-input" style="display: none;">
+                                            <input type="number" id="event-repeat-count" min="1" max="100" value="1">
+                                            <span>times</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="event-tags">Tags (separated by commas)</label>
+                            <input type="text" id="event-tags" placeholder="Example: Important, Meeting, Urgent">
+                        </div>
+                        <div class="form-group">
+                            <label>Set Reminder</label>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="event-reminder">
+                                <label for="event-reminder"></label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="event-location">Things Location</label>
+                            <input type="text" id="event-location">
+                            <button type="button" id="map-picker-btn">Map Selection</button>
+                        </div>
+                        <div class="form-group">
+                            <label for="event-participants">Participants (separated by commas)</label>
+                            <input type="text" id="event-participants" placeholder="Example: John, Mary, Tom">
+                        </div>
+                        <div class="form-group">
+                            <label for="event-color">Things Color Mark</label>
+                            <input type="color" id="event-color" value="#4285f4">
+                        </div>
+                        <div class="form-group">
+                            <label for="event-notes">Notes</label>
+                            <textarea id="event-notes"></textarea>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" id="save-event-btn">Save</button>
+                            <button type="button" id="cancel-event-btn">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+                
+                <div id="import" class="create-content">
+                    <div class="import-container">
+                        <div class="import-section">
+                            <h3>Import Schedule File</h3>
+                            <p>Supports CSV or ICS format</p>
+                            <input type="file" id="import-file" accept=".csv,.ics">
+                            <button id="import-btn">Import File</button>
+                        </div>
+                        
+                        <div class="import-section">
+                            <h3>Text Import</h3>
+                            <p>Supports input in the following format:</p>
+                            <div class="format-hint">
+                                <pre>Name | Start Time | End Time | Location | Participants | Tags | Parent Item | 
+Example:
+Product Review | 2024-03-20 14:00 | 2024-03-20 16:00 | Meeting Room A | John, Mary | Important,Meeting | Product Iteration | daily,2024-04-20,10
+Monthly Report | 2024-03-25 15:00 | 2024-03-25 16:00 | Meeting Room B | All | Meeting,Monthly | Daily Work | monthly,2024-12-25,12
+Annual Meeting | 2024-12-31 09:00 | 2024-12-31 18:00 | Headquarters | All Staff | Important,Annual | Company Events | yearly,2025-12-31
+
+Repeat Set Format Description:
+- First parameter: Repeat type (daily/weekly/monthly/yearly)
+- Second parameter: End date (optional, format: YYYY-MM-DD)
+- Third parameter: Repeat count (optional, integer 1-100)</pre>
+                            </div>
+                            <textarea id="import-text" placeholder="Please enter Things information according to the above format, one Thing per line" rows="6"></textarea>
+                            <button id="import-text-btn">Import Text</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div id="ai-create" class="create-content">
+                <div class="ai-prompt-container">
+                    <button id="open-ai-assistant" class="ai-modal-btn" onclick="window.location.href='ai-assistant.html'">
+                        <i class="fas fa-robot"></i>
+                        Open AI Assistant
+                    </button>
+                </div>
+            </div>
+ 
+            <!-- Focus视图 -->
+            <section id="focus-mode" class="view-section">
+                <div class="view-header">
+                </div>
+                <div class="focus-container">
+                    <div class="analog-clock">
+                        <div class="clock-face">
+                            <div class="clock-hour"></div>
+                            <div class="clock-minute"></div>
+                            <div class="clock-second"></div>
+                            <div class="clock-center"></div>
+                        </div>
+                    </div>
+                    <div class="focus-redirect" style="text-align: center; padding: 20px; background: rgba(255, 255, 255, 0.1); border-radius: 15px; backdrop-filter: blur(10px);">
+                        <button id="open-focus-window" class="btn primary" style="padding: 12px 24px; font-size: 16px; background: linear-gradient(45deg, #667eea, #764ba2); color: white; border: none; border-radius: 8px; cursor: pointer; transition: all 0.3s ease;">
+                            Open Pomodoro Timer
+                        </button>
+                        
+                        <!-- 专注Stats -->
+                        <div class="focus-stats" style="margin-top: 30px; padding: 20px; background: rgba(255, 255, 255, 0.1); border-radius: 10px;">
+                            <h4 style="margin-bottom: 15px; color: #fefefe; text-align: center;">Focus Statistics</h4>
+                            <div style="display: flex; justify-content: space-around; align-items: center;">
+                                <div class="stat-item">
+                                    <span style="color: hsl(0, 0%, 98%);">Completed Pomodoros:</span>
+                                    <span id="focus-completed-pomodoros" style="font-weight: bold;">0</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span style="color: #f7f7f7;">Total Time:</span>
+                                    <span id="focus-total-time" style="font-weight: bold;">0min</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span style="color: #f8f8f8;">Current Thing:</span>
+                                    <span id="focus-current-event" style="font-weight: bold;">Empty</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- List视图 -->
+            <section id="todoList" class="view-section">
+                <div class="view-header">
+                    <div class="view-controls">
+                        <button id="add-List-btn" class="add-btn"><i class="fas fa-plus"></i>New List</button>
+                        <button id="delete-List-btn" class="delete-btn"><i class="fas fa-trash"></i>Delete</button>
+                        <button id="toggle-batch-mode-btn" class="select-btn"><i class="fas fa-check-square"></i>Batch Select</button>
+                        <button id="batch-delete-btn" class="danger-btn" style="display: none;"><i class="fas fa-trash"></i>Batch Delete</button>
+                        <div class="dropdown">
+                            <button class="dropdown-btn"><i class="fas fa-ellipsis-v"></i></button>
+                            <div class="dropdown-content">
+                                    <i class="fas fa-file-import"></i>
+                                </label>
+                                <input type="file" id="import-Lists-input" accept=".json" style="display: none;">
+                                <button id="import-Lists-text-btn"><i class="fas fa-file-alt"></i>Text Import</button>
+                                <button id="edit-Lists-text-btn"><i class="fas fa-edit"></i>Text Edit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="Lists-container">
+                    <div class="Lists-sidebar">
+                        <div class="Lists-search">
+                            <div class="search-box">
+                                <i class="fas fa-search search-icon"></i>
+                                <input type="text" id="List-search" placeholder="Search List...">
+                                <button id="clear-List-search-btn" class="clear-search-btn" style="display: none;">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="Lists-nav" id="Lists-nav">
+                            <!-- List列表将通过JS动态生成 -->
+                        </div>
+                    </div>
+                    <div class="List-content">
+                        <div class="List-header">
+                            <h3 id="current-List-title">Please select or create a List</h3>
+                            <div class="List-actions">
+                                <button id="add-List-item-btn" class="List-action-btn" disabled><i class="fas fa-plus"></i>Add Item</button>
+                                <button id="edit-List-btn" class="List-action-btn" disabled><i class="fas fa-edit"></i>Edit</button>
+                                <button id="share-List-btn" class="List-action-btn"><i class="fas fa-share-alt"></i>Share</button>
+                            </div>
+                        </div>
+                        <div class="List-items-container" id="List-items-container">
+                            <!-- ListItem将通过JS动态生成 -->
+                            <div class="empty-List-message">
+                                <div class="empty-icon">📋</div>
+                                <p>Please select or create a List</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!--  Countdown Day视图 -->
+            <section id="countdown" class="view-section">
+                <div class="view-header">
+                    <div class="view-controls">
+                        <button id="add-countdown-btn" class="add-btn"><i class="fas fa-plus"></i>Add Anniversary</button>
+                        <button id="toggle-countdown-batch-mode-btn" class="select-btn"><i class="fas fa-check-square"></i>Batch Select</button>
+                        <button id="countdown-batch-delete-btn" class="danger-btn" style="display: none;"><i class="fas fa-trash"></i>Batch Delete</button>
+                        <div class="dropdown">
+                            <button class="dropdown-btn"><i class="fas fa-ellipsis-v"></i></button>
+                            <div class="dropdown-content">
+                                <button id="import-countdowns-text-btn"><i class="fas fa-file-alt"></i>Text Import</button>
+                                <button id="edit-countdowns-text-btn"><i class="fas fa-edit"></i>Text Edit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 固定Search框 -->
+                <div class="countdown-search-fixed">
+                    <div class="countdown-search">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="countdown-search-input" placeholder="Search Anniversary...">
+                    </div>
+                </div>
+                
+                <div class="countdown-container">
+                    <div class="countdown-List" id="countdown-List">
+                        <!--  Countdown Day列表将通过JS动态生成 -->
+                    </div>
+                    <div class="empty-countdown-message" id="empty-countdown-message">
+                        <div class="empty-icon">📅</div>
+                        <p>No anniversaries added yet</p>
+                        <p class="sub-text">Click the "Add Anniversary" button in the upper right corner to start</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Notes视图 -->
+            <section id="notes" class="view-section">
+                <div class="view-header">
+                    <div class="view-controls">
+                        <button id="add-note-btn" class="add-btn"><i class="fas fa-plus"></i>New Note</button>
+                        <button id="toggle-notes-batch-mode-btn" class="select-btn"><i class="fas fa-check-square"></i>Batch Select</button>
+                        <button id="notes-batch-delete-btn" class="danger-btn" style="display: none;"><i class="fas fa-trash"></i>Batch Delete</button>
+                        <div class="dropdown">
+                            <button class="dropdown-btn"><i class="fas fa-ellipsis-v"></i></button>
+                            <div class="dropdown-content">
+                                <button id="import-notes-text-btn"><i class="fas fa-file-alt"></i>Text Import</button>
+                                <button id="import-notes-file-btn"><i class="fas fa-file-upload"></i>File Import</button>
+                                <button id="edit-notes-text-btn"><i class="fas fa-edit"></i>Text Edit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 固定Search框 -->
+                <div class="notes-search-fixed">
+                    <div class="notes-search">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="notes-search-input" placeholder="Search Notes...">
+                    </div>
+                </div>
+                
+                <div class="notes-container">
+                    <div class="notes-List" id="notes-List">
+                        <!-- Notes列表将通过JS动态生成 -->
+                    </div>
+                    <div class="empty-notes-message" id="empty-notes-message">
+                        <div class="empty-icon">📝</div>
+                        <p>No notes added yet</p>
+                        <p class="sub-text">Click the "New Note" button in the upper right corner to start</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 打卡视图 -->
+            <section id="daka" class="view-section">
+                <div class="view-header">
+                    <div class="view-controls">
+                        <button id="add-daka-btn" class="add-btn"><i class="fas fa-plus"></i>New Check-in</button>
+                        <button id="toggle-daka-batch-mode-btn" class="select-btn"><i class="fas fa-check-square"></i>Batch Select</button>
+                        <button id="daka-batch-delete-btn" class="danger-btn" style="display: none;"><i class="fas fa-trash"></i>Batch Delete</button>
+                        <div class="dropdown">
+                            <button class="dropdown-btn"><i class="fas fa-ellipsis-v"></i></button>
+                            <div class="dropdown-content">
+                                <button id="import-daka-text-btn"><i class="fas fa-file-alt"></i>Text Import</button>
+                                <button id="edit-daka-text-btn"><i class="fas fa-edit"></i>Text Edit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 固定Search框 -->
+                <div class="daka-search-fixed">
+                    <div class="daka-search">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="daka-search-input" placeholder="Search Check-ins...">
+                    </div>
+                </div>
+                <div class="daka-container">
+                    <div class="daka-List" id="daka-List">
+                        <!-- 打卡列表将通过JS动态生成 -->
+                    </div>
+                    <div class="empty-daka-message" id="empty-daka-message">
+                        <div class="empty-icon">✅</div>
+                        <p>No check-ins added yet</p>
+                        <p class="sub-text">Click the "New Check-in" button in the upper right corner to start</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Downtime视图 -->
+            <section id="relax" class="view-section">
+                <div class="view-header">
+                <div class="relax-container">
+                    <div class="relax-group-sidebar">
+                        <div class="relax-group-tabs">
+                            <button class="relax-group-tab active" data-group="all"><i class="fas fa-th-large"></i> All Cards</button>
+                            <button class="relax-group-tab" data-group="health"><i class="fas fa-heartbeat"></i> Health Cards</button>
+                            <button class="relax-group-tab" data-group="tools"><i class="fas fa-toolbox"></i> Utility Cards</button>
+                        </div>
+                    </div>
+                    <!-- 移除积分模块（.points-display） -->
+                    <!-- <div class="points-display">
+                        <h3>积分</h3>
+                        <div class="points-value" id="user-points">0</div>
+                    </div> -->
+                    <div class="relax-main-content">
+                        <!-- 移除成就与勋章模块（.medals-wall） -->
+                        <div class="lucky-wheel">
+                            <h3>Utilities</h3>
+                            <div class="tools-container">
+                                <button id="tools-btn" onclick="checkPointsAndRedirect()"><i class="fas fa-toolbox"></i> Utilities Page (Each use costs 20 points)</button>
+                                <button id="tools-countdown-btn" style="display: none;" onclick="checkPointsAndRedirect()">
+                                    <i class="fas fa-toolbox"></i> Utilities Page (Free use, remaining: <span id="tools-countdown">24:00:00</span>)
+                                </button>
+                                <!-- 新增：Date推算卡片入口 -->
+                                <button id="date-calc-card-btn" class="date-calc-card-btn"><span style="font-size:18px;margin-right:4px;">📅</span>Date Calculator Card</button>
+                                <button id="lottery-card-btn" class="lottery-card-btn"><span style="font-size:18px;margin-right:4px;">🎲</span>Custom Lottery Card</button>
+                                <button id="decibel-meter-btn" class="decibel-meter-btn"><span style="font-size:18px;margin-right:4px;">📊</span>Decibel Meter Card</button>
+                            </div>
+                        </div>
+
+                        <!-- 喝水提醒模块 -->
+                        <div id="water-reminder-panel" class="water-reminder-panel">
+                            <!-- 喝水提醒Content将通过JS动态生成 -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Set弹窗 -->
+            <div class="settings-modal" id="settings-modal">
+                <div class="settings-content">
+                    <div class="settings-header">
+                        <h2>Settings</h2>
+                        <button class="close-btn" id="settings-close"><i class="fas fa-times"></i></button>
+                    </div>
+                    
+                    <div class="settings-tabs">
+                        <button class="settings-tab active" data-tab="user-settings">User</button>
+                        <button class="settings-tab" data-tab="theme-settings">Theme</button>
+                        <button class="settings-tab" data-tab="data-settings">Data</button>
+                        <button class="settings-tab" data-tab="wenjuanxing">Feedback</button>
+                        <button class="settings-tab" data-tab="about">About</button>
+                    </div>
+
+                    <div class="settings-body">
+                        <div id="user-settings" class="settings-section active" style="--option-index: 0">
+                            <div class="settings-option">
+                                <label for="settings-nickname">Nickname</label>
+                                <input type="text" id="settings-nickname" class="settings-input" placeholder="Enter nickname" maxlength="20">
+                                <p class="input-hint">Must be 2-20 characters, currently only supports Chinese, English, numbers and underscores</p>
+                            </div>
+                            <div class="settings-option">
+                                <label for="settings-avatar">Avatar</label>
+                                <input type="file" id="settings-avatar" accept="image/*" class="settings-input">
+                                <p class="input-hint">Supports common image formats like JPG, PNG, file size should not exceed 20MB</p>
+                            </div>
+                        </div>
+
+                    <div id="wenjuanxing" class="settings-section">
+                        <div class="modal-content ai-modal-content">
+                                <div class="modal-body" style="width: 600px; height: 700px; overflow-x: hidden">
+                                    <iframe 
+                                      src="https://www.wjx.cn/vm/wD94PAY.aspx" 
+                                      frameborder="0" 
+                                      width="100%" 
+                                      height="100%"
+                                      style="user-select: none; zoom: 1; transform: scale(1); transform-origin: 0 0;"
+                                    ></iframe>
+                                  </div>
+                            </div>
+                        </div>
+
+                        <div id="theme-settings" class="settings-section" style="--option-index: 1">
+                            <div class="settings-option">
+                                <input type="radio" id="light-theme" name="theme" value="light" checked>
+                                <label for="light-theme">Light</label>
+                            </div>
+                            <div class="settings-option">
+                                <input type="radio" id="dark-theme" name="theme" value="dark">
+                                <label for="dark-theme">Dark</label>
+                            </div>
+                            <div class="settings-option">
+                                <input type="radio" id="auto-theme" name="theme" value="auto">
+                                <label for="auto-theme">Auto (18:00-6:00 Dark)</label>
+                            </div>
+                        </div>
+
+                        
+                        <div id="data-settings" class="settings-section">
+                            <div class="settings-option">
+                                <label for="backup-data">Backup Data</label>
+                                <button id="backup-data" class="settings-btn primary">Backup</button>
+                                <p class="input-hint">Will export data as JSON file excluding focus timer data<br><span style='color:#e67e22;'>Will not backup focus timer content</p>
+                            </div>
+                            <div class="settings-option">
+                                <label for="import-data">Import Data/File</label>
+                                <input type="file" id="import-data" accept=".json" class="settings-input" style="display: none;">
+                                <button id="import-data-btn" class="settings-btn primary">Select File</button>
+                                <p class="input-hint">Import data from JSON file<br>Please select through file manager<br><span style='color:#e67e22;'>Will not import focus timer content</p>
+                            </div>
+                            <div class="settings-option danger-zone">
+                                <label for="clear-all-data">Clear All Content</label>
+                                <button id="clear-all-data" class="settings-btn danger">Clear</button>
+                                <p class="input-hint warning">Dangerous operation: Will delete all content, this action cannot be undone</p>
+                            </div>
+                        </div>
+
+                        <div id="about" class="settings-section" style="--option-index: 5">
+                            <div class="about-content">
+                                <pre class="about-text">
+Treanly (Desktop Version)
+Plan easily, schedule worry-free
+Current Version 3.1.0
+Now supports China Mobile Jiutian AI Assistant intelligent agent content management
+This update optimized several features and fixed many bugs
+1. Schedule and Task Management
+Schedule and task management is a core function that helps users efficiently arrange time and track task progress.
+Search function: Provides date search, allowing users to intuitively view their schedules and conveniently plan short and long-term tasks.
+Task creation and classification: Supports creating tasks and classifying them by priority, deadline, item category, etc., ensuring important tasks are not missed.
+Time block management: Allows users to divide a day into different time blocks, allocating fixed time periods for each task to improve time utilization.
+2. Large Project Planning
+The large project planning function aims to help users manage complex projects, ensuring projects progress according to plan and are completed on time.
+Project breakdown: Break down large projects into multiple phases or tasks, each phase can be further divided into specific steps.
+Milestone setting: Allows users to set key milestones, marking important nodes of the project to ensure the project progresses as planned.
+Resource allocation: Supports allocating resources for tasks, such as personnel, time, budget, ensuring reasonable project resource allocation.
+Progress tracking: Real-time tracking of project progress, marking tasks as completed, in progress, or not started, helping users adjust plans in a timely manner.
+3. Things List Function
+The List function is a tool to help users organize and track to-do items, suitable for handling trivial tasks or short-term goals.
+List creation: Users can create multiple Lists, such as shopping Lists, to-do Lists, study Lists, etc.
+Task checking: Supports task checking function, after completing a task it can be marked as "completed", helping users visually see progress.
+Subtask support: Allows adding subtasks to the List, breaking down complex tasks into smaller steps for gradual completion.
+Priority marking: Can set priorities for tasks in the List, such as high, medium, low, ensuring important tasks are completed first.
+Shared Lists: Supports sharing Lists with others, facilitating team collaboration or family members completing tasks together.
+4. Pomodoro Focus Timer
+The Pomodoro focus timer function originates from the "Pomodoro Technique" proposed in psychology, helping users improve focus and efficiency through time management.
+Pomodoro timing: Set 25 minutes or more customized focus time periods, i.e., a "Pomodoro time", during which users can focus on one task.
+Timer reminder: Issues a reminder when the Pomodoro time ends, helping users maintain rhythm.
+Focus recording: Records the user's time and completed Pomodoro count, generates statistical data, helping users understand their focus habits.
+Distraction blocking: Supports blocking notifications or locking devices, reducing external distractions, ensuring focus.
+5. Humanistic Care Function
+Smart rest reminder: When users use the app after 10 PM, it will automatically remind users to rest, encouraging users to develop good rest habits
+Hydration reminder: Allows users to customize drinking water intervals, automatically reminding users to drink water when the time comes
+Dietary care assistant: Reminds users when they haven't eaten at appropriate times, encouraging users to form regular eating habits
+6. Mini Tools Function
+Users can exchange points to use for one day, the tools are convenient and practical, greatly solving user pain points.
+7. Today's Hot Search Module
+Users can know what's happening in the world without exiting the software
+8. Horoscope Module
+Using this module, users can quickly get today's fortune, helping them make travel decisions
+9. This Day in History
+This module helps users broaden their horizons
+Developer: Robin Liu (bilibili: 布吉岛与我不造, TikTok: Robin1, Kuaishou: 布吉岛与我不造Robin)
+Development time: 2025/7/17-release
+Official website: https://youshu3r.netlify.app/
+                                </pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Decibel Meter Card -->
+            <div class="decibel-meter-modal" id="decibel-meter-modal">
+                <div class="decibel-meter-content">
+                    <div class="decibel-meter-header">
+                        <h3><span style="font-size:20px;margin-right:8px;">📊</span>Decibel Meter</h3>
+                        <button class="close-btn" id="decibel-meter-close"><i class="fas fa-times"></i></button>
+                    </div>
+                    <div class="decibel-meter-body">
+                        <div class="decibel-display">
+                            <div class="decibel-value" id="decibel-value">--</div>
+                            <div class="decibel-unit">dB</div>
+                        </div>
+                        <div class="decibel-extremes" style="text-align:center;margin-bottom:18px;">
+                            <span id="decibel-min" style="color:#10b981;">Min: -- dB</span>
+                            <span style="margin:0 12px;">|</span>
+                            <span id="decibel-max" style="color:#ef4444;">Max: -- dB</span>
+                        </div>
+                        <div class="decibel-meter-visual">
+                            <div class="meter-bar">
+                                <div class="meter-fill" id="meter-fill"></div>
+                            </div>
+                            <div class="meter-labels">
+                                <span>0</span>
+                                <span>30</span>
+                                <span>60</span>
+                                <span>90</span>
+                                <span>120</span>
+                            </div>
+                        </div>
+                        <div class="decibel-status" id="decibel-status">Click to start measuring</div>
+                        <div class="decibel-controls">
+                            <button id="decibel-start-btn" class="decibel-btn primary">Start Measuring</button>
+                            <button id="decibel-stop-btn" class="decibel-btn secondary" style="display: none;">Stop Measuring</button>
+                        </div>
+                        <div class="decibel-info decibel-standards">
+                            <h4 style="font-size: 1.05em; margin-bottom: 10px;">Decibel Level Standards</h4>
+                            <ul class="decibel-standards-List">
+                                <li class="db-row db-quiet">
+                                    <span class="db-dot"></span>
+                                    <span class="db-range">0~20 dB</span>
+                                    <span class="db-title">Very quiet, almost imperceptible</span>
+                                    <span class="db-harm db-harm-none">No harm</span>
+                                </li>
+                                <li class="db-row db-normal">
+                                    <span class="db-dot"></span>
+                                    <span class="db-range">20~40 dB</span>
+                                    <span class="db-title">Quiet, like soft speaking</span>
+                                    <span class="db-harm db-harm-none">No harm</span>
+                                </li>
+                                <li class="db-row db-moderate">
+                                    <span class="db-dot"></span>
+                                    <span class="db-range">40~60 dB</span>
+                                    <span class="db-title">Normal indoor conversation</span>
+                                    <span class="db-harm db-harm-none">No harm</span>
+                                </li>
+                                <li class="db-row db-loud">
+                                    <span class="db-dot"></span>
+                                    <span class="db-range">60~70 dB</span>
+                                    <span class="db-title">Noisy, loud talking, roadside traffic</span>
+                                    <span class="db-harm db-harm-mild">Disturbs rest/distracts</span>
+                                </li>
+                                <li class="db-row db-veryloud">
+                                    <span class="db-dot"></span>
+                                    <span class="db-range">70~90 dB</span>
+                                    <span class="db-title">Very noisy, like a construction site</span>
+                                    <span class="db-harm db-harm-warning">Damages nerve cells/ears uncomfortable</span>
+                                </li>
+                                <li class="db-row db-dangerous">
+                                    <span class="db-dot"></span>
+                                    <span class="db-range">90~100 dB</span>
+                                    <span class="db-title">Extremely noisy, like explosions</span>
+                                    <span class="db-harm db-harm-danger">Hearing damage/ear pain</span>
+                                </li>
+                                <li class="db-row db-deadly">
+                                    <span class="db-dot"></span>
+                                    <span class="db-range">100~120 dB</span>
+                                    <span class="db-title"><U></U>Unbearable</span>
+                                    <span class="db-harm db-harm-deadly">May cause hearing loss</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Purge数据对话框 -->
+            <div class="clear-dialog-overlay" id="clear-dialog-overlay">
+                <div class="clear-dialog">
+                    <div class="clear-dialog-header">
+                        <h3>
+                            <i class="fas fa-exclamation-triangle warning-icon"></i>
+                            Clear All Content
+                        </h3>
+                        <button class="clear-dialog-close" id="clear-dialog-close">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="clear-dialog-body">
+                        <div class="clear-dialog-icon">🗑️</div>
+                        <div class="clear-dialog-title">Do you want Clear All Content?</div>
+                        <div class="clear-dialog-description">
+                            This operation will permanently delete all your content, including:
+                            <br>• All Things and tasks
+                            <br>• Item information
+                            <br>• Lists and countdowns
+                            <br>• Focus records and points
+                            <br>• User settings and preferences
+                        </div>
+                        <div class="clear-dialog-warning">
+                            <div class="warning-text">
+                                <i class="fas fa-exclamation-circle"></i>
+                                <span>This operation cannot be undone, please proceed with caution!</span>
+                            </div>
+                        </div>
+                        
+                        <!-- 第一步Confirm -->
+                        <div class="clear-confirm-step" id="clear-step-1">
+                            <div class="clear-dialog-actions">
+                                <button class="clear-dialog-btn cancel" id="clear-cancel-btn">
+                                    <i class="fas fa-times"></i>
+                                    Cancel
+                                </button>
+                                <button class="clear-dialog-btn confirm" id="clear-confirm-btn">
+                                    <i class="fas fa-trash"></i>
+                                    Confirm Clear
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- 第二步Confirm -->
+                        <div class="clear-confirm-step" id="clear-step-2">
+                            <div class="clear-confirm-hint">
+                                Please enter "Clear All Content" to operate with Confirm
+                            </div>
+                            <input type="text" class="clear-confirm-input" id="clear-confirm-input" 
+                                   placeholder="Clear All Content">
+                            <div class="clear-dialog-actions">
+                                <button class="clear-dialog-btn cancel" id="clear-back-btn">
+                                    <i class="fas fa-arrow-left"></i>
+                                    Back
+                                </button>
+                                <button class="clear-dialog-btn confirm" id="clear-final-btn" disabled>
+                                    <i class="fas fa-trash"></i>
+                                    Final Confirm
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SaveHint -->
+            <div class="save-indicator" id="save-indicator">
+                Settings Saved
+            </div>
+            
+            <!-- Things详情模态框 -->
+            <div id="event-details-modal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 id="detail-event-name"></h3>
+                        <button id="close-details">×</button>
+                    </div>
+                    <div class="event-details-content">
+                        <div class="detail-item">
+                            <span class="detail-label">Item:</span>
+                            <span id="detail-event-project"></span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Time:</span>
+                            <span id="detail-event-time"></span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Location:</span>
+                            <span id="detail-event-location"></span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Participants:</span>
+                            <span id="detail-event-participants"></span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Tags:</span>
+                            <div id="detail-event-tags" class="task-tags"></div>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Notes:</span>
+                            <p id="detail-event-notes"></p>
+                        </div>
+                    </div>
+                    <div class="modal-actions">
+                        <button id="edit-event-btn">Edit</button>
+                        <button id="delete-event-btn">Delete</button>
+                    </div>
+                </div>
+            </div>
+        
+            <!-- 添加/Edit Countdown Day模态框 -->
+            <div id="countdown-modal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 id="countdown-modal-title">Add Anniversary</h3>
+                        <button class="close-btn" id="close-countdown-modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="countdown-name">Anniversary Name</label>
+                            <input type="text" id="countdown-name" required placeholder="Ex: Wedding Anniversary">
+                        </div>
+                        <div class="form-group">
+                            <label for="countdown-date">Date</label>
+                            <input type="date" id="countdown-date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="countdown-type">Type</label>
+                            <select id="countdown-type">
+                                <option value="once">Once</option>
+                                <option value="monthly">Monthly</option>
+                                <option value="yearly">Yearly</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="countdown-icon">Icon</label>
+                            <div class="icon-selector" id="countdown-icon-selector">
+                                <button class="icon-option" data-icon="🎂">🎂</button>
+                                <button class="icon-option" data-icon="💑">💑</button>
+                                <button class="icon-option" data-icon="🎓">🎓</button>
+                                <button class="icon-option" data-icon="🏆">🏆</button>
+                                <button class="icon-option" data-icon="✈️">✈️</button>
+                                <button class="icon-option" data-icon="🎯">🎯</button>
+                                <button class="icon-option" data-icon="📅">📅</button>
+                            </div>
+                            <input type="hidden" id="countdown-icon" value="📅">
+                        </div>
+                        <div class="form-group">
+                            <label for="countdown-color">Color</label>
+                            <input type="color" id="countdown-color" value="#4285f4">
+                        </div>
+                        <div class="form-group">
+                            <label for="countdown-notes">Remark</label>
+                            <textarea id="countdown-notes" placeholder="Add some notes..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="countdown-participants">Participants</label>
+                            <input type="text" id="countdown-participants" placeholder="Ex: John, Mary, Tom, separated by commas">
+                        </div>
+                    </div>
+                    <div class="modal-actions">
+                        <button id="save-countdown-btn" class="primary-btn">Save</button>
+                        <button id="cancel-countdown-btn" class="secondary-btn">Cancel</button>
+                    </div>
+                </div>
+            </div>
+            <!-- List文本Import模态框 -->
+            <div id="todoList-import-modal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Import List</h3>
+                        <button class="close-btn" id="close-todoList-import-modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="import-format-hint">
+                            <h4>Import Format:</h4>
+                            <pre>List Name | Item Content | Due Date | Priority | Tag
+Ex:
+Shopping List | Buy milk | 2024-03-20 | High | Daily,Life
+Shopping List | Buy bread | 2024-03-20 | Medium | Daily,Life
+Work List | Complete report | 2024-03-25 | High | Work,Urgent
+Work List | Schedule meeting | 2024-03-22 | Medium | Work,Meeting</pre>
+                        </div>
+                        <div class="form-group">
+                            <label for="todoList-import-text">Please enter List content:</label>
+                            <textarea id="todoList-import-text" rows="10" placeholder="Please enter the List content in the above format, one item per line"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-actions">
+                        <button id="confirm-todoList-import" class="primary-btn">Import</button>
+                        <button id="cancel-todoList-import" class="secondary-btn">Cancel</button>
+                    </div>
+                </div>
+            </div>
+
+            <!--  Countdown Day文本Import模态框 -->
+            <div id="countdown-import-modal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Import Countdown Day</h3>
+                        <button class="close-btn" id="close-countdown-import-modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="import-format-hint">
+                            <h4>Import Format:</h4>
+                            <pre>Anniversary Name | Date | Type | Icon | Color | Remark
+Ex:
+Wedding Anniversary | 2020-05-20 | yearly | 💑 | #ff4081 | Our wedding anniversary
+Birthday | 1990-01-01 | yearly | 🎂 | #4caf50 | My birthday
+Graduation Anniversary | 2015-06-30 | yearly | 🎓 | #2196f3 | University graduation anniversary
+Salary Payment | 2024-01-15 | monthly | 💰 | #ff9800 | Salary paid on the 15th of each month</pre>
+                        </div>
+                        <div class="form-group">
+                            <label for="countdown-import-text">Please enter Countdown Day content:</label>
+                            <textarea id="countdown-import-text" rows="10" placeholder="Please enter the countdown content in the above format, one countdown per line"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-actions">
+                        <button id="confirm-countdown-import" class="primary-btn">Import</button>
+                        <button id="cancel-countdown-import" class="secondary-btn">Cancel</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!--  Countdown Day文本Edit模态框 -->
+            <div id="countdown-edit-modal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Edit Countdown Day</h3>
+                        <button class="close-btn" id="close-countdown-edit-modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="import-format-hint">
+                            <h4>Edit format description:</h4>
+                            <pre>Anniversary Name | Date | Type | Icon | Color | Remark
+Ex:
+Wedding Anniversary | 2020-05-20 | yearly | 💑 | #ff4081 | Our wedding anniversary
+Birthday | 1990-01-01 | yearly | 🎂 | #4caf50 | My birthday
+Graduation Anniversary | 2015-06-30 | yearly | 🎓 | #2196f3 | University graduation anniversary
+Salary Payment | 2024-01-15 | monthly | 💰 | #ff9800 | Salary paid on the 15th of each month</pre>
+                        </div>
+                        <div class="form-group">
+                            <label for="countdown-edit-text">Edit Countdown Day：</label>
+                            <textarea id="countdown-edit-text" rows="15" placeholder="请按照上述格式Edit Countdown DayContent，每行一个 Countdown Day"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-actions">
+                        <button id="confirm-countdown-edit" class="primary-btn">Save更改</button>
+                        <button id="cancel-countdown-edit" class="secondary-btn">Cancel</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- List文本Edit模态框 -->
+            <div id="todoList-edit-modal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Edit list</h3>
+                        <button id="close-todoList-edit-modal" class="close-btn">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="edit-format-hint">
+                            <h4>Edit format description:</h4>
+                            <pre>List Name | Item Content | Due Date | Priority | Tag
+Ex:
+Shopping List | Buy milk | 2024-03-20 | High | Daily,Life
+Shopping List | Buy bread | 2024-03-20 | Medium | Daily,Life
+Work List | Complete report | 2024-03-25 | High | Work,Urgent
+Work List | Schedule meeting | 2024-03-22 | Medium | Work,Meeting</pre>
+                        </div>
+                        <div class="form-group">
+                            <label for="todoList-edit-text">Edit list Contents:</label>
+                            <textarea id="todoList-edit-text" rows="10" placeholder="请按照上述格式EditListContent，每行一个事项"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-actions">
+                        <button id="confirm-todoList-edit" class="primary-btn">Save</button>
+                        <button id="cancel-todoList-edit" class="secondary-btn">Cancel</button>
+                    </div>
+                </div>
             </div>
         </main>
-    </body>
-</html>
+
+        <!-- 底部导航栏 -->
+        <nav class="bottom-nav" style="display: none;">
+            <button id="nav-recent" class="nav-item active"><i class="fas fa-calendar-day"></i>Soon</button>
+            <button id="nav-projects" class="nav-item"><i class="fas fa-project-diagram"></i>大Item</button>
+            <button id="nav-todoList" class="nav-item"><i class="fas fa-tasks"></i>List</button>
+            <button id="nav-countdown" class="nav-item"><i class="fas fa-hourglass"></i> Countdown Day</button>
+            <button id="nav-create" class="nav-item"><i class="fas fa-plus-circle"></i>New</button>
+            <button id="nav-focus" class="nav-item"><i class="fas fa-hourglass-half"></i>Focus</button>
+            <button id="nav-relax" class="nav-item"><i class="fas fa-gamepad"></i>Downtime</button>
+        </nav>
+    </div>
+
+    <!-- User Info模态框 -->
+    <div id="user-info-modal" class="modal">
+      <div class="modal-content user-info-modal-content">
+        <div class="modal-header">
+          <h3>User Info</h3>
+          <button class="close-btn" id="close-user-info-modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="user-info-avatar-nick">
+            <img id="user-info-avatar" class="user-avatar" src="img/1.png" alt="User Avatar">
+            <span id="user-info-nickname">Not Logged In</span>
+          </div>
+          <div class="user-info-stats">
+            <div>Items Created：<span id="user-projects-created">0</span></div>
+            <div>Items Completed：<span id="user-projects-completed">0</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Points Details模态框 -->
+    <div id="points-info-modal" class="modal">
+      <div class="modal-content points-info-modal-content">
+        <div class="modal-header">
+          <h3>Points Details</h3>
+          <button class="close-btn" id="close-points-info-modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="points-info-summary">
+            <div class="points-info-total">Total Points：<span id="points-info-total">0</span></div>
+          </div>
+          <div class="points-info-section points-info-detail-section">
+            <div class="points-section-title">
+              <button id="toggle-earn-detail" class="toggle-section-btn">Expand</button>
+              Points Earning Details
+            </div>
+            <div class="points-section-panel" id="earn-detail-panel" style="display:none;">
+              <ul class="points-earn-detail-List" id="points-earn-detail-List"></ul>
+            </div>
+          </div>
+          <div class="points-info-section points-info-earn-section">
+            <div class="points-section-title">
+              <button id="toggle-earn-way" class="toggle-section-btn">Expand</button>
+              Points Earning Methods
+            </div>
+            <div class="points-section-panel" id="earn-way-panel" style="display:none;">
+              <ul class="points-earn-List" id="points-earn-List"></ul>
+            </div>
+          </div>
+          <div class="points-info-section points-info-spend-section">
+            <div class="points-section-title">
+              <button id="toggle-spend-way" class="toggle-section-btn">Expand</button>
+              Points Spending Methods
+            </div>
+            <div class="points-section-panel" id="spend-way-panel" style="display:none;">
+              <ul class="points-spend-List" id="points-spend-List"></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 专注悬浮球 -->
+    <div class="focus-floating-indicator" id="focus-floating-indicator" style="display:none;align-items:center;cursor:pointer;z-index:1000;position:fixed;bottom:80px;right:20px;">
+        <i class="fas fa-hourglass-half"></i>
+        <span class="focus-floating-text" style="margin-left:8px;">Focus in Progress</span>
+        <span class="timer-mini" id="floating-timer" style="margin-left:8px;font-weight:bold;">00:00</span>
+    </div>
+
+    <!-- 脚本链接 -->
+    <script src="js/app.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/tasks.js"></script>
+    <script src="js/focus.js"></script>
+    <script src="js/relax.js"></script>
+    <script src="js/ai.js"></script>
+    <script src="js/notification.js"></script>
+    <script src="js/simple-weather.js"></script>
+    <script src="js/ai-float-button.js"></script>
+    <script src="js/todoList.js"></script>
+    <script src="js/countdown.js"></script>
+    <script src="js/clear-dialog.js"></script>
+    <script src="js/project-search.js"></script>
+    <script src="js/event-detail-window.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/water-reminder.js"></script>
+    <script src="js/rest-reminder.js"></script>
+    <script src="js/hot-today.js"></script>
+    <script src="js/horoscope.js"></script>
+    <script src="js/bottom-nav-new.js"></script>
+    <script src="js/sidebar-nav.js"></script>
+    <script src="js/quick-nav.js"></script>
+    <script src="js/notes.js"></script>
+    <script src="js/create-menu.js"></script>
+    <script src="js/unified-filter.js"></script>
+    <script src="js/relax-group-tabs.js"></script>
+    <script src="js/date-calc-card.js"></script>
+    <script src="js/lottery-card.js"></script>
+    <script src="js/weather-detail.js"></script>
+    <script src="js/decibel-meter.js"></script>
+    <script src="js/diet-calorie.js"></script>
+    <script src="js/user-info-modal.js"></script>
+    <script src="js/points-info-modal.js"></script>
+    <script src="js/focus-status.js"></script>
+    <script src="js/holiday-lunar-float.js"></script>
+    <script src="js/daka.js"></script>
+    <script src="js/share-daka-image.js"></script>
+    <script src="js/ongoing-event.js"></script>
+    <script src="js/download.js"></script>
+</body>
+</html> 
