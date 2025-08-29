@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clearing Data...</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/theme.css">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            background: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        .clear-container {
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .progress-container {
+            width: 100%;
+            background-color: var(--border-color);
+            border-radius: 10px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            width: 0%;
+            height: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+
+        .clear-message {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+
+        .clear-icon {
+            font-size: 3em;
+            margin-bottom: 20px;
+            color: #667eea;
+        }
+    </style>
+</head>
+<body class="dark-theme">
+    <div class="clear-container">
+        <div class="clear-icon">
+            <i class="fas fa-broom"></i>
+        </div>
+        <div class="clear-message">Clearing data...</div>
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const progressBar = document.getElementById('progressBar');
+            let progress = 0;
+            
+            // 清除本地存储数据
+            function clearData() {
+                // 清除所有localStorage数据
+                localStorage.clear();
+                // 清除所有sessionStorage数据
+                sessionStorage.clear();
+                
+                // 特别清除番茄时钟相关数据（确保完全清除）
+                localStorage.removeItem('pomodoroAppData');
+                localStorage.removeItem('focusStats');
+                localStorage.removeItem('lastDailyReset');
+                localStorage.removeItem('lastSelectedTask');
+                localStorage.removeItem('toolsLastUseTime');
+                localStorage.removeItem('recentItems');
+                localStorage.removeItem('favorites');
+                sessionStorage.removeItem('focusTasks');
+                sessionStorage.removeItem('clearDataConfirmed');
+                
+                // 清除StorageManagermedium的focusState数据
+                try {
+                    const data = {
+                        user: {
+                            nickname: '',
+                            avatar: 'assets/avatar-default.png'
+                        },
+                        settings: {
+                            theme: 'system',
+                            notifications: true,
+                            sounds: true,
+                            autoStartBreak: true,
+                            strictMode: false
+                        },
+                        events: [],
+                        projects: [],
+                        focusTime: {
+                            total: 0,
+                            today: 0,
+                            history: []
+                        },
+                        // 确保清除番茄时钟相关数据
+                        focusState: null,
+                        focusLogs: [],
+                        taskFocusStats: {},
+                        lastSelectedTask: null,
+                        todayFocusTime: 0,
+                        totalFocusTime: 0,
+                        medals: [
+                            { id: 'newcomer', name: 'Newcomer', icon: '🎯', description: 'Welcome to Treanly (Desktop)!', unlocked: true },
+                            { id: 'points-100', name: 'Points Expert', icon: '🌟', description: 'Accumulated 100 points', unlocked: false },
+                            { id: 'points-500', name: 'Points Master', icon: '💫', description: 'Accumulated 500 points', unlocked: false },
+                            { id: 'points-1000', name: 'Points Champion', icon: '✨', description: 'Accumulated 1000 points', unlocked: false },
+                            { id: 'time-1h', name: 'Time Explorer', icon: '⏱️', description: 'Used for 1 hour in total', unlocked: false },
+                            { id: 'time-5h', name: 'Time Manager', icon: '⌛', description: 'Used for 5 hours in total', unlocked: false },
+                            { id: 'time-24h', name: 'Time Master', icon: '⏳', description: 'Used for 24 hours in total', unlocked: false },
+                            { id: 'streak-3', name: 'Perseverance', icon: '🔥', description: 'Used for 3 consecutive days', unlocked: false },
+                            { id: 'streak-7', name: 'Persistence', icon: '💪', description: 'Used for 7 consecutive days', unlocked: false },
+                            { id: 'streak-30', name: 'Habit Formation', icon: '🏆', description: 'Used for 30 consecutive days', unlocked: false }
+                        ],
+                        points: 0,
+                        wheelItems: [
+                            { text: 'Listen to Music', color: '#4285f4' },
+                            { text: 'Take a Break', color: '#34a853' },
+                            { text: 'Play a Game', color: '#fbbc05' },
+                            { text: 'Go for a Walk', color: '#ea4335' },
+                            { text: 'Keep Working', color: '#673ab7' },
+                            { text: 'Drink Water', color: '#3f51b5' }
+                        ],
+                        loginDates: [],
+                        lastLogin: null,
+                        repeatTypes: {
+                            none: '不重复',
+                            daily: '每天',
+                            weekly: '每周',
+                            monthly: 'Everymonth',
+                            yearly: 'Everyyear'
+                        }
+                    };
+                    
+                    // 保存重置后的默认数据
+                    localStorage.setItem('schedule_app_data', JSON.stringify(data));
+                } catch (error) {
+                    console.error('重置默认数据失败:', error);
+                }
+
+                // 清除用户相关数据
+                localStorage.removeItem('userLocation');
+                localStorage.removeItem('userAvatar');
+                localStorage.removeItem('userNickname');
+                localStorage.removeItem('tempUserNickname');
+                localStorage.removeItem('tempUserAvatar');
+            }
+
+            // 更新进度条
+            function updateProgress() {
+                progress += 1;
+                progressBar.style.width = progress + '%';
+                
+                if (progress < 100) {
+                    setTimeout(updateProgress, 20); // 2秒内Completed
+                } else {
+                    clearData();
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 500);
+                }
+            }
+
+            // 开始进度条动画
+            updateProgress();
+        });
+    </script>
+</body>
+</html> 
