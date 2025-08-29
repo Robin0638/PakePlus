@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trean Tools (Desktop) Pomodoro Timer</title>
+    <link rel="stylesheet" href="css/pomodoro.css">
+    <link rel="stylesheet" href="css/pomodorodark.css">
+    <!-- 引入Font Awesome图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="light-theme">
+    <!-- Header User Info -->
+    <header class="user-header">
+        <div class="user-info">
+            <div class="user-avatar-container">
+                <img id="user-avatar" class="user-avatar" src="img/1.png" alt="User Avatar">
+            </div>
+            <div class="user-details">
+                <span id="user-nickname" class="user-nickname">Not Logged In</span>
+                <div class="points-info">
+                    <span class="points-icon star-icon"><i class="fas fa-star"></i></span>
+                    <span id="user-points">0</span>
+                </div>
+            </div>
+        </div>
+        <button class="back-btn" onclick="window.location.href='index.html'">
+            <i class="fas fa-arrow-left"></i>
+            Back to Recent Tasks
+        </button>
+    </header>
+
+    <div class="container">
+        <!-- 侧边栏 (桌面端) -->
+        <div class="sidebar">
+            <h2><i class="fas fa-stopwatch" style="color:#ff6347;margin-right:8px;"></i>Trean Tools (Desktop) Pomodoro Timer</h2>
+            
+            <!-- Add Event Form -->
+            <div class="event-form">
+                <h3 style="margin-bottom: 15px; color: #667eea;">Add New Task</h3>
+                <div class="form-group">
+                    <label>Task Name</label>
+                    <input type="text" id="eventName" placeholder="Enter task name">
+                </div>
+                <div class="form-group">
+                    <label>Focus Duration (minutes)</label>
+                    <div style="display: flex; gap: 10px;">
+                        <select id="eventDuration" style="flex: 1;">
+                            <option value="25">25 minutes</option>
+                            <option value="30">30 minutes</option>
+                            <option value="45">45 minutes</option>
+                            <option value="60">60 minutes</option>
+                            <option value="custom">Custom duration</option>
+                        </select>
+                        <input type="number" id="customDuration" placeholder="Custom minutes" style="display: none; width: 120px;" min="1" max="180">
+                    </div>
+                </div>
+                <button class="btn" onclick="addEvent()" style="width: 100%;">Add Task</button>
+            </div>
+
+            <!-- Things列表 -->
+            <div class="event-List" id="eventList">
+                <!-- 动态生成 -->
+            </div>
+
+            <!-- Statistics -->
+            <div class="stats">
+                <h3>Today's Stats</h3>   
+                <div class="stat-item"> 
+                     <span><i class="fas fa-List-check" style="color:#667eea;"></i> Current Task:</span>
+                     <span id="currentEventName">None</span>
+                </div>
+                <div class="stat-item">
+                    <span><i class="fas fa-check-circle" style="color:#ff6347;"></i> Completed Today:</span>
+                    <span id="completedPomodoros">0</span>
+                </div>
+                <div class="stat-item">
+                    <span><i class="fas fa-fire" style="color:#ff9800;"></i> Focus Time:</span>
+                    <span id="totalTime">0 minutes</span>
+                </div>
+                <div class="stat-item">
+                    <span><i class="fas fa-bullseye" style="color:#4caf50;"></i> Daily Goal:</span>
+                    <div style="display: flex; align-items: center; gap: 5px;">
+                        <span id="dailyTarget">0 minutes</span>
+                        <button class="btn btn-small" onclick="setDailyTarget()"><i class="fas fa-pen"></i> Set</button>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <span><i class="fas fa-trophy" style="color:#ffd700;"></i> Goal Completion:</span>
+                    <span id="targetCompletionRate">0%</span>
+                </div>
+
+                <h3>Total Stats</h3>
+                <div class="stat-item">
+                    <span><i class="fas fa-apple-whole" style="color:#ff6347;"></i> Total Pomodoros:</span>
+                    <span id="totalPomodoros">0</span>
+                </div>
+                <div class="stat-item">
+                    <span><i class="fas fa-award" style="color:#ffd700;"></i> Total Goal Completion:</span>
+                    <span id="totalCompletionRate">0%</span>
+                </div>
+                <div class="stat-item">
+                    <span><i class="fas fa-fire" style="color:#ff9800;"></i> Total Focus Time:</span>
+                    <span id="totalFocusTime">0 minutes</span>
+                </div>
+            </div>
+
+            <!-- Data Management -->
+            <div class="data-management">
+                <h3 style="color: #667eea; margin-bottom: 15px;">Pomodoro Timer Data Management</h3>
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <button class="btn secondary" onclick="showEventStats()" style="width: 100%;">
+                        📊 View Detailed Stats
+                    </button>
+                    <button class="btn secondary" onclick="showDailyStats()" style="width: 100%;">
+                        📅 View Daily Stats
+                    </button>
+                    <button class="btn secondary" onclick="exportData()" style="width: 100%;">
+                        📥 Export Data
+                    </button>
+                    <div style="position: relative;">
+                        <input type="file" id="importFile" accept=".json" style="display: none;" onchange="importData(event)">
+                        <button class="btn secondary" onclick="document.getElementById('importFile').click()" style="width: 100%;">
+                            📤 Import Data
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="sidebar-resizer"></div>
+        </div>
+
+        <!-- 主Content区 -->
+        <div class="main-content">
+            <div class="timer-container">
+                <div class="timer-label" id="timerLabel">
+                    <i class="fas fa-stopwatch" style="color:#ff6347;margin-right:8px;"></i>Ready to Focus
+                </div>
+                
+                <!-- Progress Ring -->
+                <svg class="progress-ring" width="200" height="200">
+                    <circle class="progress-ring-circle" cx="100" cy="100" r="90" 
+                            stroke-dasharray="565.48" stroke-dashoffset="565.48" id="progressCircle">
+                    </circle>
+                </svg>
+                
+                <div class="timer-display" id="timerDisplay">25:00</div>
+                
+                <div class="current-event" id="currentEvent" style="display: none;">
+                    <i class="fas fa-List-check" style="color:#667eea;margin-right:4px;"></i>Current Task: <span id="currentEventDisplay">None</span>
+                </div>
+
+                <div>
+                    <button class="btn" id="startBtn" onclick="startTimer()">
+                        <i class="fas fa-play"></i> Start
+                    </button>
+                    <button class="btn secondary" id="pauseBtn" onclick="pauseTimer()" style="display: none;">
+                        <i class="fas fa-pause"></i> Pause
+                    </button>
+                    <button class="btn secondary" onclick="resetTimer()">
+                        <i class="fas fa-rotate-left"></i> Reset
+                    </button>
+                    <button class="btn success" onclick="completePomodoro()" id="completeBtn" style="display: none;">
+                        <i class="fas fa-check"></i> Complete
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Navigation -->
+    <div class="mobile-nav">
+        <div class="nav-buttons">
+            <button class="nav-btn active" onclick="showMobileSection('timer')">
+                <i class="fas fa-stopwatch"></i> Timer
+            </button>
+            <button class="nav-btn" onclick="showMobileSection('events')">
+                <i class="fas fa-calendar-plus"></i> Tasks
+            </button>
+            <button class="nav-btn" onclick="showMobileSection('stats')">
+                <i class="fas fa-chart-bar"></i> Stats
+            </button>
+        </div>
+    </div>
+
+    <!-- Mobile Modal -->
+    <div class="mobile-modal" id="mobileModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle"><i class="fas fa-calendar-plus" style="margin-right:6px;"></i>Task Management</h3>
+                <button class="close-btn" onclick="closeMobileModal()">&times;</button>
+            </div>
+            <div id="modalContent">
+                <!-- Dynamic Content -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Focus Mode Floating Indicator -->
+    <div class="focus-floating-indicator" id="focus-floating-indicator" onclick="openPomodoroTracker()">
+        <i class="fas fa-hourglass-half"></i>
+        <span class="focus-floating-text">Focusing</span>
+        <span class="timer-mini" id="floating-timer"><i class="fas fa-stopwatch"></i> 25:00</span>
+    </div>
+
+    <script src="js/storage.js"></script>
+    <script src="js/pomodoro.js"></script>
+    <script>
+        // Theme management function - Get settings from storage.js to keep consistent with main app
+        function updateThemeFromSettings() {
+            if (!window.StorageManager) {
+                console.warn('StorageManager not available, using default theme');
+                return;
+            }
+            
+            const settings = StorageManager.getSettings();
+            const theme = settings.theme || 'system';
+            
+            // 移除所有主题类
+            document.body.classList.remove('light-theme', 'dark-theme', 'dark-mode');
+            
+            // 根据Set应用主题
+            if (theme === 'dark') {
+                document.body.classList.add('dark-theme', 'dark-mode');
+            } else if (theme === 'light') {
+                document.body.classList.add('light-theme');
+            } else if (theme === 'auto' || theme === 'system') {
+                // 自动模式：根据time判断
+                const currentHour = new Date().getHours();
+                const isDarkMode = currentHour >= 18 || currentHour < 6;
+                
+                if (isDarkMode) {
+                    document.body.classList.add('dark-theme', 'dark-mode');
+                } else {
+                    document.body.classList.add('light-theme');
+                }
+            }
+            
+            // SetHTML元素的data属性，便于CSSSelect器使用
+            const currentTheme = document.body.classList.contains('dark-theme') ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', currentTheme);
+        }
+
+        // 监听主题变化和User Info变化
+        function setupThemeListener() {
+            // 监听storage变化
+            window.addEventListener('storage', function(e) {
+                if (e.key === 'schedule_app_data' || e.key === 'userNickname' || e.key === 'userAvatar') {
+                    updateThemeFromSettings();
+                    loadUserInfo(); // 同时更新User Info
+                }
+            });
+            
+            // 监听主题变化Things（来自主应用）
+            document.addEventListener('themechange', function(e) {
+                const theme = e.detail.theme;
+                document.body.classList.remove('light-theme', 'dark-theme', 'dark-mode');
+                if (theme === 'dark') {
+                    document.body.classList.add('dark-theme', 'dark-mode');
+                } else {
+                    document.body.classList.add('light-theme');
+                }
+                document.documentElement.setAttribute('data-theme', theme);
+            });
+            
+            // 监听User Info更新Things
+            document.addEventListener('userInfoUpdate', function() {
+                loadUserInfo();
+            });
+            
+            // 监听用户登录状态变化Things
+            window.addEventListener('userLoginStateChanged', function(e) {
+                loadUserInfo();
+            });
+            
+            // 定期检查主题Set和User Info（以防其他页面修改了Set）
+            setInterval(function() {
+                updateThemeFromSettings();
+                loadUserInfo();
+            }, 30000); // 每30秒检查一times
+        }
+
+        // Load user information
+        function loadUserInfo() {
+            if (!window.StorageManager) {
+                console.warn('StorageManager not available');
+                return;
+            }
+            
+            // 从localStorage获取当前登录的昵称和头像
+            const currentNickname = localStorage.getItem('userNickname') || '未登录';
+            const currentAvatar = localStorage.getItem('userAvatar');
+            const points = StorageManager.getPoints();
+            
+            // 更新用户昵称
+            const nicknameElement = document.getElementById('user-nickname');
+            if (nicknameElement) {
+                nicknameElement.textContent = currentNickname;
+            }
+            
+            // 更新用户头像
+            const avatarElement = document.getElementById('user-avatar');
+            if (avatarElement) {
+                let avatarSrc = currentAvatar;
+                // 如果头像为空，使用默认头像
+                if (!avatarSrc) {
+                    avatarSrc = 'img/1.png';
+                }
+                avatarElement.src = avatarSrc;
+                
+                // 处理头像加载失败的情况
+                avatarElement.onerror = function() {
+                    this.src = 'img/1.png';
+                };
+            }
+            
+            // 更新积分
+            const pointsElement = document.getElementById('user-points');
+            if (pointsElement) {
+                const pointsValue = points || 0;
+                pointsElement.textContent = pointsValue;
+            }
+        }
+        
+        // 立即初始化主题和User Info（不等待DOMContentLoaded）
+        updateThemeFromSettings();
+        
+        // 尝试立即加载User Info
+        setTimeout(loadUserInfo, 100); // 延迟100ms确保DOM已加载
+        
+        // 页面加载Completed后Set监听器
+        document.addEventListener('DOMContentLoaded', function() {
+            setupThemeListener();
+            loadUserInfo(); // 再times加载User Info确保正确显示
+        });
+
+        /**
+         * Universal file download method, compatible with HBuilderX packaging and browsers
+         * @param {string} url Download URL
+         * @param {string} filename Save filename (optional)
+         */
+        function downloadFile(url, filename) {
+            if (window.plus) {
+                // 申请存储权限
+                plus.android.requestPermissions(
+                    ["android.permission.WRITE_EXTERNAL_STORAGE"],
+                    function(e) {
+                        // 权限申请成功
+                        let dtask = plus.downloader.createDownload(url, {
+                            filename: "_downloads/" + (filename || url.split('/').pop())
+                        }, function(d, status) {
+                            if (status == 200) {
+                                plus.nativeUI.toast("下载成功：" + d.filename);
+                                // 下载Completed后自动打开文件
+                                plus.runtime.openFile(d.filename);
+                            } else {
+                                plus.nativeUI.toast("下载失败");
+                            }
+                        });
+                        dtask.start();
+                    },
+                    function(e) {
+                        plus.nativeUI.toast("未获得存储权限，Empty法下载");
+                    }
+                );
+            } else {
+                // 浏览器环境，降级处理
+                fetch(url)
+                    .then(res => res.blob())
+                    .then(blob => {
+                        const a = document.createElement('a');
+                        a.href = window.URL.createObjectURL(blob);
+                        a.download = filename || url.split('/').pop();
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                        window.URL.revokeObjectURL(a.href);
+                    })
+                    .catch(() => {
+                        window.open(url, '_blank');
+                    });
+            }
+        }
+    </script>
+    <script>
+    // Sidebar width drag functionality (desktop only)
+    (function() {
+        const sidebar = document.querySelector('.sidebar');
+        const resizer = document.querySelector('.sidebar-resizer');
+        const mainContent = document.querySelector('.main-content');
+        if (!sidebar || !resizer) return;
+        let isDragging = false;
+        let startX = 0;
+        let startWidth = 0;
+        const minWidth = 260;
+        const maxWidth = 800;
+        // 页面加载时恢复宽度
+        if (window.innerWidth >= 1024) {
+            const savedWidth = localStorage.getItem('sidebarWidth');
+            if (savedWidth) {
+                sidebar.style.width = savedWidth + 'px';
+                if (mainContent) {
+                    mainContent.style.width = `calc(100% - ${savedWidth}px)`;
+                }
+            }
+        }
+        resizer.addEventListener('mousedown', function(e) {
+            if (window.innerWidth < 1024) return;
+            isDragging = true;
+            startX = e.clientX;
+            startWidth = sidebar.offsetWidth;
+            document.body.style.cursor = 'ew-resize';
+            document.body.style.userSelect = 'none';
+        });
+        document.addEventListener('mousemove', function(e) {
+            if (!isDragging) return;
+            let newWidth = startWidth + (e.clientX - startX);
+            newWidth = Math.max(minWidth, Math.min(maxWidth, newWidth));
+            sidebar.style.width = newWidth + 'px';
+            if (mainContent) {
+                mainContent.style.width = `calc(100% - ${newWidth}px)`;
+            }
+            // 拖动时实时保存宽度
+            localStorage.setItem('sidebarWidth', newWidth);
+        });
+        document.addEventListener('mouseup', function() {
+            if (isDragging) {
+                isDragging = false;
+                document.body.style.cursor = '';
+                document.body.style.userSelect = '';
+            }
+        });
+    })();
+    </script>
+</body>
+</html>
