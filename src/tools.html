@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Treanly Tools</title>
+    <link rel="stylesheet" href="css/tools.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        .back-to-home {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 999;
+            background-color: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 20px;
+            padding: 8px 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: #333;
+        }
+        .back-to-home:hover {
+            transform: scale(1.05);
+            background-color: rgba(255, 255, 255, 1);
+        }
+        .dark-mode .back-to-home {
+            background-color: rgba(51, 51, 51, 0.9);
+            color: #fff;
+        }
+        .dark-mode .back-to-home:hover {
+            background-color: rgba(51, 51, 51, 1);
+        }
+        .back-to-home i {
+            color: inherit;
+        }
+        .back-to-home span {
+            color: inherit;
+            font-size: 14px;
+        }
+        .iframe-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            z-index: 1000;
+            display: none;
+        }
+        .iframe-container.active {
+            display: block;
+        }
+        .top-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: none;
+            z-index: 1001;
+            align-items: center;
+            padding: 0 20px;
+        }
+        .top-bar.active {
+            display: flex;
+        }
+        .back-button {
+            background: none;
+            border: none;
+            color: #333;
+            font-size: 16px;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+        .back-button:hover {
+            background-color: rgba(0,0,0,0.05);
+        }
+        .back-button i {
+            font-size: 18px;
+        }
+        .dark-mode .top-bar {
+            background: rgba(51, 51, 51, 0.95);
+        }
+        .dark-mode .back-button {
+            color: #fff;
+        }
+        .dark-mode .back-button:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+        /* User Info floating bubble style */
+        .user-info-float {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 1000;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .user-info-float:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid rgba(102, 126, 234, 0.2);
+            transition: border-color 0.3s ease;
+        }
+
+        .user-details {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .user-nickname {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333333;
+            transition: color 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .points-info {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+            color: #666666;
+            transition: color 0.3s ease;
+        }
+
+        .points-icon {
+            color: #ffd700;
+            font-size: 10px;
+        }
+
+        /* Dark mode adaptation */
+        .dark-mode .user-info-float {
+            background: rgba(45, 45, 45, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .dark-mode .user-nickname {
+            color: #ffffff;
+        }
+
+        .dark-mode .points-info {
+            color: #cccccc;
+        }
+
+        .dark-mode .user-avatar {
+            border-color: rgba(102, 126, 234, 0.3);
+        }
+
+        .main-content {
+            padding-top: 20px;
+        }
+        
+        /* Mobile adaptation */
+        @media (max-width: 768px) {
+            .user-info-float {
+                top: 15px;
+                right: 15px;
+                padding: 10px 14px;
+            }
+            
+            .user-avatar {
+                width: 32px;
+                height: 32px;
+            }
+            
+            .user-nickname {
+                font-size: 13px;
+            }
+            
+            .points-info {
+                font-size: 11px;
+            }
+            
+            .back-to-home {
+                top: 15px;
+                left: 15px;
+                padding: 6px 12px;
+            }
+            
+            .back-to-home span {
+                font-size: 13px;
+            }
+        }
+        
+        /* Loading animation style */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1002;
+            flex-direction: column;
+        }
+        .loading-overlay.active {
+            display: flex;
+        }
+        .dark-mode .loading-overlay {
+            background: rgba(51, 51, 51, 0.95);
+        }
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+        .dark-mode .loading-spinner {
+            border: 4px solid #444;
+            border-top: 4px solid #3498db;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .loading-text {
+            font-size: 18px;
+            color: #333;
+        }
+        .dark-mode .loading-text {
+            color: #fff;
+        }
+        
+        /* Error message style */
+        .error-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1002;
+            flex-direction: column;
+        }
+        .error-overlay.active {
+            display: flex;
+        }
+        .dark-mode .error-overlay {
+            background: rgba(51, 51, 51, 0.95);
+        }
+        .error-icon {
+            font-size: 64px;
+            color: #e74c3c;
+            margin-bottom: 20px;
+        }
+        .error-title {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        .dark-mode .error-title {
+            color: #fff;
+        }
+        .error-message {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 30px;
+            text-align: center;
+            max-width: 400px;
+        }
+        .dark-mode .error-message {
+            color: #ccc;
+        }
+        .error-actions {
+            display: flex;
+            gap: 15px;
+        }
+        .error-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        .error-btn.retry {
+            background: #3498db;
+            color: white;
+        }
+        .error-btn.retry:hover {
+            background: #2980b9;
+        }
+        .error-btn.close {
+            background: #95a5a6;
+            color: white;
+        }
+        .error-btn.close:hover {
+            background: #7f8c8d;
+        }
+    </style>
+</head>
+<body class="light-theme">
+    <!-- User Info floating bubble -->
+    <div class="user-info-float" id="user-info-float">
+        <img id="user-avatar" class="user-avatar" src="img/1.png" alt="User avatar">
+        <div class="user-details">
+            <span id="user-nickname" class="user-nickname">Not Logged In</span>
+            <div class="points-info">
+                <span class="points-icon star-icon"><i class="fas fa-star"></i></span>
+                <span id="user-points">0</span>
+            </div>
+        </div>
+    </div>
+
+    <a href="index.html" class="back-to-home" aria-label="Return to home page">
+        <i class="fas fa-home"></i>
+        <span>Back to Home</span>
+    </a>
+
+    <div class="weather-bg" id="weatherBg"></div>
+    <div class="main-content">
+    <header>
+        <h1>Treanly Tools</h1>
+        <p class="subtitle">In Treanly Tools, you'll find our own tools and products, as well as carefully selected tools, platforms, and resources</p>
+    </header>
+    
+    <div class="search-container">
+        <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" class="search-input" placeholder="Search resources...">
+    </div>
+    
+    <div class="categories">
+        <button class="category-btn active">All</button>
+        <button class="category-btn">Productivity Tools</button>
+        <button class="category-btn">Learning Software</button>
+        <button class="category-btn">Arts & Appreciation</button>
+        <button class="category-btn">Psychological Tests</button>
+    </div>
+    
+    <div class="resources-container">
+        <!-- Social platform homepage -->
+        <div class="resource-card" data-category="Psychological Tests">
+            <div class="card-header">
+               <span class="card-tag">Psychological Tests</span>
+               <i class="fas fa-brain card-icon"></i>
+            </div>
+            <div class="card-content">
+                <h3 class="card-title">Robin's Psychological Tests</h3>
+                <p class="card-description">A minimaList psychological testing website</p>
+                <div class="card-footer">
+                    <!-- Replace with actual website links -->
+                <a href="javascript:void(0)" onclick="openInIframe('https://robintest123.netlify.app/login.html')" class="card-link">
+                        Go
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </a>
+                    <div class="card-ratin
+                        <span class="text">Free psychological testing website</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="resource-card" data-category="Productivity Tools">
+            <div class="card-header">
+                <span class="card-tag">Productivity Tools</span>
+                <i class="fas fa-crop-alt card-icon"></i>
+            </div>
+            <div class="card-content">
+                <h3 class="card-title">Image Rounded Corner Generator</h3>
+                <p class="card-description">Add rounded corners to images for a more modern and attractive look</p>
+                <div class="card-footer">
+                   <!-- Replace with actual website links -->
+                <a href="javascript:void(0)" onclick="openInIframe('https://pptpictureround.netlify.app')" class="card-link">
+                        Go
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </a>
+                    <div class="card-ratin
+                        <span class="text">A simple image tool</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="resource-card" data-category="Productivity Tools">
+            <div class="card-header">
+                <span class="card-tag">Productivity Tools</span>
+                <i class="fas fa-file-audio card-icon"></i>
+            </div>
+            <div class="card-content">
+                <h3 class="card-title">Video to Audio Converter</h3>
+                <p class="card-description">Supports video input and audio output</p>
+                <div class="card-footer">
+                   <!-- Replace with actual website links -->
+                <a href="javascript:void(0)" onclick="openInIframe('https://tomusic.netlify.app')" class="card-link">
+                        Go
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </a>
+                    <div class="card-ratin
+                        <span class="text">A free and useful converter</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+       <div class="resource-card" data-category="Learning Software">
+            <div class="card-header">
+                <span class="card-tag">Learning Software</span>
+                <i class="fas fa-book-open card-icon"></i>
+            </div>
+            <div class="card-content">
+                <h3 class="card-title">WordPass</h3>
+                <p class="card-description">A useful vocabulary learning software</p>
+                <div class="card-footer">
+                   <!-- Replace with actual website links -->
+                <a href="javascript:void(0)" onclick="openInIframe('https://ciguoguo-new.netlify.app/')" class="card-link">
+                        Go
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </a>
+                    <div class="card-ratin
+                        <span class="text">Self-developed software</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="resource-card" data-category="Learning Software">
+            <div class="card-header">
+                <span class="card-tag">Learning Software</span>
+                <i class="fas fa-language card-icon"></i>
+            </div>
+            <div class="card-content">
+                <h3 class="card-title">French Listening Practice</h3>
+                <p class="card-description">Professional French Listening training platform</p>
+                <div class="card-footer">
+                   <!-- Replace with actual website links -->
+                <a href="javascript:void(0)" onclick="openInIframe('https://robinfrlearning.netlify.app/')" class="card-link">
+                        Go
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </a>
+                    <div class="card-ratin
+                        <span class="text">Essential tool for French learning</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="resource-card" data-category="Learning Software">
+            <div class="card-header">
+                <span class="card-tag">Learning Software</span>
+                <i class="fas fa-calculator card-icon"></i>
+            </div>
+            <div class="card-content">
+                <h3 class="card-title">GradeCalc</h3>
+                <p class="card-description">Professional grade calculation platform for college students</p>
+                <div class="card-footer">
+                   <!-- Replace with actual website links -->
+                <a href="javascript:void(0)" onclick="openInIframe('https://youfen-robin.netlify.app/')" class="card-link">
+                        Go
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </a>
+                    <div class="card-ratin
+                        <span class="text">Essential tool for college students</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="resource-card" data-category="Learning Software">
+            <div class="card-header">
+                <span class="card-tag">Learning Software</span>
+                <i class="fas fa-tasks card-icon"></i>
+            </div>
+            <div class="card-content">
+                <h3 class="card-title">Smart Quiz Software</h3>
+                <p class="card-description">A useful cross-platform practice software</p>
+                <div class="card-footer">
+                   <!-- Replace with actual website links -->
+                <a href="javascript:void(0)" onclick="openInIframe('https://test-subject-robin123.netlify.app/')" class="card-link">
+                        Go
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </a>
+                    <div class="card-ratin
+                        <span class="text">Useful cross-platform practice software</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+      <div class="resource-card" data-category="Productivity Tools">
+            <div class="card-header">
+                <span class="card-tag">Productivity Tools</span>
+                <i class="fas fa-clock card-icon"></i>
+            </div>
+            <div class="card-content">
+                <h3 class="card-title">Flip Clock</h3>
+                <p class="card-description">Small utility</p>
+                <div class="card-footer">
+                   <!-- Replace with actual website links -->
+                <a href="javascript:void(0)" onclick="openInIframe('https://clock-robin.netlify.app')" class="card-link">
+                        Go
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </a>
+                    <div class="card-ratin
+                        <span class="text">Self-developed software</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+       <div class="resource-card" data-category="Arts & Appreciation">
+            <div class="card-header">
+                <span class="card-tag">Arts & Appreciation</span>
+                <i class="fas fa-music card-icon"></i>
+            </div>
+            <div class="card-content">
+        <h3 class="card-title">Music Player</h3>
+                <p class="card-description">Supports audio content input</p>
+                <div class="card-footer">
+                   <!-- Replace with actual website links -->
+                <a href="javascript:void(0)" onclick="openInIframe('https://music-robin.netlify.app/')" class="card-link">
+                        Go
+                        <svg xmlns="https://music-robin.netlify.app" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </a>
+                    <div class="card-ratin
+                        <span class="text">MinimaList music player</span>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Loading animation overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Loading website...</div>
+    </div>
+    
+    <!-- Error message overlay -->
+    <div class="error-overlay" id="errorOverlay">
+        <div class="error-icon">
+            <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        <div class="error-title">Loading Failed</div>
+        <div class="error-message" id="errorMessage">The website is temporarily unavailable, please try again later</div>
+        <div class="error-actions">
+            <button class="error-btn retry" onclick="retryLoad()">Retry</button>
+            <button class="error-btn close" onclick="closeError()">Close</button>
+        </div>
+    </div>
+    
+    <div class="top-bar" id="topBar">
+        <button class="back-button" onclick="closeIframe()">
+            <i class="fas fa-arrow-left"></i>
+            <span>Back to Tools</span>
+        </button>
+    </div>
+    <div class="iframe-container" id="iframeContainer">
+        <iframe id="contentFrame" style="width: 100%; height: calc(100% - 60px); border: none; margin-top: 60px;"></iframe>
+    </div>
+    <script src="js/storage.js"></script>
+    <script src="js/script.js"></script>
+    <script>
+        // Load User Info
+        function loadUserInfo() {
+            if (!window.StorageManager) {
+                console.warn('StorageManager not available');
+                return;
+            }
+            
+            // Get current nickname and avatar from localStorage
+            const currentNickname = localStorage.getItem('userNickname') || 'Not Logged In';
+            const currentAvatar = localStorage.getItem('userAvatar');
+            const points = StorageManager.getPoints();
+            
+            // Update user nickname
+            const nicknameElement = document.getElementById('user-nickname');
+            if (nicknameElement) {
+                nicknameElement.textContent = currentNickname;
+            }
+            
+            // Update user avatar
+            const avatarElement = document.getElementById('user-avatar');
+            if (avatarElement) {
+                let avatarSrc = currentAvatar;
+                // If avatar is empty, use default avatar
+                if (!avatarSrc) {
+                    avatarSrc = 'img/1.png';
+                }
+                avatarElement.src = avatarSrc;
+                
+                // Handle avatar loading failure
+                avatarElement.onerror = function() {
+                    this.src = 'img/1.png';
+                };
+            }
+            
+            // Update points
+            const pointsElement = document.getElementById('user-points');
+            if (pointsElement) {
+                const pointsValue = points || 0;
+                pointsElement.textContent = pointsValue;
+            }
+        }
+
+        // Listen for User Info changes
+        function setupUserInfoListener() {
+            // Listen for storage changes
+            window.addEventListener('storage', function(e) {
+                if (e.key === 'userNickname' || e.key === 'userAvatar' || e.key === 'schedule_app_data') {
+                    loadUserInfo();
+                }
+            });
+            
+            // Listen for user login state changes
+            window.addEventListener('userLoginStateChanged', function(e) {
+                loadUserInfo();
+            });
+            
+            // Listen for User Info updates
+            document.addEventListener('userInfoUpdate', function() {
+                loadUserInfo();
+            });
+        }
+
+        // Initialize after page loading is complete
+        document.addEventListener('DOMContentLoaded', function() {
+            loadUserInfo();
+            setupUserInfoListener();
+        });
+
+        // Immediately try to load User Info
+        setTimeout(loadUserInfo, 100);
+        let currentUrl = '';
+        let loadTimeout = null;
+        
+        function openInIframe(url) {
+            currentUrl = url;
+            document.getElementById('iframeContainer').classList.add('active');
+            document.getElementById('topBar').classList.add('active');
+            document.getElementById('loadingOverlay').classList.add('active');
+            document.getElementById('errorOverlay').classList.remove('active');
+            
+            const iframe = document.getElementById('contentFrame');
+            iframe.src = url;
+            
+            // Set loading timeout
+            loadTimeout = setTimeout(() => {
+                showError('Loading timeout, please check your network connection');
+            }, 30000); // 30 seconds timeout
+            
+            // Listen for iframe loading events
+            iframe.onload = function() {
+                clearTimeout(loadTimeout);
+                document.getElementById('loadingOverlay').classList.remove('active');
+            };
+            
+            iframe.onerror = function() {
+                clearTimeout(loadTimeout);
+                showError('Website failed to load, please check your network connection');
+            };
+        }
+
+        function closeIframe() {
+            clearTimeout(loadTimeout);
+            document.getElementById('iframeContainer').classList.remove('active');
+            document.getElementById('topBar').classList.remove('active');
+            document.getElementById('loadingOverlay').classList.remove('active');
+            document.getElementById('errorOverlay').classList.remove('active');
+            document.getElementById('contentFrame').src = '';
+            currentUrl = '';
+        }
+        
+        function showError(message) {
+            document.getElementById('loadingOverlay').classList.remove('active');
+            document.getElementById('errorMessage').textContent = message;
+            document.getElementById('errorOverlay').classList.add('active');
+        }
+        
+        function retryLoad() {
+            if (currentUrl) {
+                openInIframe(currentUrl);
+            }
+        }
+        
+        function closeError() {
+            document.getElementById('errorOverlay').classList.remove('active');
+            closeIframe();
+        }
+        
+        // Listen for iframe's loadstart events (if supported)
+        document.addEventListener('DOMContentLoaded', function() {
+            const iframe = document.getElementById('contentFrame');
+            
+            // Try to Listen to more events to detect loading status
+            iframe.addEventListener('loadstart', function() {
+                console.log('Loading started');
+            });
+            
+            iframe.addEventListener('load', function() {
+                console.log('Loading completed');
+                clearTimeout(loadTimeout);
+                document.getElementById('loadingOverlay').classList.remove('active');
+            });
+            
+            iframe.addEventListener('error', function() {
+                console.log('Loading error');
+                clearTimeout(loadTimeout);
+                showError('Website failed to load, please check your network connection');
+            });
+        });
+    </script>
+</body>
+</html> 
