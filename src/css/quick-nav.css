@@ -1,0 +1,229 @@
+/* 快速导航按钮样式 */
+.quick-nav-container {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    padding: 0 15px;
+    flex-wrap: wrap;
+}
+
+.quick-nav-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+    border: 2px solid var(--border-color, #e0e0e0);
+    background-color: var(--card-bg-color, #f8f9fa);
+    color: var(--text-secondary-color, #666666);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    gap: 6px;
+    min-width: 80px;
+    position: relative;
+    overflow: hidden;
+}
+
+.quick-nav-btn:hover {
+    border-color: var(--primary-color, #4285f4);
+    background-color: var(--primary-color-light, rgba(66, 133, 244, 0.1));
+    color: var(--primary-color, #4285f4);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(66, 133, 244, 0.15);
+}
+
+.quick-nav-btn.active {
+    background-color: var(--primary-color, #4285f4);
+    border-color: var(--primary-color, #4285f4);
+    color: white;
+    box-shadow: 0 4px 12px rgba(66, 133, 244, 0.3);
+}
+
+.quick-nav-btn i {
+    font-size: 16px;
+}
+
+/* 按钮计数器样式 - 现在在文字旁边显示 */
+.quick-nav-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--danger-color, #ea4335);
+    color: white;
+    border-radius: 8px;
+    padding: 1px 4px;
+    font-size: 10px;
+    font-weight: 600;
+    min-width: 14px;
+    height: 14px;
+    text-align: center;
+    line-height: 1;
+    margin-left: 4px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.quick-nav-btn.active .quick-nav-count {
+    background-color: white;
+    color: var(--primary-color, #4285f4);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* 暗黑主题样式 */
+.dark-theme .quick-nav-btn {
+    background-color: var(--card-bg-color, #1a1a1a);
+    border-color: var(--border-color, #333333);
+    color: var(--text-secondary-color, #aaaaaa);
+}
+
+.dark-theme .quick-nav-btn:hover {
+    border-color: var(--primary-color, #5c9aff);
+    background-color: var(--primary-color-light, rgba(92, 154, 255, 0.15));
+    color: var(--primary-color, #5c9aff);
+}
+
+.dark-theme .quick-nav-btn.active {
+    background-color: var(--primary-color, #5c9aff);
+    border-color: var(--primary-color, #5c9aff);
+    color: white;
+}
+
+.dark-theme .quick-nav-btn.active .quick-nav-count {
+    background-color: white;
+    color: var(--primary-color, #5c9aff);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+    .quick-nav-container {
+        flex-direction: row;
+        /* 保持横向排列 */
+    }
+    .quick-nav-btn {
+        padding: 3px 0;
+        gap: 1px;
+    }
+    .quick-nav-btn i {
+        font-size: 16px;
+        margin-bottom: 1px;
+    }
+    .quick-nav-btn span:not(.quick-nav-count) {
+        font-size: 10px;
+    }
+    .quick-nav-count {
+        font-size: 7px;
+        min-width: 8px;
+        height: 8px;
+        margin-top: 1px;
+    }
+}
+
+@media (max-width: 480px) {
+    .quick-nav-container {
+        gap: 4px;
+        padding: 0 8px;
+        margin-bottom: 10px;
+        justify-content: space-between;
+    }
+    
+    .quick-nav-btn {
+        padding: 2px 0;
+        font-size: 12px;
+        min-width: 70px;
+        gap: 3px;
+        flex: 1;
+        max-width: none;
+    }
+    
+    .quick-nav-btn i {
+        font-size: 14px;
+    }
+    
+    .quick-nav-btn span:not(.quick-nav-count) {
+        font-size: 9px;
+    }
+    
+    .quick-nav-count {
+        padding: 1px 1px;
+        font-size: 7px;
+        min-width: 8px;
+        height: 8px;
+        margin-left: 1px;
+    }
+}
+
+@media (max-width: 360px) {
+    .quick-nav-container {
+        gap: 2px;
+        padding: 0 4px;
+    }
+    
+    .quick-nav-btn {
+        padding: 4px 6px;
+        font-size: 11px;
+        min-width: 50px;
+        gap: 2px;
+    }
+    
+    .quick-nav-btn i {
+        font-size: 12px;
+    }
+    
+    .quick-nav-count {
+        padding: 1px 1px;
+        font-size: 7px;
+        min-width: 8px;
+        height: 8px;
+        margin-left: 1px;
+    }
+}
+
+/* 动画效果 */
+.quick-nav-btn {
+    animation: fadeInUp 0.3s ease;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 按钮点击效果 */
+.quick-nav-btn:active {
+    transform: translateY(0) scale(0.95);
+    transition: transform 0.1s ease;
+}
+
+/* 按钮组样式 */
+.quick-nav-group {
+    display: flex;
+    gap: 4px;
+}
+
+.quick-nav-group .quick-nav-btn {
+    border-radius: 16px;
+    min-width: auto;
+    padding: 6px 12px;
+}
+
+/* 响应式布局 */
+@media (max-width: 640px) {
+    .quick-nav-container {
+        justify-content: center;
+    }
+    
+    .quick-nav-btn {
+        flex: 1;
+        max-width: 120px;
+    }
+} 
